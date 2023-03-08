@@ -129,5 +129,8 @@
       }
     }
   },
-  "defaultProject": "TimeKeeper"
+  "defaultProject": "TimeKeeper",
+  "cli": {
+    "analytics": false
+  }
 }
