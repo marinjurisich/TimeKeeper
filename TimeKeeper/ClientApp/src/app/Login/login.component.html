@@ -1,0 +1,20 @@
+<h2>Login</h2>
+
+<form [formGroup]="loginForm">
+
+  <fieldset>
+    <label for="email_address">E-mail address: </label>
+    <input id="email_address" type="email" formControlName="emailAddress" placeholder= "">
+  </fieldset>
+
+  <fieldset>
+    <label for="password">Password: </label>
+    <input id="password" type="password" formControlName="password" placeholder="">
+  </fieldset>
+
+  <span>Wrong email or password !</span>
+
+  <button (click)="onSubmit()" [disabled]="loginForm.invalid">Submit</button>
+
+</form>
+<!--Comment-->
