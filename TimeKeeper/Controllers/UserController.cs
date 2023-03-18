@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using TimeKeeper.Data;
+using TimeKeeper.Models;
 
 namespace TimeKeeper.Controllers
 {
@@ -8,6 +8,12 @@ namespace TimeKeeper.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+
+        private readonly ApplicationDbContext _context;
+
+        public UserController(ApplicationDbContext context) {
+            _context = context;
+        }
 
         [HttpGet]
         public string GetUsername(string userId)
@@ -17,9 +23,10 @@ namespace TimeKeeper.Controllers
 
         // GET: api/<UserController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public User Get()
         {
-            return new string[] { "value1", "value2" };
+            var users = _context.Users.FirstOrDefault();
+            return users;
         }
 
         // GET api/<UserController>/5
