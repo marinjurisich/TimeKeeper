@@ -26,6 +26,10 @@ namespace TimeKeeper.Controllers
         public User Get()
         {
             var users = _context.Users.FirstOrDefault();
+            var company = _context.Companies.FirstOrDefault();
+            var month = _context.Months.FirstOrDefault();
+            var project = _context.Projects.FirstOrDefault();
+            var day = _context.Workdays.FirstOrDefault();
             return users;
         }
 

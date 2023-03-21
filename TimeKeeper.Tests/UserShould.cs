@@ -56,7 +56,7 @@ public class UserShould {
         Assert.Equal(sut.isAdmin, isAdmin);
         Assert.Equal(sut.payPerHour, payPerHour, 0.00001);
         Assert.Equal(sut.companyId, companyId);
-        Assert.Equal(sut.grade, grade, 0.001);
+        Assert.Equal(sut.grade, grade);
         Assert.Equal(sut.guid, guid);
     }
 

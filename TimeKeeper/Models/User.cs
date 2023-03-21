@@ -28,7 +28,7 @@ namespace TimeKeeper.Models {
         }
 
         //constructor called when fetching from DB
-        public User(int id, string firstName, string lastName, string email, string password, bool isAdmin, double payPerHour, int companyId, double grade, string guid) {
+        public User(int id, string firstName, string lastName, string email, string password, bool isAdmin, double payPerHour, int companyId, double? grade, string guid) {
             this.id = id;
             this.firstName = firstName;
             this.lastName = lastName;
