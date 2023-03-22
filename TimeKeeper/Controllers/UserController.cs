@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.Design;
 using TimeKeeper.Data;
 using TimeKeeper.Models;
 
@@ -16,28 +17,28 @@ namespace TimeKeeper.Controllers
         }
 
         [HttpGet]
-        public string GetUsername(string userId)
+        public User LoginUser(string email, string password)
         {
-            return $"some_name_{userId}";
+            //Demo login, treba bolji način za lozinku slati, vjj ce ici preko POST poziva
+            return _context.Users.Where(u => u.email.Equals(email) && u.password.Equals(password)).FirstOrDefault();
         }
 
         // GET: api/<UserController>
-        [HttpGet]
-        public User Get()
+        [HttpGet("{companyId}")]
+        public List<User> GetAllUsers(int companyId)
         {
-            var users = _context.Users.FirstOrDefault();
-            var company = _context.Companies.FirstOrDefault();
-            var month = _context.Months.FirstOrDefault();
-            var project = _context.Projects.FirstOrDefault();
-            var day = _context.Workdays.FirstOrDefault();
+            List<User> users = _context.Users.Where(u => u.companyId == companyId).ToList();  
+            
             return users;
         }
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public User Get(int id)
         {
-            return "value";
+            var user = _context.Users.Where(u => u.id.Equals(id)).FirstOrDefault();
+
+            return user;
         }
 
         // POST api/<UserController>
