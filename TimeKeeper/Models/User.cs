@@ -10,7 +10,7 @@ namespace TimeKeeper.Models {
         public bool isAdmin { get; set; }
         public double payPerHour { get; set; }
         public int companyId { get; set; }
-        public double grade { get; set; }
+        public double? grade { get; set; }
         public string guid { get; set; }
 
         //constructor called when creating a new user
@@ -28,7 +28,7 @@ namespace TimeKeeper.Models {
         }
 
         //constructor called when fetching from DB
-        public User(int id, string firstName, string lastName, string email, string password, bool isAdmin, double payPerHour, int companyId, double grade, string guid) {
+        public User(int id, string firstName, string lastName, string email, string password, bool isAdmin, double payPerHour, int companyId, double? grade, string guid) {
             this.id = id;
             this.firstName = firstName;
             this.lastName = lastName;

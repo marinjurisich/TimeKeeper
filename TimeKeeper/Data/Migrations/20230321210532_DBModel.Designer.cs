@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TimeKeeper.Data;
 
@@ -11,9 +12,10 @@ using TimeKeeper.Data;
 namespace TimeKeeper.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230321210532_DBModel")]
+    partial class DBModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,14 +43,6 @@ namespace TimeKeeper.Data.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Companies");
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            address = "A demo company address",
-                            name = "D.E.M.O. Company"
-                        });
                 });
 
             modelBuilder.Entity("TimeKeeper.Models.Month", b =>
@@ -80,18 +74,6 @@ namespace TimeKeeper.Data.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Months");
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            grade = 0.0,
-                            payPerHour = 16.489999999999998,
-                            salary = 2637.330078125,
-                            userId = 1,
-                            workHours = 160.0
-                        });
                 });
 
             modelBuilder.Entity("TimeKeeper.Models.Project", b =>
@@ -116,15 +98,6 @@ namespace TimeKeeper.Data.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Projects");
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            companyId = 1,
-                            description = "Official project of the demo company",
-                            name = "A Demo Company's demo project"
-                        });
                 });
 
             modelBuilder.Entity("TimeKeeper.Models.User", b =>
@@ -170,21 +143,6 @@ namespace TimeKeeper.Data.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            companyId = 1,
-                            email = "demo@mail.com",
-                            firstName = "Demo",
-                            grade = 0.0,
-                            guid = "not-a-guid",
-                            isAdmin = true,
-                            lastName = "Account",
-                            password = "pass",
-                            payPerHour = 4.4500000000000002
-                        });
                 });
 
             modelBuilder.Entity("TimeKeeper.Models.Workday", b =>
@@ -225,20 +183,6 @@ namespace TimeKeeper.Data.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Workdays");
-
-                    b.HasData(
-                        new
-                        {
-                            id = 1,
-                            clockIn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            clockOut = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            date = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            description = "Worked on Demo Company's demo project",
-                            grade = 0.0,
-                            projectId = 1,
-                            userId = 1,
-                            workHours = 8.0
-                        });
                 });
 #pragma warning restore 612, 618
         }
