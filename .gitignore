@@ -364,3 +364,6 @@ FodyWeavers.xsd
 /TimeKeeper/ClientApp/.angular/cache/14.0.3
 /TimeKeeper/ClientApp/package-lock.json
 /TimeKeeper/ClientApp/angular.json
+
+# Ignore VSCode config
+.vscode
