@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.Design;
+using System.Text.Json;
 using TimeKeeper.Data;
 using TimeKeeper.Models;
 
@@ -11,6 +12,7 @@ namespace TimeKeeper.Controllers
     {
 
         private readonly ApplicationDbContext _context;
+
 
         public UserController(ApplicationDbContext context) {
             _context = context;
@@ -41,20 +43,30 @@ namespace TimeKeeper.Controllers
             return user;
         }
 
-        // POST api/<UserController>
         [HttpPost]
-        public string Post([FromBody] string value)
-        {
-            return $"You've sent \"{value}\"";
-        }
+        public IActionResult Register() {
 
-        [HttpPost]
-        public string AnotherPost()
-        {
             using var bodyStream = new StreamReader(Request.Body);
-            var bodyText = bodyStream.ReadToEndAsync().Result;
+            var jsonString = bodyStream.ReadToEndAsync().Result;
 
-            return "You've sent this body:\n" + bodyText;
+            User user = JsonSerializer.Deserialize<User>(jsonString);
+
+            try {
+
+                user.guid = Guid.NewGuid().ToString();
+                user.password = Models.User.GenerateRandomPassword();
+
+                _context.Users.Add(user);
+                _context.SaveChanges();
+
+                return Ok(user);
+
+            } catch (Exception ex) {
+
+                return BadRequest(ex.Message);
+
+            }
+
         }
 
     }

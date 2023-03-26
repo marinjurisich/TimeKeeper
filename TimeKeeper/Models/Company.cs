@@ -5,6 +5,7 @@
         public string name { get; set; }
         public string address { get; set; }
 
+        public Company() {}
 
         public Company (string name, string address) {
             this.name = name;
