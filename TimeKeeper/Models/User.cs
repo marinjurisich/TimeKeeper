@@ -1,6 +1,10 @@
 ﻿
+using TimeKeeper.Data;
+
 namespace TimeKeeper.Models {
     public class User {
+
+        private readonly ApplicationDbContext _context;
 
         public int id { get; set; }
         public string firstName { get; set; }
@@ -12,6 +16,11 @@ namespace TimeKeeper.Models {
         public int companyId { get; set; }
         public double? grade { get; set; }
         public string guid { get; set; }
+
+
+
+        //constructor used when serializing from JSON
+        public User() { }
 
         //constructor called when creating a new user
         public User (string firstName, string lastName, string email, bool isAdmin, double payPerHour, int companyId) {
@@ -41,7 +50,7 @@ namespace TimeKeeper.Models {
             this.guid = guid;
         }
 
-        private static string GenerateRandomPassword() {
+        public static string GenerateRandomPassword() {
 
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             var stringChars = new char[8];
@@ -55,6 +64,7 @@ namespace TimeKeeper.Models {
 
             return finalString;
         }
+
 
 
 

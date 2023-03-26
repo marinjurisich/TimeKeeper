@@ -42,6 +42,17 @@ namespace TimeKeeper {
                 options.LoginPath = "/Identity/Account/Login";
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
+
+            });
+
+            builder.Services.AddCors(o =>
+            {
+                o.AddPolicy(name: "CorsPolicy",
+                      policy =>
+                      {
+                          policy.WithOrigins("https://localhost:44476",
+                                              "http://www.contoso.com"); // add the allowed origins  
+                      });
             });
 
             var app = builder.Build();
@@ -57,6 +68,8 @@ namespace TimeKeeper {
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             //app.UseAuthentication();
             //app.UseIdentityServer();
