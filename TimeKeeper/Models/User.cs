@@ -28,12 +28,12 @@ namespace TimeKeeper.Models {
             this.firstName = firstName;
             this.lastName = lastName;
             this.email = email;
-            this.password = GenerateRandomPassword();
             this.isAdmin = isAdmin;
             this.payPerHour = payPerHour;
             this.companyId = companyId;
             this.grade = 0;
             this.guid = System.Guid.NewGuid().ToString();
+            GenerateRandomPassword();
         }
 
         //constructor called when fetching from DB
@@ -50,7 +50,7 @@ namespace TimeKeeper.Models {
             this.guid = guid;
         }
 
-        public static string GenerateRandomPassword() {
+        public void GenerateRandomPassword() {
 
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             var stringChars = new char[8];
@@ -62,13 +62,8 @@ namespace TimeKeeper.Models {
 
             var finalString = new String(stringChars);
 
-            return finalString;
+            password = finalString;
         }
-
-
-
-
-
 
     }
 }

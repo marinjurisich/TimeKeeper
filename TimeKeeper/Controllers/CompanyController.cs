@@ -2,6 +2,7 @@
 using TimeKeeper.Data;
 using TimeKeeper.Models;
 using System.Text.Json;
+using TimeKeeper.Data.DbOperations;
 
 namespace TimeKeeper.Controllers;
 
@@ -10,9 +11,11 @@ namespace TimeKeeper.Controllers;
 public class CompanyController : ControllerBase {
 
     private readonly ApplicationDbContext _context;
+    private readonly DbOperations _operations;
 
-    public CompanyController(ApplicationDbContext context) {
+    public CompanyController(ApplicationDbContext context, DbOperations operations) {
         _context = context;
+        _operations = operations;
     }
 
     [HttpGet("{id}")]
@@ -28,19 +31,7 @@ public class CompanyController : ControllerBase {
 
         Company company = JsonSerializer.Deserialize<Company>(jsonString);
         
-        try {
-
-            _context.Companies.Add(company);
-            _context.SaveChanges();
-
-            return Ok(company);
-
-        }
-        catch (Exception ex) {
-
-            return BadRequest(ex.Message);
-
-        }
+        return _operations.RegisterCompany(company);
 
     }
 

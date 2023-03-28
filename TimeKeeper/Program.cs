@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
+using TimeKeeper.Controllers;
 using TimeKeeper.Data;
+using TimeKeeper.Data.DbOperations;
 using TimeKeeper.Models;
 
 namespace TimeKeeper {
@@ -18,6 +20,8 @@ namespace TimeKeeper {
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("TimeKeeperConnection")));
+
+            builder.Services.AddScoped<IDbOperations, DbOperations>();
 
             //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -44,6 +48,8 @@ namespace TimeKeeper {
                 options.SlidingExpiration = true;
 
             });
+
+
 
             builder.Services.AddCors(o =>
             {
