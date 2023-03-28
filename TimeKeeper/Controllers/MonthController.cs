@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TimeKeeper.Data;
+using TimeKeeper.Data.DbOperations;
 using TimeKeeper.Models;
 
 namespace TimeKeeper.Controllers 
@@ -10,8 +11,11 @@ namespace TimeKeeper.Controllers
 
         private readonly ApplicationDbContext _context;
 
-        public MonthController(ApplicationDbContext context) {
+        private readonly DbOperations _operations;
+
+        public MonthController(ApplicationDbContext context, DbOperations operations) {
             _context = context;
+            _operations = operations;
         }
 
         [HttpGet]
@@ -23,6 +27,13 @@ namespace TimeKeeper.Controllers
         [HttpGet]
         public Month GetUsersMonths(int userId) {
             return _context.Months.Where(m => m.userId == userId).FirstOrDefault();
+        }
+
+        [HttpGet]
+        public IActionResult GetDays(string date) {
+
+            return _operations.GetAllDaysInAMonth(date);
+
         }
     }
 }

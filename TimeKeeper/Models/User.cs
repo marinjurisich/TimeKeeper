@@ -33,7 +33,7 @@ namespace TimeKeeper.Models {
             this.companyId = companyId;
             this.grade = 0;
             this.guid = System.Guid.NewGuid().ToString();
-            GenerateRandomPassword();
+            this.GenerateRandomPassword();
         }
 
         //constructor called when fetching from DB
@@ -62,7 +62,7 @@ namespace TimeKeeper.Models {
 
             var finalString = new String(stringChars);
 
-            password = finalString;
+            this.password = finalString;
         }
 
     }

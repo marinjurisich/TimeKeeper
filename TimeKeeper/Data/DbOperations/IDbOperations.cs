@@ -1,5 +1,5 @@
 ﻿namespace TimeKeeper.Data.DbOperations {
-    public interface IDbOperations : BackgroundService {
+    public interface IDbOperations {
 
         void ClockInOut() { }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using System.Linq;
 using TimeKeeper.Models;
 
@@ -14,6 +15,35 @@ namespace TimeKeeper.Data.DbOperations {
         }
 
         #region Workday
+
+        public IActionResult GetWorkday(string dateAsString) {
+
+            DateTime dateTime = DateTime.Parse(dateAsString);
+
+            Workday workday = _context.Workdays.Where(w => w.date.Equals(dateTime)).FirstOrDefault();
+
+            return statusResponse(200, workday);
+
+        }
+
+        public IActionResult UpdateWorkday(Workday workday) {
+
+            DateTime temp = (DateTime) workday.clockOut;
+            workday.workHours = temp.Subtract((DateTime) workday.clockIn).TotalHours;
+
+            _context.Workdays.Update(workday);
+            _context.SaveChanges();
+
+            return statusResponse(200);
+        }
+
+        public IActionResult GetAllDaysInAMonth(string dateAsString) {
+            DateTime dateTime = DateTime.Parse(dateAsString);
+
+            List<Workday> days = _context.Workdays.Where(w => w.date.Month == dateTime.Month && w.date.Year == dateTime.Year).ToList();
+
+            return statusResponse(200, days);
+        }
 
         public IActionResult ClockInOut(Workday workday) {
 
@@ -49,7 +79,7 @@ namespace TimeKeeper.Data.DbOperations {
 
                 _context.SaveChanges();
 
-                //calculateMonthlyHours();
+                //TODO: calculateMonthlyHours();
 
                 return statusResponse(200);
 
@@ -117,7 +147,7 @@ namespace TimeKeeper.Data.DbOperations {
 
                 _context.SaveChanges();
 
-                //calculateMonthlyHours();
+                //TODO: calculateMonthlyHours();
 
                 return statusResponse(200);
 
