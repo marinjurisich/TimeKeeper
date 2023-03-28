@@ -4,9 +4,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 import {AppComponent} from './app.component';
-import {HomeComponent} from './home/home.component';
-import {DashboardComponent} from './home/Dashboard/dashboard.component';
-import {NavigationComponent} from './home/Navigation/navigation.component';
+import {HomeComponent} from './Home/home.component';
+import {DashboardComponent} from './Home/Dashboard/dashboard.component';
+import {NavigationComponent} from './Home/Navigation/navigation.component';
 import {LoginComponent} from './Login/login.component';
 import {RegisterComponent} from "./Register/register.component";
 
