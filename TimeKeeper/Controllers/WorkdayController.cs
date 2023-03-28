@@ -17,6 +17,24 @@ namespace TimeKeeper.Controllers {
             _operations = operations;
         }
 
+        [HttpGet]
+        public IActionResult Get(string date) {
+
+            return _operations.GetWorkday(date);
+        }
+
+        [HttpPost]
+        public IActionResult Update() {
+
+            using var bodyStream = new StreamReader(Request.Body);
+            var jsonString = bodyStream.ReadToEndAsync().Result;
+
+            Workday workday = JsonSerializer.Deserialize<Workday>(jsonString);
+
+            return _operations.UpdateWorkday(workday);
+
+        }
+
         [HttpPost]
         public IActionResult ClockInOut() {
 
@@ -32,6 +50,8 @@ namespace TimeKeeper.Controllers {
 
         [HttpGet]
         public IActionResult ScannerClockInOut(string guid) {
+
+            return _operations.ScannerClockInOut(guid);
 
         }
 
