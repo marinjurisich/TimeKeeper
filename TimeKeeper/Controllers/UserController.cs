@@ -2,6 +2,7 @@
 using System.ComponentModel.Design;
 using System.Text.Json;
 using TimeKeeper.Data;
+using TimeKeeper.Data.DbOperations;
 using TimeKeeper.Models;
 
 namespace TimeKeeper.Controllers
@@ -12,10 +13,11 @@ namespace TimeKeeper.Controllers
     {
 
         private readonly ApplicationDbContext _context;
+        private readonly DbOperations _operations;
 
-
-        public UserController(ApplicationDbContext context) {
+        public UserController(ApplicationDbContext context, DbOperations operations) {
             _context = context;
+            _operations = operations;
         }
 
         [HttpGet]
@@ -51,21 +53,7 @@ namespace TimeKeeper.Controllers
 
             User user = JsonSerializer.Deserialize<User>(jsonString);
 
-            try {
-
-                user.guid = Guid.NewGuid().ToString();
-                user.password = Models.User.GenerateRandomPassword();
-
-                _context.Users.Add(user);
-                _context.SaveChanges();
-
-                return Ok(user);
-
-            } catch (Exception ex) {
-
-                return BadRequest(ex.Message);
-
-            }
+            return _operations.CreateUser(user);
 
         }
 
