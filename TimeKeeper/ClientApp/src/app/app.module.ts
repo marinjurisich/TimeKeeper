@@ -4,26 +4,21 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 import {AppComponent} from './app.component';
-import {HomeComponent} from './Home/home.component';
-import {DashboardComponent} from './Home/Dashboard/dashboard.component';
-import {NavigationComponent} from './Home/Navigation/navigation.component';
+import {HomeComponent} from "./Home/home.component";
 import {LoginComponent} from './Login/login.component';
 import {RegisterComponent} from "./Register/register.component";
+import {HomeModule} from "./Home/home.module";
 
 
 @NgModule({
 
   declarations: [
     AppComponent,
-    HomeComponent,
     LoginComponent,
-    RegisterComponent,
-    DashboardComponent,
-    NavigationComponent
+    RegisterComponent
   ],
 
   imports: [
-
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
     HttpClientModule,
     FormsModule,
@@ -32,7 +27,8 @@ import {RegisterComponent} from "./Register/register.component";
       {path: '', component: HomeComponent, pathMatch: 'full'},
       {path: 'login', component: LoginComponent},
       {path: 'register', component: RegisterComponent}
-    ])
+    ]),
+    HomeModule
 
   ],
 

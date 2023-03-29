@@ -5,19 +5,19 @@ export class ClientAppRoutes {
   constructor(private _router: Router) {
   }
 
-  /***** App home ROUTE *****/
+  /***** App home route *****/
   navigateToHome(): Promise<boolean> | null {
     let path: string = '';
     return this._router ? this._router.navigate([path]) : null;
   }
 
-  /***** LOGIN ROUTE *****/
+  /***** Login route *****/
   navigateToLogin(): Promise<boolean> | null {
     let path: string = 'login';
     return this._router ? this._router.navigate([path]) : null;
   }
 
-  /***** REGISTRATION ROUTE *****/
+  /***** Registration route *****/
   navigateToRegister(): Promise<boolean> | null {
     let path: string = 'register';
     return this._router ? this._router.navigate([path]) : null;
