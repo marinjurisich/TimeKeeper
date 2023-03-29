@@ -17,13 +17,13 @@ export class AjaxService{
 
   /***** Login *****/
   userLogin(credentials: any): any {
-    let apiUrl : string = this._urlPrefix + '/login';
+    let apiUrl : string = this._urlPrefix + '/user/loginuser';
     return this._http.post(apiUrl, credentials);
   }
 
   /***** Registration *****/
   userRegistration(credentials: any): any {
-    let apiUrl : string = this._urlPrefix + '/registration';
+    let apiUrl : string = this._urlPrefix + '/user/register';
     return this._http.post(apiUrl, credentials);
   }
 
