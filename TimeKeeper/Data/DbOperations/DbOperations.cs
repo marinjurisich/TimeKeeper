@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using TimeKeeper.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TimeKeeper.Data.DbOperations {
 
@@ -38,6 +41,7 @@ namespace TimeKeeper.Data.DbOperations {
         }
 
         public IActionResult GetAllDaysInAMonth(string dateAsString) {
+
             DateTime dateTime = DateTime.Parse(dateAsString);
 
             List<Workday> days = _context.Workdays.Where(w => w.date.Month == dateTime.Month && w.date.Year == dateTime.Year).ToList();
@@ -51,7 +55,16 @@ namespace TimeKeeper.Data.DbOperations {
 
                 var days = _context.Workdays.Where(w => w.Equals(workday));
 
+                
+
                 if (days == null) {
+
+                    //check if month exists, if not, create it
+                    if (_context.Months.Where(m => m.date.Month == workday.date.Month
+                    && m.date.Year == workday.date.Year).FirstOrDefault() == null) {
+                        CreateMonth(workday.userId);
+                    }
+
                     //clockIn if no record for this day
                     _context.Workdays.Add(workday);
                 } else {
@@ -103,6 +116,7 @@ namespace TimeKeeper.Data.DbOperations {
 
                 var userId = _context.Users.Where(u => u.guid == guid).Select(u => u.id).FirstOrDefault();
 
+
                 if (days == null) {
 
                     //clockIn if no record for this day
@@ -115,7 +129,15 @@ namespace TimeKeeper.Data.DbOperations {
                             clockIn = new DateTime()
                         };
 
+                        //check if month exists, if not, create it
+                        if (_context.Months.Where(m => m.date.Month == workday.date.Month
+                        && m.date.Year == workday.date.Year).FirstOrDefault() == null) {
+                            CreateMonth(userId);
+                        }
                         _context.Workdays.Add(workday);
+
+                    } else {
+                        throw new Exception("Missing user guid");
                     }
 
                 } else {
@@ -165,18 +187,22 @@ namespace TimeKeeper.Data.DbOperations {
             try {
 
                 user.guid = Guid.NewGuid().ToString();
-                user.GenerateRandomPassword();
+                if(String.IsNullOrWhiteSpace(user.password)) {
+                    user.GenerateRandomPassword();
+                }
+
+
+
+                ValidateUser(user);
 
                 _context.Users.Add(user);
                 _context.SaveChanges();
-
-                ValidateUser(user);
 
                 return statusResponse(200, user);
 
             } catch (Exception ex) {
 
-                return statusResponse(500,ex.Message);
+                return statusResponse(500, ex.Message);
 
             }
 
@@ -190,6 +216,10 @@ namespace TimeKeeper.Data.DbOperations {
                 || user.companyId == null || user.companyId == 0 || String.IsNullOrWhiteSpace(user.guid))
             {
                 throw new Exception("Missing user data!");
+            }
+
+            if(_context.Users.Any(u => u.email.Equals(user.email))){
+                throw new Exception("User with this email already exists!");
             }
 
         }
@@ -215,12 +245,58 @@ namespace TimeKeeper.Data.DbOperations {
 
         #endregion
 
+        #region Month
+
+        public IActionResult CreateMonth(int userId) {
+
+            DateTime date = DateTime.Now;
+            if (date.Day > 1) {
+                date = date.AddDays(-(date.Day - 1));
+            }
+
+            double payPerHour = _context.Users.Where(u => u.id == userId).Select(u => u.payPerHour).First();
+
+            Month month = new Month(date, userId, 0, null, 0, payPerHour);
+
+            _context.Months.Add(month);
+            _context.SaveChanges();
+
+            return statusResponse(200);
+        }
+
+        #endregion
+
         #region Helpers
         public ObjectResult statusResponse (int status, object? obj=null) {
             var result = new ObjectResult(obj);
             result.StatusCode = status;
             return result;
         }
+
+        string HashPasword(string password, out byte[] salt) {
+
+            const int keySize = 64;
+            const int iterations = 350000;
+            HashAlgorithmName hashAlgorithm = HashAlgorithmName.SHA512;
+
+            try {
+                salt = RandomNumberGenerator.GetBytes(keySize);
+
+                var hash = Rfc2898DeriveBytes.Pbkdf2(
+                    Encoding.UTF8.GetBytes(password),
+                    salt,
+                    iterations,
+                    hashAlgorithm,
+                    keySize);
+
+                return Convert.ToHexString(hash);
+
+            } catch (Exception ex) {
+                salt = null;
+                return ex.Message;
+            }
+        }
+
         #endregion
     }
 }
