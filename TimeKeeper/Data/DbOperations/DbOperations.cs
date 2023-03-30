@@ -199,7 +199,9 @@ namespace TimeKeeper.Data.DbOperations {
 
                 ValidateUser(user);
 
-                string hashedPasswoord = HashPasword(user.password, out salt);
+                string hashedPassword = HashPasword(user.password, out salt);
+                user.password = hashedPassword;
+
                 UserSalt s = new UserSalt(user.email, salt);
 
                 _context.UserSalts.Add(s);
@@ -216,15 +218,15 @@ namespace TimeKeeper.Data.DbOperations {
 
         }
 
-        public IActionResult LoginUser(string email, string password) {
+        public IActionResult LoginUser(LoginDTO loginData) {
             try {
 
-                salt = _context.UserSalts.Where(s => s.email.Equals(email))
+                salt = _context.UserSalts.Where(s => s.email.Equals(loginData.email))
                         .Select(s => s.salt).First();
 
-                string hashedPassword = ValidatePassword(password, salt);
+                string hashedPassword = ValidatePassword(loginData.password, salt);
 
-                User user = _context.Users.Where(u => u.email.Equals(email) && u.password.Equals(hashedPassword)).FirstOrDefault();
+                User user = _context.Users.Where(u => u.email.Equals(loginData.email) && u.password.Equals(hashedPassword)).FirstOrDefault();
 
                 if (user != null) {
                     return statusResponse(200, user);
