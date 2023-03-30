@@ -7,10 +7,11 @@ import {NavigationComponent} from "./Navigation/navigation.component";
 import {SalaryChartComponent} from "./Dashboard/SalaryChart/salary-chart.component";
 import { ClockInComponent } from './Dashboard/ClockIn/clock-in.component';
 import { SummaryComponent } from './Dashboard/Summary/summary.component';
+import { HeaderComponent } from './Header/header.component';
 
 
 @NgModule({
-  declarations: [HomeComponent, DashboardComponent, CalendarComponent, NavigationComponent, SalaryChartComponent, ClockInComponent, SummaryComponent],
+  declarations: [HomeComponent, DashboardComponent, CalendarComponent, NavigationComponent, SalaryChartComponent, ClockInComponent, SummaryComponent, HeaderComponent],
   imports:[
     CommonModule,
   ]

@@ -1,23 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { DataService } from "../Shared/Server/DataService";
+import { ClientAppRoutes } from '../Shared/Routes/ClientAppRoutes';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
+
 export class LoginComponent implements OnInit {
+
+  demoImageCss: string = "url('https://fastly.picsum.photos/id/64/4326/2884.jpg?hmac=9_SzX666YRpR_fOyYStXpfSiJ_edO3ghlSRnH2w09Kg')";
 
   loginForm: any = null;
   span: HTMLElement | null = null;
   submitButton: HTMLElement | null = null;
+  clientAppRoutes: ClientAppRoutes;
 
-  constructor(private _dataService: DataService) {
+  constructor(private _dataService: DataService, private _router: Router) {
+    this.clientAppRoutes = new ClientAppRoutes(this._router);
   }
 
   ngOnInit(): void {
 
+    // TODO
     this.span = document.getElementsByTagName('span')[0];
+
+    // TODO - fix tagname
     this.submitButton = document.getElementsByTagName('button')[0];
 
     this.loginForm = new FormGroup({
@@ -43,8 +54,15 @@ export class LoginComponent implements OnInit {
 
       this._dataService.userLogin(loginData);
       this._dataService.loggedUserBehaviorSubject.subscribe((res: any) => {
-        if (res['status'] == 'OK') { this.displaySpan(false); console.log("SAKRIJ") }
-        else { this.displaySpan(true); console.log("PRIKAZI") }
+        
+        if (res['status'] == 'OK') {
+          this.displaySpan(false);
+          console.log("SAKRIJ")
+        }
+        else {
+          this.displaySpan(true);
+          console.log("PRIKAZI");
+        }
       });
 
     } else {
@@ -53,13 +71,17 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  private displaySpan(show: boolean = false, message: string = "Wrong email or password !"): void {
-    if (this.submitButton instanceof HTMLElement && this.span instanceof HTMLElement) {
-      this.span.style.visibility = show ? 'visible' : 'hidden';
-      //@ts-ignore
-      this.submitButton.disabled = show;
-      this.span.innerText = message;
-    }
+  private displaySpan(show: boolean = false, message: string = "Wrong email or password!"): void {
+
+    console.log("Trying to " + (show ? "show" : "hide") + " the span... (old login)");
+    return;
+
+    // if (this.submitButton instanceof HTMLElement && this.span instanceof HTMLElement) {
+    //   this.span.style.visibility = show ? 'visible' : 'hidden';
+    //   //@ts-ignore
+    //   this.submitButton.disabled = show;
+    //   this.span.innerText = message;
+    // }
   }
 
 }

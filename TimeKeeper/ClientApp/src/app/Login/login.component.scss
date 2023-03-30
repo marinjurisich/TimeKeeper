@@ -1,69 +1,7 @@
-.my-header-wrapper, .my-footer-wrapper {
-  padding: 1%;
-  background-color: rgba(255, 255, 255, 0.7);
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-
-.my-login-wrapper {
-  background-color: rgba(255, 255, 255, 0.7);
-  border-radius: var(--my-border-radius);
-  padding: 1%;
-  width: 70%;
-  height: 40%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
-
-h1{
-    padding: 0;
-    margin: 0;
-}
-
-form {
-  width: 100%;
-  max-width: 80%;
-}
-
-fieldset {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  width: 100%;
-}
-
-input {
-  display: flex;
-  flex-grow: 1;
-
-  margin-left: 5%;
-  padding: 1%;
-
-  line-height: 5%;
-
-  border-radius: var(--my-border-radius);
-  border-width: 0px;
-
-  background-color: rgba(13, 110, 253, 0.7);
-  outline: none;
-
-  text-decoration: none;
-}
-
-span {
-  display: block;
-  width: 100%;
-  text-align: center;
-  margin-top: 2%;
-}
-
-button {
-  width: 15%;
-  border-radius: var(--my-border-radius);
+.background {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
