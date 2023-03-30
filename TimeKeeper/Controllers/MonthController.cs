@@ -30,6 +30,11 @@ namespace TimeKeeper.Controllers
         }
 
         [HttpGet]
+        public List<Month> GetLastTwelveMonths(int userId) {
+            return _context.Months.Where(m => m.userId == userId).TakeLast(12).ToList();
+        }
+
+        [HttpGet]
         public IActionResult GetDays(string date) {
 
             return _operations.GetAllDaysInAMonth(date);
