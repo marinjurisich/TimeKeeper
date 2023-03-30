@@ -11,9 +11,9 @@ namespace TimeKeeper.Controllers
 
         private readonly ApplicationDbContext _context;
 
-        private readonly DbOperations _operations;
+        private readonly IDbOperations _operations;
 
-        public MonthController(ApplicationDbContext context, DbOperations operations) {
+        public MonthController(ApplicationDbContext context, IDbOperations operations) {
             _context = context;
             _operations = operations;
         }
@@ -27,6 +27,11 @@ namespace TimeKeeper.Controllers
         [HttpGet]
         public Month GetUsersMonths(int userId) {
             return _context.Months.Where(m => m.userId == userId).FirstOrDefault();
+        }
+
+        [HttpGet]
+        public List<Month> GetLastTwelveMonths(int userId) {
+            return _context.Months.Where(m => m.userId == userId).TakeLast(12).ToList();
         }
 
         [HttpGet]

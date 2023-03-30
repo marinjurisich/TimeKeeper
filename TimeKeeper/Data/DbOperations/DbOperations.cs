@@ -43,6 +43,8 @@ namespace TimeKeeper.Data.DbOperations {
             _context.Workdays.Update(workday);
             _context.SaveChanges();
 
+            CalculateMonthlySalary(workday);
+
             return statusResponse(200);
         }
 
@@ -61,8 +63,6 @@ namespace TimeKeeper.Data.DbOperations {
 
                 var days = _context.Workdays.Where(w => w.Equals(workday));
 
-                
-
                 if (days == null) {
 
                     //check if month exists, if not, create it
@@ -73,7 +73,9 @@ namespace TimeKeeper.Data.DbOperations {
 
                     //clockIn if no record for this day
                     _context.Workdays.Add(workday);
+
                 } else {
+
                     Workday day = days.Last();
 
                     if (day.clockOut == null) {
@@ -98,7 +100,7 @@ namespace TimeKeeper.Data.DbOperations {
 
                 _context.SaveChanges();
 
-                //TODO: calculateMonthlyHours();
+                CalculateMonthlySalary(workday);
 
                 return statusResponse(200);
 
@@ -199,7 +201,9 @@ namespace TimeKeeper.Data.DbOperations {
 
                 ValidateUser(user);
 
-                string hashedPasswoord = HashPasword(user.password, out salt);
+                string hashedPassword = HashPasword(user.password, out salt);
+                user.password = hashedPassword;
+
                 UserSalt s = new UserSalt(user.email, salt);
 
                 _context.UserSalts.Add(s);
@@ -216,15 +220,15 @@ namespace TimeKeeper.Data.DbOperations {
 
         }
 
-        public IActionResult LoginUser(string email, string password) {
+        public IActionResult LoginUser(LoginDTO loginData) {
             try {
 
-                salt = _context.UserSalts.Where(s => s.email.Equals(email))
+                salt = _context.UserSalts.Where(s => s.email.Equals(loginData.email))
                         .Select(s => s.salt).First();
 
-                string hashedPassword = ValidatePassword(password, salt);
+                string hashedPassword = ValidatePassword(loginData.password, salt);
 
-                User user = _context.Users.Where(u => u.email.Equals(email) && u.password.Equals(hashedPassword)).FirstOrDefault();
+                User user = _context.Users.Where(u => u.email.Equals(loginData.email) && u.password.Equals(hashedPassword)).FirstOrDefault();
 
                 if (user != null) {
                     return statusResponse(200, user);
@@ -294,6 +298,31 @@ namespace TimeKeeper.Data.DbOperations {
             _context.SaveChanges();
 
             return statusResponse(200);
+        }
+
+        public void CalculateMonthlySalary(Workday day) {
+
+            Month month = _context.Months.Where(m => m.userId == day.userId
+            && m.date.Month == day.date.Month && m.date.Year == day.date.Year).FirstOrDefault();
+
+            if(month == null) {
+                throw new Exception("Month does not exist!");
+            }
+
+            List<Workday> workdays = _context.Workdays.Where(w => w.userId == day.userId
+            && w.date.Month == day.date.Month && w.date.Year == day.date.Year).ToList();
+
+            double monthlyWorkHours = 0;
+            foreach (Workday workday in workdays) {
+                monthlyWorkHours += (double) workday.workHours;
+            }
+
+            month.workHours = monthlyWorkHours;
+            month.salary = month.workHours * month.payPerHour;
+
+            _context.Update(month);
+            _context.SaveChanges();
+
         }
 
         #endregion
