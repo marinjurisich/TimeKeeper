@@ -11,9 +11,9 @@ namespace TimeKeeper.Controllers
 
         private readonly ApplicationDbContext _context;
 
-        private readonly DbOperations _operations;
+        private readonly IDbOperations _operations;
 
-        public MonthController(ApplicationDbContext context, DbOperations operations) {
+        public MonthController(ApplicationDbContext context, IDbOperations operations) {
             _context = context;
             _operations = operations;
         }
