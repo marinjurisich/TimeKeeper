@@ -1,16 +1,41 @@
-<div class="card shadow border-start-primary" style="width: 100%">
-  <div class="card-header text-primary fw-bold text-xs">
-    <h6 class="text-primary fw-bold">Calendar</h6>
-  </div>
-  <div class="align-items-center d-flex justify-content-around my-card-padding">
+<div
+    id="fp_container" class="pb-3 mb-3">
 
-    <!-- Here goes calendar -->
+        <!-- Title & Generate report -->
+        <div class="d-sm-flex justify-content-between align-items-center my-4">
+            <h3 class="text-dark mb-0">
+                Workday calendar
+            </h3>
+        </div>
 
-    <div class="" style="">
-      <h1>Hello h1</h1>
-      <h2>Hello h2</h2>
-      <h3>Hello h3</h3>
+    <!-- FP Calendar (Warning - do not change ID) -->
+    <div id="fpWorkday"></div>
+
+    <!-- Button trigger modal -->
+    <button id="workdayModalOpen" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#workDayModal">
+        Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="workDayModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="workDayModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="workDayModalLabel">
+                        Edit
+                        <strong id="workday_modal_title">YYYY-MM-DD</strong>
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="workday_save_b" type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-  </div>
 </div>
