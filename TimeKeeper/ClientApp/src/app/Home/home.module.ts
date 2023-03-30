@@ -5,7 +5,6 @@ import {DashboardComponent} from "./Dashboard/dashboard.component";
 import {CalendarComponent} from "./Dashboard/Calendar/calendar.component";
 import {NavigationComponent} from "./Navigation/navigation.component";
 import {SalaryChartComponent} from "./Dashboard/SalaryChart/salary-chart.component";
-import {NgChartsModule} from "ng2-charts";
 import { ClockInComponent } from './Dashboard/ClockIn/clock-in.component';
 import { SummaryComponent } from './Dashboard/Summary/summary.component';
 
@@ -14,7 +13,6 @@ import { SummaryComponent } from './Dashboard/Summary/summary.component';
   declarations: [HomeComponent, DashboardComponent, CalendarComponent, NavigationComponent, SalaryChartComponent, ClockInComponent, SummaryComponent],
   imports:[
     CommonModule,
-    NgChartsModule
   ]
 })
 
