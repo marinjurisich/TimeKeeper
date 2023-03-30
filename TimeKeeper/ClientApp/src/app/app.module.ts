@@ -28,8 +28,7 @@ import {HomeModule} from "./Home/home.module";
       {path: 'login', component: LoginComponent},
       {path: 'register', component: RegisterComponent}
     ]),
-    HomeModule
-
+    HomeModule,
   ],
 
   providers: [],

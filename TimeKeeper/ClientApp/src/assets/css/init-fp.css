@@ -1,0 +1,13 @@
+/* A file used for additional flatpickr configuration */
+
+#fp_container .flatpickr-calendar {
+    margin: 0 auto;
+}
+
+/* .flatpickr-day {
+    border-radius: 0;
+} */
+
+.flatpickr-day.weekend {
+    background: #ffecb1;
+}

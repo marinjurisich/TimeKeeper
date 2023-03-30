@@ -8,40 +8,98 @@ declare let google: any;
 })
 export class SalaryChartComponent implements OnInit {
 
+  barChartData: any = {
+    "labels": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug"
+    ],
+    "datasets": [
+      {
+        "label": "Earnings",
+        "fill": true,
+        "data": [
+          "0",
+          "10000",
+          "5000",
+          "15000",
+          "10000",
+          "20000",
+          "15000",
+          "25000"
+        ],
+        "backgroundColor": "rgba(78, 115, 223, 0.05)",
+        "borderColor": "rgba(78, 115, 223, 1)"
+      }
+    ]
+  }
+  barChartOptions: any = {
+    "maintainAspectRatio": false,
+    "legend": {
+      "display": false,
+      "labels": {
+        "fontStyle": "normal"
+      }
+    },
+    "title": {
+      "fontStyle": "normal"
+    },
+    "scales": {
+      "xAxes": [
+        {
+          "gridLines": {
+            "color": "rgb(234, 236, 244)",
+            "zeroLineColor": "rgb(234, 236, 244)",
+            "drawBorder": false,
+            "drawTicks": false,
+            "borderDash": [
+              "2"
+            ],
+            "zeroLineBorderDash": [
+              "2"
+            ],
+            "drawOnChartArea": false
+          },
+          "ticks": {
+            "fontColor": "#858796",
+            "fontStyle": "normal",
+            "padding": 20
+          }
+        }
+      ],
+      "yAxes": [
+        {
+          "gridLines": {
+            "color": "rgb(234, 236, 244)",
+            "zeroLineColor": "rgb(234, 236, 244)",
+            "drawBorder": false,
+            "drawTicks": false,
+            "borderDash": [
+              "2"
+            ],
+            "zeroLineBorderDash": [
+              "2"
+            ]
+          },
+          "ticks": {
+            "fontColor": "#858796",
+            "fontStyle": "normal",
+            "padding": 20
+          }
+        }
+      ]
+    }
+  }
+
   constructor() { }
 
   ngOnInit(): void {
 
-    loadChart();
-
-    function loadChart() {
-
-      google.charts.load('current', { packages: ['corechart'] });
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-
-        // Set Data
-        var data = google.visualization.arrayToDataTable([
-          ['Price', 'Size'],
-          ['Jan', 7], ['Feb', 8], ['Mar', 8], [80, 9], [90, 9],
-          [100, 9], [110, 10], [120, 11],
-          [130, 14], [140, 14], [150, 15]
-        ]);
-
-        // Set Options
-        var options = {
-          title: 'House Prices vs. Size',
-          hAxis: { title: 'Square Meters' },
-          vAxis: { title: 'Price in Millions' },
-          legend: 'none'
-        };
-
-        // Draw
-        var chart = new google.visualization.LineChart(document.getElementById('myChart'));
-        chart.draw(data, options);
-      }
-    }
   }
 
 }
