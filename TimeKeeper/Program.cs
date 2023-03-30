@@ -57,7 +57,8 @@ namespace TimeKeeper {
                       policy =>
                       {
                           policy.WithOrigins("https://localhost:44476",
-                                              "http://www.contoso.com"); // add the allowed origins  
+                                              "http://www.contoso.com");
+                          policy.AllowAnyHeader();
                       });
             });
 

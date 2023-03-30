@@ -11,9 +11,9 @@ namespace TimeKeeper.Controllers;
 public class CompanyController : ControllerBase {
 
     private readonly ApplicationDbContext _context;
-    private readonly DbOperations _operations;
+    private readonly IDbOperations _operations;
 
-    public CompanyController(ApplicationDbContext context, DbOperations operations) {
+    public CompanyController(ApplicationDbContext context, IDbOperations operations) {
         _context = context;
         _operations = operations;
     }

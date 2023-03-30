@@ -13,17 +13,22 @@ namespace TimeKeeper.Controllers
     {
 
         private readonly ApplicationDbContext _context;
-        private readonly DbOperations _operations;
+        private readonly IDbOperations _operations;
 
-        public UserController(ApplicationDbContext context, DbOperations operations) {
+        public UserController(ApplicationDbContext context, IDbOperations operations) {
             _context = context;
             _operations = operations;
         }
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult LoginUser(string email, string password)
         {
-            return _operations.LoginUser(email, password);
+            using var bodyStream = new StreamReader(Request.Body);
+            var jsonString = bodyStream.ReadToEndAsync().Result;
+
+            LoginDTO loginData = JsonSerializer.Deserialize<LoginDTO>(jsonString);
+
+            return _operations.LoginUser(loginData);
         }
 
         // GET: api/<UserController>

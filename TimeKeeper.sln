@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeKeeper", "TimeKeeper\TimeKeeper.csproj", "{F962F24A-D50E-4CFB-993A-6F470E305628}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeKeeper.Tests", "TimeKeeper.Tests\TimeKeeper.Tests.csproj", "{19B1EED2-9284-4624-80CB-4A080767E2FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeKeeper.Tests", "TimeKeeper.Tests\TimeKeeper.Tests.csproj", "{19B1EED2-9284-4624-80CB-4A080767E2FB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F962F24A-D50E-4CFB-993A-6F470E305628} = {F962F24A-D50E-4CFB-993A-6F470E305628}
 	EndProjectSection

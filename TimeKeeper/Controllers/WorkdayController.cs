@@ -11,9 +11,9 @@ namespace TimeKeeper.Controllers {
     [ApiController]
     public class WorkdayController : ControllerBase {
 
-        private readonly DbOperations _operations;
+        private readonly IDbOperations _operations;
 
-        public WorkdayController(DbOperations operations) {
+        public WorkdayController(IDbOperations operations) {
             _operations = operations;
         }
 
