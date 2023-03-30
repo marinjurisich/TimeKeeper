@@ -21,10 +21,9 @@ namespace TimeKeeper.Controllers
         }
 
         [HttpGet]
-        public User LoginUser(string email, string password)
+        public IActionResult LoginUser(string email, string password)
         {
-            //Demo login, treba bolji način za lozinku slati, vjj ce ici preko POST poziva
-            return _context.Users.Where(u => u.email.Equals(email) && u.password.Equals(password)).FirstOrDefault();
+            return _operations.LoginUser(email, password);
         }
 
         // GET: api/<UserController>

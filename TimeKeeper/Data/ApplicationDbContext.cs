@@ -16,6 +16,7 @@ namespace TimeKeeper.Data {
         public DbSet<Month> Months { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Workday> Workdays { get; set; }
+        public DbSet<UserSalt> UserSalts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
 
