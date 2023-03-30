@@ -7,5 +7,10 @@ namespace TimeKeeper.Models {
         public string email { get; set; }
         public byte[] salt { get; set; }
 
+        public UserSalt(string email, byte[] salt) {
+            this.email = email;
+            this.salt = salt;
+        }
+
     }
 }

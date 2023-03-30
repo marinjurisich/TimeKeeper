@@ -11,11 +11,17 @@ namespace TimeKeeper.Data.DbOperations {
 
     public class DbOperations : IDbOperations {
 
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext? _context;
+        public byte[]? salt;
+        const int keySize = 64;
+        const int iterations = 350000;
+        HashAlgorithmName hashAlgorithm = HashAlgorithmName.SHA512;
 
         public DbOperations(ApplicationDbContext context) {
             _context = context;
         }
+
+        public DbOperations() { }
 
         #region Workday
 
@@ -191,10 +197,12 @@ namespace TimeKeeper.Data.DbOperations {
                     user.GenerateRandomPassword();
                 }
 
-
-
                 ValidateUser(user);
 
+                string hashedPasswoord = HashPasword(user.password, out salt);
+                UserSalt s = new UserSalt(user.email, salt);
+
+                _context.UserSalts.Add(s);
                 _context.Users.Add(user);
                 _context.SaveChanges();
 
@@ -206,6 +214,30 @@ namespace TimeKeeper.Data.DbOperations {
 
             }
 
+        }
+
+        public IActionResult LoginUser(string email, string password) {
+            try {
+
+                salt = _context.UserSalts.Where(s => s.email.Equals(email))
+                        .Select(s => s.salt).First();
+
+                string hashedPassword = ValidatePassword(password, salt);
+
+                User user = _context.Users.Where(u => u.email.Equals(email) && u.password.Equals(hashedPassword)).FirstOrDefault();
+
+                if (user != null) {
+                    return statusResponse(200, user);
+                } else {
+                    return statusResponse(500, "Wrong email or password!");
+                }
+
+
+            } catch (Exception ex) {
+
+                return statusResponse(500, ex.Message);
+
+            }
         }
 
         public void ValidateUser(User user) {
@@ -273,11 +305,27 @@ namespace TimeKeeper.Data.DbOperations {
             return result;
         }
 
-        string HashPasword(string password, out byte[] salt) {
+        public string ValidatePassword(string password, byte[] salt) {
 
-            const int keySize = 64;
-            const int iterations = 350000;
-            HashAlgorithmName hashAlgorithm = HashAlgorithmName.SHA512;
+            try {
+
+                var hash = Rfc2898DeriveBytes.Pbkdf2(
+                    Encoding.UTF8.GetBytes(password),
+                    salt,
+                    iterations,
+                    hashAlgorithm,
+                    keySize);
+
+                return Convert.ToHexString(hash);
+
+            } catch (Exception ex) {
+                salt = null;
+                return ex.Message;
+            }
+
+        }
+
+        public string HashPasword(string password, out byte[] salt) {
 
             try {
                 salt = RandomNumberGenerator.GetBytes(keySize);
