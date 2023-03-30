@@ -43,6 +43,8 @@ namespace TimeKeeper.Data.DbOperations {
             _context.Workdays.Update(workday);
             _context.SaveChanges();
 
+            CalculateMonthlySalary(workday);
+
             return statusResponse(200);
         }
 
@@ -61,8 +63,6 @@ namespace TimeKeeper.Data.DbOperations {
 
                 var days = _context.Workdays.Where(w => w.Equals(workday));
 
-                
-
                 if (days == null) {
 
                     //check if month exists, if not, create it
@@ -73,7 +73,9 @@ namespace TimeKeeper.Data.DbOperations {
 
                     //clockIn if no record for this day
                     _context.Workdays.Add(workday);
+
                 } else {
+
                     Workday day = days.Last();
 
                     if (day.clockOut == null) {
@@ -98,7 +100,7 @@ namespace TimeKeeper.Data.DbOperations {
 
                 _context.SaveChanges();
 
-                //TODO: calculateMonthlyHours();
+                CalculateMonthlySalary(workday);
 
                 return statusResponse(200);
 
@@ -296,6 +298,31 @@ namespace TimeKeeper.Data.DbOperations {
             _context.SaveChanges();
 
             return statusResponse(200);
+        }
+
+        public void CalculateMonthlySalary(Workday day) {
+
+            Month month = _context.Months.Where(m => m.userId == day.userId
+            && m.date.Month == day.date.Month && m.date.Year == day.date.Year).FirstOrDefault();
+
+            if(month == null) {
+                throw new Exception("Month does not exist!");
+            }
+
+            List<Workday> workdays = _context.Workdays.Where(w => w.userId == day.userId
+            && w.date.Month == day.date.Month && w.date.Year == day.date.Year).ToList();
+
+            double monthlyWorkHours = 0;
+            foreach (Workday workday in workdays) {
+                monthlyWorkHours += (double) workday.workHours;
+            }
+
+            month.workHours = monthlyWorkHours;
+            month.salary = month.workHours * month.payPerHour;
+
+            _context.Update(month);
+            _context.SaveChanges();
+
         }
 
         #endregion

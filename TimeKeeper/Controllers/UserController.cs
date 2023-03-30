@@ -21,7 +21,7 @@ namespace TimeKeeper.Controllers
         }
 
         [HttpPost]
-        public IActionResult LoginUser(string email, string password)
+        public IActionResult LoginUser()
         {
             using var bodyStream = new StreamReader(Request.Body);
             var jsonString = bodyStream.ReadToEndAsync().Result;
