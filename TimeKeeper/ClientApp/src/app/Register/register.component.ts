@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {DataService} from "../Shared/Server/DataService";
+import { ClientAppRoutes } from '../Shared/Routes/ClientAppRoutes';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -9,9 +11,13 @@ import {DataService} from "../Shared/Server/DataService";
 })
 export class RegisterComponent implements OnInit {
 
-  registrationForm: any = null;
+  demoImageCss: string = "url('https://fastly.picsum.photos/id/64/4326/2884.jpg?hmac=9_SzX666YRpR_fOyYStXpfSiJ_edO3ghlSRnH2w09Kg')";
 
-  constructor(private _dataService: DataService) {
+  registrationForm: any = null;
+  clientAppRoutes: ClientAppRoutes;
+
+  constructor(private _dataService: DataService, private _router: Router) {
+    this.clientAppRoutes = new ClientAppRoutes(this._router);
   }
 
   ngOnInit(): void {

@@ -48,18 +48,34 @@
             <!-- Show times -->
             <span *ngFor="let item of clock_in_arr; index as idx;">
 
+                <!-- Show clock in -->
                 <span *ngIf="item.type=='clock_in'">
-                    <i class="fas fa-circle" style="color: #7ed1b3"></i>&nbsp;{{item.time}}
-                    <span *ngIf="idx != clock_in_arr.length - 1">
+
+                    <!-- If this is not last item, show with dash -->
+                    <span *ngIf="idx != clock_in_arr.length - 1; else elseBlock">
+                        <i class="fas fa-circle" style="color: #7ed1b3;"></i>&nbsp;{{item.time}}
                         ->
                     </span>
+
+                    <!-- Stronger color if last item -->
+                    <ng-template #elseBlock>
+                        <i class="fas fa-hourglass-half fa-fade" style="color: #00c47c;"></i>&nbsp;{{item.time}}
+                    </ng-template>
                 </span>
 
+                <!-- Show clock out -->
                 <span *ngIf="item.type=='clock_out'">
-                    <i class="fas fa-circle" style="color: #db7878"></i>&nbsp;{{item.time}}
-                    <span *ngIf="idx != clock_in_arr.length - 1">
+
+                    <!-- If this is not last item, add space -->
+                    <span *ngIf="idx != clock_in_arr.length - 1; else elseBlock;">
+                        <i class="fas fa-circle" style="color: #db7878"></i>&nbsp;{{item.time}}
                         &nbsp;
                     </span>
+
+                    <!-- Stronger color if last item -->
+                    <ng-template #elseBlock>
+                        <i class="fas fa-hourglass-end" style="color: #cc2e2e"></i>&nbsp;{{item.time}}
+                    </ng-template>
                 </span>
 
             </span>

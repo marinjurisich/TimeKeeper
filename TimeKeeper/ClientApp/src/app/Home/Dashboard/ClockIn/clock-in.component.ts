@@ -14,12 +14,20 @@ export class ClockInComponent implements OnInit {
 
   constructor() {
     this.clock_in_arr = []
+
+    // For demo, put curr time
+    this.clock_in();
   }
 
   ngOnInit(): void {
   }
 
   clock_out() {
+    if (this.clocked_in != true) {
+      console.log("Cannot clock out.");
+      return;
+    }
+
     let curr_time = new Date();
     let time = curr_time.getHours() + ":" + ("0" + curr_time.getMinutes()).slice(-2);
 
@@ -31,6 +39,11 @@ export class ClockInComponent implements OnInit {
   }
 
   clock_in() {
+    if (this.clocked_in == true) {
+      console.log("Cannot clock in.");
+      return;
+    }
+
     let curr_time = new Date();
     let time = curr_time.getHours() + ":" + ("0" + curr_time.getMinutes()).slice(-2);
 

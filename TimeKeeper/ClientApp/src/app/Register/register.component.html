@@ -1,67 +1,59 @@
-<h2>Registration</h2>
+<div class="background bg-gradient-primary"></div>
 
-<form [formGroup]="registrationForm">
+<div class="container">
+  <div class="card shadow-lg o-hidden border-0 my-5">
+    <div class="card-body p-0">
+      <div class="row">
+        <div class="col-lg-5 d-none d-lg-flex">
+          <div class="flex-grow-1 bg-register-image" [ngStyle]="{'background-image': demoImageCss}"></div>
+        </div>
+        <div class="col-lg-7">
+          <div class="p-5">
+            <div class="text-center">
+              <h4 class="text-dark mb-4">Create an Account!</h4>
+            </div>
+            <form class="user">
+              <div class="row mb-3">
+                <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text"
+                    id="exampleFirstName" placeholder="First Name" name="first_name"></div>
+                <div class="col-sm-6"><input class="form-control form-control-user" type="text" id="exampleLastName"
+                    placeholder="Last Name" name="last_name"></div>
+              </div>
+              <div class="mb-3">
+                <input class="form-control form-control-user" type="email" id="exampleInputEmail"
+                  aria-describedby="emailHelp" placeholder="Email Address" name="email">
+              </div>
+              <div class="row mb-3">
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <input class="form-control form-control-user" type="password" id="examplePasswordInput"
+                    placeholder="Password" name="password">
+                </div>
+                <div class="col-sm-6">
+                  <input class="form-control form-control-user" type="password" id="exampleRepeatPasswordInput"
+                    placeholder="Repeat Password" name="password_repeat">
+                </div>
+              </div>
 
-  <div id="company_wrapper">
-    <fieldset>
-      <label for="company_name">Company name: </label>
-      <input id="company_name" type="text" formControlName="companyName" placeholder="">
-      <!--Error Message-->
-      <span *ngIf="registrationForm.controls.companyName.invalid">Company name must be filled !</span>
-    </fieldset>
+              <!-- Placeholder button -->
+              <button class="btn btn-primary d-block btn-user w-100" type="submit"
+              (click)="clientAppRoutes.navigateToHome()">
+                Register Account
+              </button>
+              <!-- <button class="btn btn-primary d-block btn-user w-100" type="submit">
+                Register Account
+              </button> -->
 
-    <fieldset>
-      <label for="company_address">Company address: </label>
-      <input id="company_address" type="text" formControlName="companyAddress" placeholder="">
-      <!--Error Message-->
-      <span *ngIf="registrationForm.controls.companyAddress.invalid">Company name must be filled !</span>
-    </fieldset>
-  </div>
+              <hr>
+            </form>
 
-
-  <div id="admin_wrapper">
-    <fieldset>
-      <label for="first_name">Admin first name: </label>
-      <input id="first_name" type="text" formControlName="adminFirstName" placeholder="">
-      <!--Error Message-->
-      <span *ngIf="registrationForm.controls.adminFirstName.invalid">First name must be filled !</span>
-    </fieldset>
-
-    <fieldset>
-      <label for="last_name">Admin last name: </label>
-      <input id="last_name" type="text" formControlName="adminLastName" placeholder="">
-      <!--Error Message-->
-      <span *ngIf="registrationForm.controls.adminLastName.invalid">Last name must be filled !</span>
-    </fieldset>
-
-    <fieldset>
-      <label for="email_address">E-mail address: </label>
-      <input id="email_address" type="email" formControlName="adminEmailAddress" placeholder="">
-      <!--Error Message-->
-      <div *ngIf="registrationForm.controls.adminEmailAddress.invalid">
-        <span *ngIf="registrationForm.controls.adminEmailAddress.errors.required; else adminEmailAddressInvalidEmail">Email address must be filled !</span>
-        <ng-template #adminEmailAddressInvalidEmail><span>Wrong form of email address</span></ng-template>
+            <div class="text-center">
+              <span class="subtext btn btn-link" (click)="clientAppRoutes.navigateToLogin()">
+                Already have an account? Login!
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
-
-    </fieldset>
-
-    <div id="passwords_wrapper">
-      <fieldset>
-        <label for="password_1">Password: </label>
-        <input id="password_1" type="password" formControlName="adminPassword1" placeholder="">
-      </fieldset>
-
-      <fieldset>
-        <label for="password_2">Repeat password: </label>
-        <input id="password_2" type="password" formControlName="adminPassword2" placeholder="">
-      </fieldset>
-
-      <!--Error Message-->
-      <span *ngIf="registrationForm.controls.adminPassword1.value != registrationForm.controls.adminPassword2.value || registrationForm.controls.adminPassword1.invalid">Passwords must be same and min 6 characters long!</span>
     </div>
-
   </div>
-
-  <button (click)="onSubmit()" [disabled]="registrationForm.invalid || registrationForm.controls.adminPassword1.value != registrationForm.controls.adminPassword2.value">Register</button>
-
-</form>
+</div>
