@@ -64,7 +64,6 @@ namespace TimeKeeper {
             });
 
             var app = builder.Build();
-            app.UseCors();
 
             //// Configure the HTTP request pipeline.
             //if (app.Environment.IsDevelopment()) {
@@ -78,7 +77,7 @@ namespace TimeKeeper {
             app.UseStaticFiles();
             app.UseRouting();
 
-            // app.UseCors("CorsPolicy");
+            app.UseCors("CorsPolicy");
 
             //app.UseAuthentication();
             //app.UseIdentityServer();
