@@ -26,13 +26,20 @@ export class DataService {
       debugger;
 
       let apiUrl: string = environment.API_URL + '/user/loginuser';
-      let res = await fetch(apiUrl, {
+      let body = await fetch(apiUrl, {
         method: "POST",
         body: JSON.stringify(credentials)
+      }).then(res => {
+        if (res.status === 200) {
+          return res.json();
+        }
+        else {
+          return null;
+        }
       });
 
-      if (res.status === 200) {
-        Storage.saveUser(new User(credentials), rememberMe);
+      if (body) {
+        Storage.saveUser(new User(body), rememberMe);
       }
 
       true || this._ajaxService.userLogin(credentials)
