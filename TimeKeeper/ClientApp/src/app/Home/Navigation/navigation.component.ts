@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {ClientAppRoutes} from "../../Shared/Routes/ClientAppRoutes";
 import {Router} from "@angular/router";
 
+// Declare vanilly JS function that handles sidebar collapsing
+declare function setupSidebarToggle(): any;
+
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
@@ -16,6 +19,11 @@ export class NavigationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  // Fun function after view renders
+  ngAfterViewInit(): void {
+    setupSidebarToggle();
   }
 
 }
