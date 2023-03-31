@@ -18,7 +18,7 @@
                                 <form class="user" [formGroup]="loginForm">
                                     <div class="mb-3">
                                         <input class="form-control form-control-user" type="email"
-                                            id="email_address" formControlName="emailAddress"
+                                            id="email_address" formControlName="email"
                                             placeholder="Enter Email Address..." name="email">
                                     </div>
                                     <div class="mb-3">
@@ -55,6 +55,9 @@
                                     <span class="subtext btn btn-link" (click)="clientAppRoutes.navigateToRegister()">
                                         Create an Account!
                                     </span>
+                                </div>
+                                <div class="text-center" [ngStyle]="{'visibility': showError ? 'visible': 'hidden'}">
+                                    <span id="errorSpan" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>

@@ -5,7 +5,9 @@
 export const environment = {
   production: false,
   // API_URL: 'http://localhost:44476'
-  API_URL: 'http://localhost:7178'
+
+  // API_URL: 'http://localhost:7178'
+  API_URL: location.protocol + '//localhost:7178/api'
 };
 
 /*

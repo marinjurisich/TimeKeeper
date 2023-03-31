@@ -10,6 +10,7 @@ using TimeKeeper.Models;
 namespace TimeKeeper {
     public class Program {
         public static void Main(string[] args) {
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -58,7 +59,7 @@ namespace TimeKeeper {
                       {
                           policy.WithOrigins("https://localhost:44476",
                                               "http://www.contoso.com");
-                          policy.AllowAnyHeader();
+                          policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
                       });
             });
 

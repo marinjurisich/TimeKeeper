@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { DataService } from "../Shared/Server/DataService";
 import { ClientAppRoutes } from '../Shared/Routes/ClientAppRoutes';
 import { Router } from '@angular/router';
+import { User } from 'oidc-client';
+import { Storage } from '../Shared/Misc/Storage';
 
 @Component({
   selector: 'app-login',
@@ -11,26 +13,27 @@ import { Router } from '@angular/router';
 })
 
 export class LoginComponent implements OnInit {
-  
+
   clientAppRoutes: ClientAppRoutes;
-  demoImageCss: string = "url('https://fastly.picsum.photos/id/64/4326/2884.jpg?hmac=9_SzX666YRpR_fOyYStXpfSiJ_edO3ghlSRnH2w09Kg')";
+  // demoImageCss: string = "url('https://fastly.picsum.photos/id/64/4326/2884.jpg?hmac=9_SzX666YRpR_fOyYStXpfSiJ_edO3ghlSRnH2w09Kg')";
+  demoImageCss: string = "url('https://images.unsplash.com/photo-1506784365847-bbad939e9335?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8Y2FsZW5kYXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60')";
 
   // Form elements
   loginForm: FormGroup;
-  span: HTMLElement | null = null;
   rememberMe: boolean = false;
   submitButton: HTMLElement | null;
+  errorSpan: HTMLElement | null;
+
+  showError: boolean = false;
 
   constructor(private _dataService: DataService, private _router: Router) {
     this.clientAppRoutes = new ClientAppRoutes(this._router);
 
-    // TODO
-    this.span = document.getElementsByTagName('span')[0];
-
     this.submitButton = document.getElementById("loginSubmitButton");
+    this.errorSpan = document.getElementById("errorSpan");
 
     this.loginForm = new FormGroup({
-      emailAddress: new FormControl(null, [Validators.required, Validators.email]),
+      email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, Validators.required)
     });
   }
@@ -47,28 +50,24 @@ export class LoginComponent implements OnInit {
 
   onLogin(event: any): void {
 
-    console.log("rememberMe value: " + this.rememberMe.toString());
-    console.log(this.loginForm.getRawValue());
-    this.clientAppRoutes.navigateToHome();
-    return;
-
-    let button = event.target;
+    // console.log("rememberMe value: " + this.rememberMe.toString());
+    // console.log(this.loginForm.getRawValue());
+    // this.clientAppRoutes.navigateToHome();
 
     if (!this.loginForm.invalid) {
 
       let loginData = this.loginForm.getRawValue();
 
-      this._dataService.userLogin(loginData);
-      this._dataService.loggedUserBehaviorSubject.subscribe((res: any) => {
-        
-        if (res['status'] == 'OK') {
-          this.displaySpan(false, "");
-        }
-        else {
-          this.displaySpan(true, "Wrong email or password!");
-        }
-      });
-
+      this._dataService.userLogin(loginData, this.rememberMe)
+        .then(success => {
+          if (success) {
+            this.displaySpan(false, "");
+            this.clientAppRoutes.navigateToHome();
+          }
+          else {
+            this.displaySpan(true, "Invalid login!");
+          }
+        })
     }
     else {
       this.displaySpan(true, "Incomplete data!");
@@ -78,14 +77,11 @@ export class LoginComponent implements OnInit {
   private displaySpan(show: boolean, message: string): void {
 
     console.log("Trying to " + (show ? "show" : "hide") + " the span... (old login)");
-    return;
 
-    // if (this.submitButton instanceof HTMLElement && this.span instanceof HTMLElement) {
-    //   this.span.style.visibility = show ? 'visible' : 'hidden';
-    //   //@ts-ignore
-    //   this.submitButton.disabled = show;
-    //   this.span.innerText = message;
-    // }
+    this.showError = show;
+    if (this.errorSpan) {
+      this.errorSpan.innerText = message;
+    }
   }
 
 }
