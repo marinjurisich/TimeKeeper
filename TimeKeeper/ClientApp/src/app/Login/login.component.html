@@ -56,6 +56,9 @@
                                         Create an Account!
                                     </span>
                                 </div>
+                                <div class="text-center" [ngStyle]="{'visibility': showError ? 'visible': 'hidden'}">
+                                    <span id="errorSpan" class="text-danger"></span>
+                                </div>
                             </div>
                         </div>
                     </div>

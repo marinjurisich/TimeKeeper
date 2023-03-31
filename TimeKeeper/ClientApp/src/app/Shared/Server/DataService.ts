@@ -1,8 +1,8 @@
-import {Injectable} from "@angular/core";
-import {AjaxService} from "./AjaxService";
-import {BehaviorSubject} from "rxjs";
-import {LocalStorage} from "../User/LocalStorage";
-import {User} from "../Models/User";
+import { Injectable } from "@angular/core";
+import { AjaxService } from "./AjaxService";
+import { BehaviorSubject } from "rxjs";
+import { Storage } from "../Misc/Storage";
+import { User } from "../Models/User";
 
 @Injectable({
   providedIn: 'root'
@@ -17,32 +17,36 @@ export class DataService {
   }
 
   /***** Login *****/
-  userLogin(credentials: any): void {
+  userLogin(credentials: any, rememberMe: boolean = false): void {
+
     this._ajaxService.userLogin(credentials)
       .subscribe((res: any) => {
-          this.loggedUserBehaviorSubject.next(res);
 
-          if (res["status"] == "OK") {
-            console.log("Login OK");
-            LocalStorage.setUserToLocalStorage(new User(credentials));
-          } else {
-            console.log("Login FAILED");
-          }
+        this.loggedUserBehaviorSubject.next(res);
+
+        if (res["status"] == "OK") {
+          Storage.saveUser(new User(credentials), rememberMe);
         }
+        else {
+          console.log("Login FAILED");
+        }
+      }
       );
   }
 
   /***** Registration *****/
-  userRegistration(credentials: any): void {
+  userRegistration(credentials: any, rememberMe: boolean = false): void {
+
     this._ajaxService.userRegistration(credentials)
       .subscribe((res: any) => {
-          if (res["status"] == "OK") {
-            console.log("Registration OK");
-            LocalStorage.setUserToLocalStorage(new User(credentials));
-          } else {
-            console.log("Registration FAILED");
-          }
+
+        if (res["status"] == "OK") {
+          Storage.saveUser(new User(credentials), rememberMe);
         }
+        else {
+          console.log("Registration FAILED");
+        }
+      }
       );
   }
 
