@@ -41,64 +41,6 @@ export class SalaryChartComponent implements OnInit {
     ]
   }
 
-  barChartOptions: any = {
-    "maintainAspectRatio": false,
-    "legend": {
-      "display": false,
-      "labels": {
-        "fontStyle": "normal"
-      }
-    },
-    "title": {
-      "fontStyle": "normal"
-    },
-    "scales": {
-      "xAxes": [
-        {
-          "gridLines": {
-            "color": "rgb(234, 236, 244)",
-            "zeroLineColor": "rgb(234, 236, 244)",
-            "drawBorder": false,
-            "drawTicks": false,
-            "borderDash": [
-              "2"
-            ],
-            "zeroLineBorderDash": [
-              "2"
-            ],
-            "drawOnChartArea": false
-          },
-          "ticks": {
-            "fontColor": "#858796",
-            "fontStyle": "normal",
-            "padding": 20
-          }
-        }
-      ],
-      "yAxes": [
-        {
-          "gridLines": {
-            "color": "rgb(234, 236, 244)",
-            "zeroLineColor": "rgb(234, 236, 244)",
-            "drawBorder": false,
-            "drawTicks": false,
-            "borderDash": [
-              "2"
-            ],
-            "zeroLineBorderDash": [
-              "2"
-            ]
-          },
-          "ticks": {
-            "fontColor": "#858796",
-            "fontStyle": "normal",
-            "padding": 20
-          }
-        }
-      ]
-    }
-  }
-
   constructor() { }
 
   ngOnInit(): void {
@@ -117,7 +59,16 @@ export class SalaryChartComponent implements OnInit {
 
       // Chart options
       options: {
-        aspectRatio:2.5
+        // aspectRatio: 2.5,
+        animation: {
+            onComplete: function(animation) {
+              // Center
+              let canvas = document.getElementById("workDataChart");
+              if (canvas) {
+                canvas.style.margin = "0 auto";
+              }
+            }
+        }
       }
     });
   }
