@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { DataService } from "../Shared/Server/DataService";
+import { Router } from '@angular/router';
+import { ClientAppRoutes } from '../Shared/Routes/ClientAppRoutes';
+import { DataService } from '../Shared/Server/DataService';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -8,16 +11,19 @@ import { DataService } from "../Shared/Server/DataService";
 })
 export class LoginComponent implements OnInit {
 
+  readonly clientAppRoutes: ClientAppRoutes;
+
   loginForm: any = null;
   span: HTMLElement | null = null;
   submitButton: HTMLElement | null = null;
 
-  constructor(private _dataService: DataService) {
+  constructor(private _dataService: DataService, private _router: Router) {
+    this.clientAppRoutes = new ClientAppRoutes(this._router);
   }
 
   ngOnInit(): void {
 
-    this.span = document.getElementsByTagName('span')[0];
+    //this.span = document.getElementsByTagName('span')[0];
     this.submitButton = document.getElementsByTagName('button')[0];
 
     this.loginForm = new FormGroup({
@@ -29,7 +35,7 @@ export class LoginComponent implements OnInit {
 
     this.loginForm.valueChanges.subscribe((value: any) => {
       //@ts-ignore
-      this.submitButton.disabled = this.loginForm.invalid;
+      //this.submitButton.disabled = this.loginForm.invalid;
     });
   }
 
@@ -39,17 +45,19 @@ export class LoginComponent implements OnInit {
 
     if (!this.loginForm.invalid) {
 
+      console.log("Login form is valid");
+
       let loginData = this.loginForm.getRawValue();
 
       this._dataService.userLogin(loginData);
       this._dataService.loggedUserBehaviorSubject.subscribe((res: any) => {
-        if (res['status'] == 'OK') { this.displaySpan(false); console.log("SAKRIJ") }
-        else { this.displaySpan(true); console.log("PRIKAZI") }
+        //if (res['status'] == 'OK') { this.displaySpan(false); console.log("SAKRIJ") }
+        //else { this.displaySpan(true); console.log("PRIKAZI") }
       });
 
     } else {
-
-      this.displaySpan(true);
+      console.log("Login form is invalid");
+      //this.displaySpan(true);
     }
   }
 

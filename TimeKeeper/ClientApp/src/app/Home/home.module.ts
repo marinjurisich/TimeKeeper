@@ -1,15 +1,18 @@
 import {NgModule} from "@angular/core";
-import {HomeComponent} from "./home.component";
 import {CommonModule} from "@angular/common";
-import {DashboardComponent} from "./Dashboard/dashboard.component";
-import {CalendarComponent} from "./Dashboard/Calendar/calendar.component";
-import {NavigationComponent} from "./Navigation/navigation.component";
-import { SalaryChartComponent } from "./Dashboard/SalaryChart/salary-chart.component";
+import { HomeComponent } from "./home.component";
+import { NavigationComponent } from "./Navigation/navigation.component";
+import { RouterModule } from "@angular/router";
+import { DashboardModule } from "./Dashboard/dashboard.module";
+import { UsersModule } from "./Users/users.module";
 
 
 @NgModule({
-  declarations: [HomeComponent, DashboardComponent, CalendarComponent, NavigationComponent, SalaryChartComponent],
-  imports:[CommonModule]
+  declarations: [
+    HomeComponent,
+    NavigationComponent
+  ],
+  imports: [CommonModule, DashboardModule, UsersModule, RouterModule]
 })
 
 export class HomeModule{}

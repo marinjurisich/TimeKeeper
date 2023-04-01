@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {DataService} from "../Shared/Server/DataService";
+import { Router } from '@angular/router';
+import { ClientAppRoutes } from '../Shared/Routes/ClientAppRoutes';
+import { DataService } from '../Shared/Server/DataService';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +13,11 @@ export class RegisterComponent implements OnInit {
 
   registrationForm: any = null;
 
-  constructor(private _dataService: DataService) {
+  readonly clientAppRoutes: ClientAppRoutes;
+  submitButton: HTMLElement | null = null;
+
+  constructor(private _dataService: DataService, private _router: Router) {
+    this.clientAppRoutes = new ClientAppRoutes(this._router);
   }
 
   ngOnInit(): void {
@@ -28,10 +34,16 @@ export class RegisterComponent implements OnInit {
 
   }
 
-  onSubmit(): void {
-    if(!this.registrationForm.invalid){
+  onRegister(event: any): void {
+    if (!this.registrationForm.invalid) {
+
+      console.log("Registration form is valid");
+
       let registrationData = this.registrationForm.getRawValue();
       this._dataService.userRegistration(registrationData);
+
+    } else {
+      console.log("Registration form is invalid");
     }
   }
 

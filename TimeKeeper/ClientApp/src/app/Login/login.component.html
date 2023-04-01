@@ -1,12 +1,11 @@
-<div class="bg-primary d-flex justify-content-between align-content-lg-center align-items-center" style="width: 100%; height: 100vh; flex-direction: column; user-select: none;">
+<!--<div id="my-authentication-component" class="d-flex justify-content-between align-content-lg-center align-items-center" style="width: 100%; height: 100vh; flex-direction: column; user-select: none;">
 
-  <div class="my-header-wrapper">
-    <h1 class="display-3 fw-bold">TimeKeeper &nbsp;<i class="fas fa-calendar rotate-n-15"></i></h1>
-    <button class="btn btn-primary fs-2 fw-bold bg-black" type="button">Register</button>
+  <div id="my-header-wrapper" class=" bg-gradient-primary">
+    <h1 class="display-3 fw-bold"> &nbsp;<i class="fas fa-calendar rotate-n-15"></i> TimeKeeper &nbsp;</h1>
+    <button class=" fs-2 fw-bold border-0" type="button" (click)="clientAppRoutes.navigateToRegister()">Register</button>
   </div>
 
-
-  <div class="my-login-wrapper">
+  <div id="my-form-wrapper" class=" bg-gradient-primary">
 
     <form [formGroup]="loginForm">
 
@@ -20,17 +19,64 @@
         <input id="password" type="password" formControlName="password" placeholder="" class="fs-4 fw-bold">
       </fieldset>
 
-      <div>
+      <div class="d-flex justify-content-center " style="flex-direction: column">
         <span class="display-6 fw-bold">Wrong email or password !</span>
-        <button class="btn btn-primary fs-2 fw-bold bg-black" type="button" [disabled]="loginForm.invalid" (click)="onLogin($event)">Login</button>
+        <button class="fs-2 fw-bold border-0" type="button" [disabled]="loginForm.invalid" (click)="onLogin($event)">Login</button>
       </div>
 
     </form>
   </div>
 
 
-  <div class="my-footer-wrapper">
+  <div id="my-footer-wrapper" class="bg-gradient-primary">-->
     <!--<h6>TimeKeeper</h6>-->
-  </div>
+  <!--</div>
 
+</div>-->
+
+
+
+
+
+
+
+
+<div class =" bg-gradient-primary" style="width: 100%; height:100vh;">
+
+  <div class="container" >
+    <div class="row justify-content-center">
+      <div class="col-md-9 col-lg-12 col-xl-10">
+        <div class="card shadow-lg o-hidden border-0 my-5">
+          <div class="card-body p-0">
+            <div class="row">
+              <div class="col-lg-6 d-none d-lg-flex">
+                <div class="flex-grow-1 bg-login-image" style="background-image: url(&quot;assets/img/dogs/image3.jpeg&quot;);"></div>
+              </div>
+              <div class="col-lg-6">
+                <div class="p-5">
+                  <div class="text-center">
+                    <h4 class="text-dark mb-4">Welcome Back!</h4>
+                  </div>
+                  <form class="user" [formGroup]="loginForm">
+                    <div class="mb-3"><input id="email_address" type="email" formControlName="emailAddress" class="form-control form-control-user" aria-describedby="emailHelp" placeholder="Enter Email Address..." name="email"></div>
+                    <div class="mb-3"><input id="password" type="password" formControlName="password" class="form-control form-control-user" placeholder="Password" name="password"></div>
+                    <div class="mb-3">
+                      <!--<div class="custom-control custom-checkbox small">
+        <div class="form-check"><input class="form-check-input custom-control-input" type="checkbox" id="formCheck-1"><label class="form-check-label custom-control-label" for="formCheck-1">Remember Me</label></div>
+      </div>-->
+                    </div>
+                    <button class="btn btn-primary d-block btn-user w-100" type="submit" (click)="onLogin($event)">Login</button>
+                    <hr>
+                    <hr>
+                  </form>
+                  <!--<div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>-->
+                  <div class="text-center"><a class="small" (click)="clientAppRoutes.navigateToRegister()" style="user-select:none;">Create an Account!</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

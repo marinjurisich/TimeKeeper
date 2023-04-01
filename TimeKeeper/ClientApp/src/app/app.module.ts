@@ -1,13 +1,15 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
-import {RouterModule} from '@angular/router';
-import {AppComponent} from './app.component';
-import {HomeComponent} from "./Home/home.component";
-import {LoginComponent} from './Login/login.component';
-import {RegisterComponent} from "./Register/register.component";
-import {HomeModule} from "./Home/home.module";
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AppComponent } from './app.component';
+import { LoginComponent } from './Login/login.component';
+import { RegisterComponent } from "./Register/register.component";
+import { RouterModule } from '@angular/router';
+import { HomeComponent } from './Home/home.component';
+import { DashboardComponent } from './Home/Dashboard/dashboard.component';
+import { UsersComponent } from './Home/Users/users.component';
+import { HomeModule } from './Home/home.module';
 
 
 @NgModule({
@@ -19,16 +21,24 @@ import {HomeModule} from "./Home/home.module";
   ],
 
   imports: [
-    BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
+    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+   
+    HomeModule,
+
     RouterModule.forRoot([
-      {path: '', component: HomeComponent, pathMatch: 'full'},
-      {path: 'login', component: LoginComponent},
-      {path: 'register', component: RegisterComponent}
+      {
+          path: '', component: HomeComponent, children: [
+          { path: '', component: DashboardComponent },
+          { path: 'Users', component: UsersComponent }
+      ]
+      },
+      { path: 'Login', component: LoginComponent },
+      { path: 'Register', component: RegisterComponent }
     ]),
-    HomeModule
+
 
   ],
 

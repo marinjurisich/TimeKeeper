@@ -3,6 +3,8 @@ import {AjaxService} from "./AjaxService";
 import {BehaviorSubject} from "rxjs";
 import {LocalStorage} from "../User/LocalStorage";
 import {User} from "../Models/User";
+import { Router } from "@angular/router";
+import { ClientAppRoutes } from "../Routes/ClientAppRoutes";
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +14,11 @@ export class DataService {
 
   loggedUserBehaviorSubject: BehaviorSubject<any>;
 
-  constructor(private _ajaxService: AjaxService) {
+  readonly clientAppRoutes: ClientAppRoutes;
+
+  constructor(private _router: Router, private _ajaxService: AjaxService) {
     this.loggedUserBehaviorSubject = new BehaviorSubject<any>({});
+    this.clientAppRoutes = new ClientAppRoutes(this._router);
   }
 
   /***** Login *****/
@@ -25,6 +30,7 @@ export class DataService {
           if (res["status"] == "OK") {
             console.log("Login OK");
             LocalStorage.setUserToLocalStorage(new User(credentials));
+            this.clientAppRoutes.navigateToDashboard();
           } else {
             console.log("Login FAILED");
           }
@@ -39,6 +45,7 @@ export class DataService {
           if (res["status"] == "OK") {
             console.log("Registration OK");
             LocalStorage.setUserToLocalStorage(new User(credentials));
+            this.clientAppRoutes.navigateToDashboard();
           } else {
             console.log("Registration FAILED");
           }

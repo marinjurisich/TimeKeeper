@@ -1,67 +1,115 @@
-<h2>Registration</h2>
+<!--<h2>Registration</h2>
 
 <form [formGroup]="registrationForm">
 
   <div id="company_wrapper">
     <fieldset>
       <label for="company_name">Company name: </label>
-      <input id="company_name" type="text" formControlName="companyName" placeholder="">
-      <!--Error Message-->
-      <span *ngIf="registrationForm.controls.companyName.invalid">Company name must be filled !</span>
-    </fieldset>
+      <input id="company_name" type="text" formControlName="companyName" placeholder="">-->
+<!--Error Message-->
+<!--<span *ngIf="registrationForm.controls.companyName.invalid">Company name must be filled !</span>
+</fieldset>
 
-    <fieldset>
-      <label for="company_address">Company address: </label>
-      <input id="company_address" type="text" formControlName="companyAddress" placeholder="">
-      <!--Error Message-->
-      <span *ngIf="registrationForm.controls.companyAddress.invalid">Company name must be filled !</span>
-    </fieldset>
+<fieldset>
+  <label for="company_address">Company address: </label>
+  <input id="company_address" type="text" formControlName="companyAddress" placeholder="">-->
+<!--Error Message-->
+<!--<span *ngIf="registrationForm.controls.companyAddress.invalid">Company name must be filled !</span>
+  </fieldset>
+</div>
+
+
+<div id="admin_wrapper">
+  <fieldset>
+    <label for="first_name">Admin first name: </label>
+    <input id="first_name" type="text" formControlName="adminFirstName" placeholder="">-->
+<!--Error Message-->
+<!--<span *ngIf="registrationForm.controls.adminFirstName.invalid">First name must be filled !</span>
+</fieldset>
+
+<fieldset>
+  <label for="last_name">Admin last name: </label>
+  <input id="last_name" type="text" formControlName="adminLastName" placeholder="">-->
+<!--Error Message-->
+<!--<span *ngIf="registrationForm.controls.adminLastName.invalid">Last name must be filled !</span>
+</fieldset>
+
+<fieldset>
+  <label for="email_address">E-mail address: </label>
+  <input id="email_address" type="email" formControlName="adminEmailAddress" placeholder="">-->
+<!--Error Message-->
+<!--<div *ngIf="registrationForm.controls.adminEmailAddress.invalid">
+    <span *ngIf="registrationForm.controls.adminEmailAddress.errors.required; else adminEmailAddressInvalidEmail">Email address must be filled !</span>
+    <ng-template #adminEmailAddressInvalidEmail><span>Wrong form of email address</span></ng-template>
   </div>
 
+</fieldset>
 
-  <div id="admin_wrapper">
-    <fieldset>
-      <label for="first_name">Admin first name: </label>
-      <input id="first_name" type="text" formControlName="adminFirstName" placeholder="">
-      <!--Error Message-->
-      <span *ngIf="registrationForm.controls.adminFirstName.invalid">First name must be filled !</span>
-    </fieldset>
+<div id="passwords_wrapper">
+  <fieldset>
+    <label for="password_1">Password: </label>
+    <input id="password_1" type="password" formControlName="adminPassword1" placeholder="">
+  </fieldset>
 
-    <fieldset>
-      <label for="last_name">Admin last name: </label>
-      <input id="last_name" type="text" formControlName="adminLastName" placeholder="">
-      <!--Error Message-->
-      <span *ngIf="registrationForm.controls.adminLastName.invalid">Last name must be filled !</span>
-    </fieldset>
-
-    <fieldset>
-      <label for="email_address">E-mail address: </label>
-      <input id="email_address" type="email" formControlName="adminEmailAddress" placeholder="">
-      <!--Error Message-->
-      <div *ngIf="registrationForm.controls.adminEmailAddress.invalid">
-        <span *ngIf="registrationForm.controls.adminEmailAddress.errors.required; else adminEmailAddressInvalidEmail">Email address must be filled !</span>
-        <ng-template #adminEmailAddressInvalidEmail><span>Wrong form of email address</span></ng-template>
-      </div>
-
-    </fieldset>
-
-    <div id="passwords_wrapper">
-      <fieldset>
-        <label for="password_1">Password: </label>
-        <input id="password_1" type="password" formControlName="adminPassword1" placeholder="">
-      </fieldset>
-
-      <fieldset>
-        <label for="password_2">Repeat password: </label>
-        <input id="password_2" type="password" formControlName="adminPassword2" placeholder="">
-      </fieldset>
-
-      <!--Error Message-->
-      <span *ngIf="registrationForm.controls.adminPassword1.value != registrationForm.controls.adminPassword2.value || registrationForm.controls.adminPassword1.invalid">Passwords must be same and min 6 characters long!</span>
+  <fieldset>
+    <label for="password_2">Repeat password: </label>
+    <input id="password_2" type="password" formControlName="adminPassword2" placeholder="">
+  </fieldset>-->
+<!--Error Message-->
+<!--<span *ngIf="registrationForm.controls.adminPassword1.value != registrationForm.controls.adminPassword2.value || registrationForm.controls.adminPassword1.invalid">Passwords must be same and min 6 characters long!</span>
     </div>
 
   </div>
 
   <button (click)="onSubmit()" [disabled]="registrationForm.invalid || registrationForm.controls.adminPassword1.value != registrationForm.controls.adminPassword2.value">Register</button>
 
-</form>
+</form>-->
+
+
+
+
+
+<div class="bg-gradient-primary p-2" style="width:100%; height:100vh;">
+
+  <div class="container">
+    <div class="card shadow-lg o-hidden border-0 my-5">
+      <div class="card-body p-0">
+        <div class="row">
+          <div class="col-lg-5 d-none d-lg-flex">
+            <div class="flex-grow-1 bg-register-image" style="background-image: url(&quot;assets/img/dogs/image2.jpeg&quot;);"></div>
+          </div>
+          <div class="col-lg-7">
+            <div class="p-5">
+              <div class="text-center">
+                <h4 class="text-dark mb-4">Create an Account!</h4>
+              </div>
+              <form class="user" [formGroup]="registrationForm">
+                <div class="row mb-3">
+                  <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" id="company_name" formControlName="companyName" placeholder="Company Name"></div>
+                  <div class="col-sm-6"><input class="form-control form-control-user" id="company_address" type="text" formControlName="companyAddress" placeholder="Company address"></div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col-sm-4 mb-3"><input class="form-control form-control-user" id="first_name" type="text" formControlName="adminFirstName" placeholder="First name"></div>
+                  <div class="col-sm-4 mb-3 mb-sm-0"><input class="form-control form-control-user" id="last_name" type="text" formControlName="adminLastName" placeholder="Last name"></div>
+                  <div class="col-sm-4"><input class="form-control form-control-user" id="email_address" type="email" formControlName="adminEmailAddress" placeholder="Email address" name="password_repeat"></div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col-sm-6 mb-3"><input class="form-control form-control-user" id="password_1" type="password" formControlName="adminPassword1"  placeholder="Password"></div>
+                  <div class="col-sm-6 mb-3"><input class="form-control form-control-user"id="password_2" type="password" formControlName="adminPassword2" placeholder="Repeat password"></div>
+               </div>
+
+                <button class="btn btn-primary d-block btn-user w-100" type="submit"   (click)="onRegister($event)" style="user-select:none;">Register Account</button>
+                <hr>
+                <hr>
+              </form>
+              <!--<div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>-->
+              <div class="text-center"><a class="small" (click)="clientAppRoutes.navigateToLogin()" style="user-select:none;">Already have an account? Login!</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

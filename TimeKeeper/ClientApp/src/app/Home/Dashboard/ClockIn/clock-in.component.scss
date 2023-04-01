@@ -1,0 +1,38 @@
+
+.clock-in-container {
+  height: 12rem;
+  position: relative;
+
+  svg {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(var(--bs-primary-rgb),var(--bs-text-opacity)) !important;
+    transition: all 0.2s;
+
+    &.svg-clock-in {
+      /* Adjust size to match clock-out */
+      width: calc(50% - 20px);
+      max-height: calc(12rem - 20px);
+      fill: #7ed1b3;
+
+      &:hover {
+        fill: #1cc88a;
+        cursor: pointer;
+      }
+    }
+
+    &.svg-clock-out {
+      width: 50%;
+      max-height: 12rem;
+      stroke: #db7878;
+
+      &:hover {
+        stroke: #D63232;
+        cursor: pointer;
+      }
+    }
+  }
+}
