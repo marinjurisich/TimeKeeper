@@ -19,6 +19,17 @@ export class NavigationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    window.onscroll = () => {
+      let navigationContent = document.getElementById("navigation-content");
+      let currentScrollY = window.scrollY;
+
+      if (navigationContent) {
+        navigationContent.style.position = "absolute";
+        navigationContent.style.top = currentScrollY + "px";
+      }
+    }
+
   }
 
   // Fun function after view renders

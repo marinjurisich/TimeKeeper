@@ -7,6 +7,9 @@ export class User {
   emailAddress: string | null;
   password: string | null;
   password2: string | null;
+  payPerHour: string | null;
+
+
 
   constructor(credentials: any) {
 
@@ -19,5 +22,7 @@ export class User {
 
     this.password = credentials.adminPassword1 || credentials.userPassword1 || credentials.password1 || credentials.adminPassword || credentials.userPassword || credentials.password;
     this.password2 = credentials.adminPassword2 || credentials.userPassword2 || credentials.password2;
+
+    this.payPerHour = credentials.payPerHour;
   }
 }

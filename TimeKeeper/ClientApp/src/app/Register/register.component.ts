@@ -27,19 +27,26 @@ export class RegisterComponent implements OnInit {
     this.registrationForm = new FormGroup({
       companyName: new FormControl(null, Validators.required),
       companyAddress: new FormControl(null, Validators.required),
-      adminFirstName: new FormControl(null, Validators.required),
-      adminLastName: new FormControl(null, Validators.required),
-      adminEmailAddress: new FormControl(null, [Validators.required, Validators.email]),
-      adminPassword1: new FormControl(null, [Validators.required, Validators.minLength(6)]),
-      adminPassword2: new FormControl(null, [Validators.required, Validators.minLength(6)])
+      userFirstName: new FormControl(null, Validators.required),
+      userLastName: new FormControl(null, Validators.required),
+      userEmailAddress: new FormControl(null, [Validators.required, Validators.email]),
+      userPayPerHour: new FormControl(null, [Validators.required, Validators.pattern(/^\d*\.?\d*$/)]),
+      userPassword1: new FormControl(null, [Validators.required, Validators.minLength(2)]),
+      userPassword2: new FormControl(null, [Validators.required, Validators.minLength(2)])
     });
 
   }
 
-  onSubmit(): void {
-    if(!this.registrationForm.invalid){
+  onRegister(event: any): void {
+    if (!this.registrationForm.invalid) {
+
+      console.log("Registration form is valid");
+
       let registrationData = this.registrationForm.getRawValue();
       this._dataService.userRegistration(registrationData);
+
+    } else {
+      console.log("Registration form is invalid");
     }
   }
 
