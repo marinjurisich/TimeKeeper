@@ -9,40 +9,78 @@
         </div>
         <div class="col-lg-7">
           <div class="p-5">
+
+            <!-- Title -->
             <div class="text-center">
-              <h4 class="text-dark mb-4">Create an Account!</h4>
+              <h4 class="text-dark mb-4">Register for TimeKeeper</h4>
             </div>
-            <form class="user">
-              <div class="row mb-3">
-                <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text"
-                    id="exampleFirstName" placeholder="First Name" name="first_name"></div>
-                <div class="col-sm-6"><input class="form-control form-control-user" type="text" id="exampleLastName"
-                    placeholder="Last Name" name="last_name"></div>
+
+            <!-- Form -->
+            <form class="user" [formGroup]="registerUserForm">
+
+              <!-- Company register section -->
+              <div class="text-left">
+                <h5 class="text-dark mb-4">Company info</h5>
               </div>
+  
+              <!-- Company name -->
               <div class="mb-3">
-                <input class="form-control form-control-user" type="email" id="exampleInputEmail"
-                  aria-describedby="emailHelp" placeholder="Email Address" name="email">
+                <input class="form-control form-control-user" type="text" formControlName="name" placeholder="Company name">
               </div>
+  
+              <!-- Company address -->
+              <div class="mb-3">
+                <input class="form-control form-control-user" type="text" formControlName="address" placeholder="Company address">
+              </div>
+  
+  
+  
+              <!-- User register section -->
+              <div class="text-left">
+                <h5 class="text-dark mb-4">User data</h5>
+              </div>
+
+              <!-- First and last name -->
               <div class="row mb-3">
+
+                <!-- First name -->
                 <div class="col-sm-6 mb-3 mb-sm-0">
-                  <input class="form-control form-control-user" type="password" id="examplePasswordInput"
-                    placeholder="Password" name="password">
+                  <input class="form-control form-control-user" type="text" formControlName="firstName" placeholder="First Name">
                 </div>
+
+                <!-- Last name -->
                 <div class="col-sm-6">
-                  <input class="form-control form-control-user" type="password" id="exampleRepeatPasswordInput"
-                    placeholder="Repeat Password" name="password_repeat">
+                  <input class="form-control form-control-user" type="text" formControlName="lastName" placeholder="Last Name">
                 </div>
               </div>
 
-              <!-- Placeholder button -->
+              <!-- E-mail -->
+              <div class="mb-3">
+                <input class="form-control form-control-user" type="email" formControlName="email" placeholder="Email Address">
+              </div>
+
+              <!-- Password & repeat password -->
+              <div class="row mb-3">
+
+                <!-- Password -->
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <input class="form-control form-control-user" type="password" formControlName="password" placeholder="Password">
+                </div>
+
+                <!-- Repeat password -->
+                <div class="col-sm-6">
+                  <input class="form-control form-control-user" type="password" formControlName="confirmPassword" placeholder="Repeat Password">
+                </div>
+              </div>
+
+              <!-- Company ID (set through JS) -->
+              <input type="hidden" formControlName="companyId" value="13">
+
+              <!-- Register button -->
               <button class="btn btn-primary d-block btn-user w-100" type="submit"
-              (click)="clientAppRoutes.navigateToHome()">
+                (click)="onSubmit()" [disabled]="register_disabled">
                 Register Account
               </button>
-              <!-- <button class="btn btn-primary d-block btn-user w-100" type="submit">
-                Register Account
-              </button> -->
-
               <hr>
             </form>
 

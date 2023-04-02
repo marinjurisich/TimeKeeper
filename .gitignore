@@ -166,6 +166,9 @@ AutoTest.Net/
 # Installshield output folder
 [Ee]xpress/
 
+# .angular folder (sometimes generated)
+.angular
+
 # DocProject is a documentation generator add-in
 DocProject/buildhelp/
 DocProject/Help/*.HxT
