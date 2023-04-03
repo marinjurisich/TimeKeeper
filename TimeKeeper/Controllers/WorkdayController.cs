@@ -17,12 +17,18 @@ namespace TimeKeeper.Controllers {
             _operations = operations;
         }
 
+        //Accepts datetime as a string, returns a single Workday or null
+        //TODO: should return Workday list in case there are multiple inputs in a single day
         [HttpGet]
         public IActionResult Get(string date) {
 
             return _operations.GetWorkday(date);
         }
 
+        /*
+         * Accepts Workday with all neccessary data, updates it and saves to DB
+         * returns statusRespnose 200
+         */
         [HttpPost]
         public IActionResult Update() {
 
@@ -35,6 +41,11 @@ namespace TimeKeeper.Controllers {
 
         }
 
+        /*Accepts a workday with:
+         * userId, date, clockIn - when clocking in
+         * The rest of Workday attributes (all attributes) - when clocking out
+         * Returns status response 200
+         */
         [HttpPost]
         public IActionResult ClockInOut() {
 
@@ -47,7 +58,8 @@ namespace TimeKeeper.Controllers {
             return _operations.ClockInOut(workday);
 
         }
-
+        
+        //Accepts guid as string, returns staus response 200
         [HttpGet]
         public IActionResult ScannerClockInOut(string guid) {
 

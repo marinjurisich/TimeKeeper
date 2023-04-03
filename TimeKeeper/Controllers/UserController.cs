@@ -20,6 +20,10 @@ namespace TimeKeeper.Controllers
             _operations = operations;
         }
 
+        /*
+            Accepts email and password in request body
+            Returns response with User or Exception message in body
+         */
         [HttpPost]
         public IActionResult LoginUser()
         {
@@ -31,7 +35,7 @@ namespace TimeKeeper.Controllers
             return _operations.LoginUser(loginData);
         }
 
-        // GET: api/<UserController>
+        // Accepts company id, returns all users in company
         [HttpGet("{companyId}")]
         public List<User> GetAllUsers(int companyId)
         {
@@ -40,7 +44,7 @@ namespace TimeKeeper.Controllers
             return users;
         }
 
-        // GET api/<UserController>/5
+        // Accepts user id, returns User or null
         [HttpGet("{id}")]
         public User Get(int id)
         {
@@ -49,6 +53,14 @@ namespace TimeKeeper.Controllers
             return user;
         }
 
+        /*
+         * Accepts User containing at least firstName, lastName, email,
+         * isAdmin, payPerHour and companyId
+         * password is optional, if one is not provided it is randomly generated
+         * grade is optional
+         * guid will always be randomly generated
+         * Returns new User or Exception message
+         */
         [HttpPost]
         public IActionResult Register() {
 

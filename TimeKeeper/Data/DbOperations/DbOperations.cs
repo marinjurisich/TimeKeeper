@@ -120,7 +120,7 @@ namespace TimeKeeper.Data.DbOperations {
                     (w,u) => new {
                         workday = w,
                         guid = u.guid
-                    }).Where(x => x.guid == guid);
+                    }).Where(x => x.guid == guid && x.workday.date.Equals(new DateTime()));
 
                 var userId = _context.Users.Where(u => u.guid == guid).Select(u => u.id).FirstOrDefault();
 
@@ -177,7 +177,7 @@ namespace TimeKeeper.Data.DbOperations {
 
                 _context.SaveChanges();
 
-                //TODO: calculateMonthlyHours();
+                CalculateMonthlySalary(days.Last().workday);
 
                 return statusResponse(200);
 
