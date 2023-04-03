@@ -18,11 +18,13 @@ public class CompanyController : ControllerBase {
         _operations = operations;
     }
 
+    //Accepts company id, returns company or null
     [HttpGet("{id}")]
     public Company Get(int id) {
         return _context.Companies.Where(c => c.id == id).FirstOrDefault();
     }
 
+    //Accepts Company name and address, returns created company(with id)
     [HttpPost]
     public IActionResult Register() {
 
