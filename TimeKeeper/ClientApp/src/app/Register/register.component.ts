@@ -45,6 +45,8 @@ export class RegisterComponent implements OnInit {
       // Company ID field is hidden and is added through JS
       companyId: new FormControl("0", Validators.required) // Hardcoded to 0 for now
 
+
+
     });
 
     // Listen for form changes
@@ -61,6 +63,7 @@ export class RegisterComponent implements OnInit {
     });
 
   }
+
 
   ngOnInit(): void {
   }
