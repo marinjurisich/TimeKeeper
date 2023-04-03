@@ -18,22 +18,26 @@ namespace TimeKeeper.Controllers
             _operations = operations;
         }
 
+        //Accepts user id and a date, returns a users month with same date or null
         [HttpGet]
         public Month Get(int userId, DateTime date)
         {
             return _context.Months.Where(m => m.userId == userId && m.date.Month == date.Month).FirstOrDefault();
         }
 
+        //Accepts user id, return all months for that user
         [HttpGet]
         public Month GetUsersMonths(int userId) {
             return _context.Months.Where(m => m.userId == userId).FirstOrDefault();
         }
 
+        //Accepts user id, returns last 12 months
         [HttpGet]
         public List<Month> GetLastTwelveMonths(int userId) {
             return _context.Months.Where(m => m.userId == userId).TakeLast(12).ToList();
         }
 
+        //Accepts date as a string, returns all days with matching month and year
         [HttpGet]
         public IActionResult GetDays(string date) {
 

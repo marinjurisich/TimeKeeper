@@ -16,7 +16,7 @@ namespace TimeKeeper.Controllers
             _context = context;
         }
 
-
+        //Accepts company id, returns all company's projects
         [HttpGet]
         public List<Project> GetCompanyProjects(int companyId)
         {

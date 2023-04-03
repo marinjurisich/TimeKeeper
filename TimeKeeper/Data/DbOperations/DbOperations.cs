@@ -120,7 +120,7 @@ namespace TimeKeeper.Data.DbOperations {
                     (w,u) => new {
                         workday = w,
                         guid = u.guid
-                    }).Where(x => x.guid == guid);
+                    }).Where(x => x.guid == guid && x.workday.date.Equals(new DateTime()));
 
                 var userId = _context.Users.Where(u => u.guid == guid).Select(u => u.id).FirstOrDefault();
 
@@ -177,7 +177,7 @@ namespace TimeKeeper.Data.DbOperations {
 
                 _context.SaveChanges();
 
-                //TODO: calculateMonthlyHours();
+                CalculateMonthlySalary(days.Last().workday);
 
                 return statusResponse(200);
 
@@ -246,10 +246,16 @@ namespace TimeKeeper.Data.DbOperations {
 
         public void ValidateUser(User user) {
             
-            if(String.IsNullOrWhiteSpace(user.firstName)  || String.IsNullOrWhiteSpace(user.lastName)
-                || String.IsNullOrWhiteSpace(user.email) || String.IsNullOrWhiteSpace(user.password)
-                || user.isAdmin == null || user.payPerHour == null || user.payPerHour == 0
-                || user.companyId == null || user.companyId == 0 || String.IsNullOrWhiteSpace(user.guid))
+            if(String.IsNullOrWhiteSpace(user.firstName) ||
+                String.IsNullOrWhiteSpace(user.lastName) ||
+                String.IsNullOrWhiteSpace(user.email) ||
+                String.IsNullOrWhiteSpace(user.password) ||
+                user.isAdmin == null ||
+                user.payPerHour == null ||
+                user.payPerHour == 0 ||
+                user.companyId == null ||
+                user.companyId == 0 ||
+                String.IsNullOrWhiteSpace(user.guid))
             {
                 throw new Exception("Missing user data!");
             }

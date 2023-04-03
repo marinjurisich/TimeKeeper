@@ -1,12 +1,11 @@
-<div
-    id="fp_container" class="pb-3 mb-3">
+<div id="fp_container" class="pb-3 mb-3">
 
-        <!-- Title & Generate report -->
-        <div class="d-sm-flex justify-content-between align-items-center my-4">
-            <h3 class="text-dark mb-0">
-                Workday calendar
-            </h3>
-        </div>
+    <!-- Title & Generate report -->
+    <div class="d-sm-flex justify-content-between align-items-center my-4">
+        <h3 class="text-dark mb-0">
+            Workday calendar
+        </h3>
+    </div>
 
     <!-- FP Calendar (Warning - do not change ID) -->
     <div id="fpWorkday"></div>
@@ -17,18 +16,52 @@
     </button>
 
     <!-- Modal -->
-    <div class="modal fade" id="workDayModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="workDayModalLabel" aria-hidden="true">
+    <div class="modal fade" id="workDayModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="workDayModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="workDayModalLabel">
-                        Edit
+                        <!-- Edit -->
+                        <i class="fa-solid fa-calendar"></i>&nbsp;
                         <strong id="workday_modal_title">YYYY-MM-DD</strong>
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ...
+
+                    <!-- Workday form -->
+
+
+                    <!-- Form -->
+                    <form class="user" [formGroup]="workdayForm">
+
+                        <!--  -->
+                        <div class="mb-3">
+                            <input class="form-control form-control-user" type="text" placeholder="Whole row input">
+                        </div>
+
+                        <!--  -->
+                        <div class="row pb-3">
+
+                            <!--  -->
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <input class="form-control form-control-user" type="text" placeholder="Half row input">
+                            </div>
+
+                            <!-- Last name -->
+                            <div class="col-sm-6">
+                                <input class="form-control form-control-user" type="text" placeholder="Half row input">
+                            </div>
+                        </div>
+
+                        <!-- Last name -->
+                        <div class="">
+                            <textarea class="form-control w-100" type="text" placeholder="Textarea input"></textarea>
+                        </div>
+
+                    </form>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

@@ -15,39 +15,76 @@ export class RegisterComponent implements OnInit {
   demoImageCss: string = "url('https://images.unsplash.com/photo-1506784365847-bbad939e9335?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8Y2FsZW5kYXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60')";
 
 
-  registrationForm: any = null;
+  // Routing utility
   clientAppRoutes: ClientAppRoutes;
 
+
+  // User form
+  registerUserForm: FormGroup;
+
+  // Button [disabled] update
+  register_disabled: boolean = true;
+
   constructor(private _dataService: DataService, private _router: Router) {
+
     this.clientAppRoutes = new ClientAppRoutes(this._router);
-  }
 
-  ngOnInit(): void {
+    this.registerUserForm = new FormGroup({
 
-    this.registrationForm = new FormGroup({
-      companyName: new FormControl(null, Validators.required),
-      companyAddress: new FormControl(null, Validators.required),
-      userFirstName: new FormControl(null, Validators.required),
-      userLastName: new FormControl(null, Validators.required),
-      userEmailAddress: new FormControl(null, [Validators.required, Validators.email]),
-      userPayPerHour: new FormControl(null, [Validators.required, Validators.pattern(/^\d*\.?\d*$/)]),
-      userPassword1: new FormControl(null, [Validators.required, Validators.minLength(2)]),
-      userPassword2: new FormControl(null, [Validators.required, Validators.minLength(2)])
+      // Company data
+      name: new FormControl(null, [Validators.required]),
+      address: new FormControl(null, [Validators.required]),
+
+      // User data
+      firstName: new FormControl(null, [Validators.required]),
+      lastName: new FormControl(null, [Validators.required]),
+      email: new FormControl(null, [Validators.required, Validators.email]),
+      password: new FormControl(null, Validators.required),
+      confirmPassword: new FormControl(null, Validators.required),
+
+      // Company ID field is hidden and is added through JS
+      companyId: new FormControl("0", Validators.required) // Hardcoded to 0 for now
+
+
+
+    });
+
+    // Listen for form changes
+    this.registerUserForm.valueChanges.subscribe(data => {
+
+      console.log(data);
+
+      // Check validity on form input
+      let form_valid = this.registerUserForm.invalid;
+      let passwords_differ = data["password"] !== data["confirmPassword"];
+
+      // Update boolean
+      this.register_disabled = this.registerUserForm.invalid || passwords_differ;
     });
 
   }
 
-  onRegister(event: any): void {
-    if (!this.registrationForm.invalid) {
 
-      console.log("Registration form is valid");
+  ngOnInit(): void {
+  }
 
-      let registrationData = this.registrationForm.getRawValue();
-      this._dataService.userRegistration(registrationData);
+  onSubmit(): void {
 
-    } else {
-      console.log("Registration form is invalid");
+    if (confirm(
+      "[TESTING]   Is this data ok:\n\n" +
+      JSON.stringify(
+        this.registerUserForm.getRawValue(), null, 2
+      )
+    ))
+    {
+      // Successful login
+      this.clientAppRoutes.navigateToHome();
     }
+    
+    // if(!this.registrationForm.invalid) {
+    //   let registrationData = this.registrationForm.getRawValue();
+    //   this._dataService.userRegistration(registrationData);
+    // }
   }
 
 }

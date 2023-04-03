@@ -1,56 +1,91 @@
+<div class="background bg-gradient-primary"></div>
 
+<div class="container">
+  <div class="card shadow-lg o-hidden border-0 my-5">
+    <div class="card-body p-0">
+      <div class="row">
+        <div class="col-lg-5 d-none d-lg-flex">
+          <div class="flex-grow-1 bg-register-image" [ngStyle]="{'background-image': demoImageCss}"></div>
+        </div>
+        <div class="col-lg-7">
+          <div class="p-5">
 
-<div class="bg-gradient-primary p-2" style="width:100%; height:100vh;">
+            <!-- Title -->
+            <div class="text-center">
+              <h4 class="text-dark mb-4">Register for TimeKeeper</h4>
+            </div>
 
-  <div class="container">
-    <div class="card shadow-lg o-hidden border-0 my-5">
-      <div class="card-body p-0">
-        <div class="row">
-          <div class="col-lg-5 d-none d-lg-flex">
-            <div class="flex-grow-1 bg-register-image" style="background-image: url(&quot;assets/img/dogs/image2.jpeg&quot;);"></div>
-          </div>
-          <div class="col-lg-7">
-            <div class="p-5">
-              <div class="text-center">
-                <h4 class="text-dark mb-4">Create an Account!</h4>
+            <!-- Form -->
+            <form class="user" [formGroup]="registerUserForm">
+
+              <!-- Company register section -->
+              <div class="text-left">
+                <h5 class="text-dark mb-4">Company info</h5>
               </div>
-              <form class="user" [formGroup]="registrationForm">
+  
+              <!-- Company name -->
+              <div class="mb-3">
+                <input class="form-control form-control-user" type="text" formControlName="name" placeholder="Company name">
+              </div>
+  
+              <!-- Company address -->
+              <div class="mb-3">
+                <input class="form-control form-control-user" type="text" formControlName="address" placeholder="Company address">
+              </div>
+  
+              <!-- User register section -->
+              <div class="text-left">
+                <h5 class="text-dark mb-4">User data</h5>
+              </div>
 
-                <div >
-                  <h6 class="text-dark mb-4">Company</h6>
+              <!-- First and last name -->
+              <div class="row mb-3">
 
-                  <div class="row mb-3">
-                    <div class="col-sm-6 mb-1"><input class="form-control form-control-user" type="text" id="company_name" formControlName="companyName" placeholder="Company Name"></div>
-                    <div class="col-sm-6 mb-1"><input class="form-control form-control-user" id="company_address" type="text" formControlName="companyAddress" placeholder="Company address"></div>
-                  </div>
+                <!-- First name -->
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <input class="form-control form-control-user" type="text" formControlName="firstName" placeholder="First Name">
                 </div>
-              
-                <div >
-                  <h6 class="text-dark mb-4">Administrator</h6>
 
-                  <div class="row mb-3">
-                    <div class="col-sm-6 mb-1"><input class="form-control form-control-user" id="first_name" type="text" formControlName="userFirstName" placeholder="First name"></div>
-                    <div class="col-sm-6 mb-1"><input class="form-control form-control-user" id="last_name" type="text" formControlName="userLastName" placeholder="Last name"></div>
-                  </div>
+                <!-- Last name -->
+                <div class="col-sm-6">
+                  <input class="form-control form-control-user" type="text" formControlName="lastName" placeholder="Last Name">
+                </div>
+              </div>
 
-                  <div class="row mb-3">
-                    <div class="col-sm-6 mb-1"><input class="form-control form-control-user" id="email_address" type="email" formControlName="userEmailAddress" placeholder="Email address"></div>
-                    <div class="col-sm-6 mb-1"><input class="form-control form-control-user" id="pay_per_hour" type="text" formControlName="userPayPerHour" placeholder="Pay per hour"></div>
-                  </div>
+              <!-- E-mail -->
+              <div class="mb-3">
+                <input class="form-control form-control-user" type="email" formControlName="email" placeholder="Email Address">
+              </div>
 
-                  <div class="row mb-3">
-                    <div class="col-sm-6 mb-1"><input class="form-control form-control-user" id="password_1" type="password" formControlName="userPassword1" placeholder="Password"></div>
-                    <div class="col-sm-6 mb-1"><input class="form-control form-control-user" id="password_2" type="password" formControlName="userPassword2" placeholder="Repeat password"></div>
-                  </div>
+              <!-- Password & repeat password -->
+              <div class="row mb-3">
+
+                <!-- Password -->
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <input class="form-control form-control-user" type="password" formControlName="password" placeholder="Password">
+                </div>
+
+                <!-- Repeat password -->
+                <div class="col-sm-6">
+                  <input class="form-control form-control-user" type="password" formControlName="confirmPassword" placeholder="Repeat Password">
+
                 </div>
                
+              <!-- Company ID (set through JS) -->
+              <input type="hidden" formControlName="companyId" value="13">
 
-                <button class="btn btn-primary d-block btn-user w-100" type="submit" (click)="onRegister($event)" style="user-select:none;">Register Account</button>
-                <!--<hr>-->
-                <hr>
-              </form>
-              <!--<div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>-->
-              <div class="text-center"><a class="small" (click)="clientAppRoutes.navigateToLogin()" style="user-select:none;">Already have an account? Login!</a></div>
+              <!-- Register button -->
+              <button class="btn btn-primary d-block btn-user w-100" type="submit"
+                (click)="onSubmit()" [disabled]="register_disabled">
+                Register Account
+              </button>
+              <hr>
+            </form>
+
+            <div class="text-center">
+              <span class="subtext btn btn-link" (click)="clientAppRoutes.navigateToLogin()">
+                Already have an account? Login!
+              </span>
             </div>
           </div>
         </div>
