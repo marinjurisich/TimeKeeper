@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 // Defined in /src/assets/js/init-fp.js
 declare function init_fp(): any;
@@ -10,7 +11,15 @@ declare function init_fp(): any;
 })
 export class CalendarComponent implements OnInit {
 
-  constructor() { }
+  // Workday form
+  workdayForm: FormGroup;
+
+  constructor() {
+
+    this.workdayForm = new FormGroup({
+
+    });
+  }
 
   ngOnInit(): void {
 

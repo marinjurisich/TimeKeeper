@@ -246,10 +246,16 @@ namespace TimeKeeper.Data.DbOperations {
 
         public void ValidateUser(User user) {
             
-            if(String.IsNullOrWhiteSpace(user.firstName)  || String.IsNullOrWhiteSpace(user.lastName)
-                || String.IsNullOrWhiteSpace(user.email) || String.IsNullOrWhiteSpace(user.password)
-                || user.isAdmin == null || user.payPerHour == null || user.payPerHour == 0
-                || user.companyId == null || user.companyId == 0 || String.IsNullOrWhiteSpace(user.guid))
+            if(String.IsNullOrWhiteSpace(user.firstName) ||
+                String.IsNullOrWhiteSpace(user.lastName) ||
+                String.IsNullOrWhiteSpace(user.email) ||
+                String.IsNullOrWhiteSpace(user.password) ||
+                user.isAdmin == null ||
+                user.payPerHour == null ||
+                user.payPerHour == 0 ||
+                user.companyId == null ||
+                user.companyId == 0 ||
+                String.IsNullOrWhiteSpace(user.guid))
             {
                 throw new Exception("Missing user data!");
             }

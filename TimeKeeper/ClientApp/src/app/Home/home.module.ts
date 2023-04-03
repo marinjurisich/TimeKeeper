@@ -8,12 +8,15 @@ import {SalaryChartComponent} from "./Dashboard/SalaryChart/salary-chart.compone
 import { ClockInComponent } from './Dashboard/ClockIn/clock-in.component';
 import { SummaryComponent } from './Dashboard/Summary/summary.component';
 import { HeaderComponent } from './Header/header.component';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 
 @NgModule({
   declarations: [HomeComponent, DashboardComponent, CalendarComponent, NavigationComponent, SalaryChartComponent, ClockInComponent, SummaryComponent, HeaderComponent],
   imports:[
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 
