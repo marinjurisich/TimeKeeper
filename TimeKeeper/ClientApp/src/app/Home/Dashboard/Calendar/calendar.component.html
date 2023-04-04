@@ -32,9 +32,14 @@
 
                     <!-- Workday form -->
 
-
                     <!-- Form -->
                     <form class="user" [formGroup]="workdayForm">
+
+                        <!-- Clock ins -->
+                        <div class="mb-3">
+                            <label for="t_timestamps">Clock ins</label>
+                            <textarea id="t_timestamps" class="clock-in-textarea form-control w-100" type="text" placeholder="Textarea input" readonly>{{clock_ins}}</textarea>
+                        </div>
 
                         <!--  -->
                         <div class="mb-3">
@@ -49,13 +54,13 @@
                                 <input class="form-control form-control-user" type="text" placeholder="Half row input">
                             </div>
 
-                            <!-- Last name -->
+                            <!--  -->
                             <div class="col-sm-6">
                                 <input class="form-control form-control-user" type="text" placeholder="Half row input">
                             </div>
                         </div>
 
-                        <!-- Last name -->
+                        <!--  -->
                         <div class="">
                             <textarea class="form-control w-100" type="text" placeholder="Textarea input"></textarea>
                         </div>

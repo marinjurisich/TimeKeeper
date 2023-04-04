@@ -11,3 +11,16 @@
 .flatpickr-day.weekend {
     background: #ffecb1;
 }
+
+.flatpickr-day.editable::before {
+    content: "";
+    display: block;
+    width: 5px;
+    height: 5px;
+    background: #1cc88a;
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+}
