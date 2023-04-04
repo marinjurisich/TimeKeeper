@@ -6,6 +6,7 @@ import { ClockInComponent } from './ClockIn/clock-in.component';
 import { SalaryChartComponent } from './SalaryChart/salary-chart.component';
 import { SummaryComponent } from './Summary/summary.component';
 import { HeaderModule } from '../Header/header.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -17,7 +18,7 @@ import { HeaderModule } from '../Header/header.module';
     SummaryComponent],
 
   imports: [
-    CommonModule, HeaderModule
+    CommonModule, HeaderModule, ReactiveFormsModule
   ]
 })
 export class DashboardModule { }

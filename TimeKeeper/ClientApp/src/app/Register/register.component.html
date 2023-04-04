@@ -22,17 +22,17 @@
               <div class="text-left">
                 <h5 class="text-dark mb-4">Company info</h5>
               </div>
-  
+
               <!-- Company name -->
               <div class="mb-3">
                 <input class="form-control form-control-user" type="text" formControlName="name" placeholder="Company name">
               </div>
-  
+
               <!-- Company address -->
               <div class="mb-3">
                 <input class="form-control form-control-user" type="text" formControlName="address" placeholder="Company address">
               </div>
-  
+
               <!-- User register section -->
               <div class="text-left">
                 <h5 class="text-dark mb-4">User data</h5>
@@ -70,13 +70,14 @@
                   <input class="form-control form-control-user" type="password" formControlName="confirmPassword" placeholder="Repeat Password">
 
                 </div>
-               
+              </div>
+
               <!-- Company ID (set through JS) -->
               <input type="hidden" formControlName="companyId" value="13">
 
               <!-- Register button -->
               <button class="btn btn-primary d-block btn-user w-100" type="submit"
-                (click)="onSubmit()" [disabled]="register_disabled">
+                      (click)="onSubmit()" [disabled]="register_disabled">
                 Register Account
               </button>
               <hr>

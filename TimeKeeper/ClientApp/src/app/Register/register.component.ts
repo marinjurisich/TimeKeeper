@@ -78,7 +78,7 @@ export class RegisterComponent implements OnInit {
     ))
     {
       // Successful login
-      this.clientAppRoutes.navigateToHome();
+      this.clientAppRoutes.navigateToDashboard();
     }
     
     // if(!this.registrationForm.invalid) {
