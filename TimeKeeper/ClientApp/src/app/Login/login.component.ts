@@ -50,10 +50,6 @@ export class LoginComponent implements OnInit {
 
   onLogin(event: any): void {
 
-    // console.log("rememberMe value: " + this.rememberMe.toString());
-    // console.log(this.loginForm.getRawValue());
-    // this.clientAppRoutes.navigateToHome();
-
     if (!this.loginForm.invalid) {
 
       let loginData = this.loginForm.getRawValue();
@@ -62,7 +58,7 @@ export class LoginComponent implements OnInit {
         .then(success => {
           if (success) {
             this.displaySpan(false, "");
-            this.clientAppRoutes.navigateToHome();
+            this.clientAppRoutes.navigateToDashboard();
           }
           else {
             this.displaySpan(true, "Invalid login!");
