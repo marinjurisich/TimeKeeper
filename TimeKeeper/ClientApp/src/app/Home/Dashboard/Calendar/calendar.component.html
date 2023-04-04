@@ -11,9 +11,7 @@
     <div id="fpWorkday"></div>
 
     <!-- Button trigger modal -->
-    <button id="workdayModalOpen" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#workDayModal">
-        Launch demo modal
-    </button>
+    <button id="workdayModalOpen" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#workDayModal"></button>
 
     <!-- Modal -->
     <div class="modal fade" id="workDayModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="workDayModalLabel"
@@ -24,7 +22,8 @@
                     <h1 class="modal-title fs-5" id="workDayModalLabel">
                         <!-- Edit -->
                         <i class="fa-solid fa-calendar"></i>&nbsp;
-                        <strong id="workday_modal_title">YYYY-MM-DD</strong>
+                        <strong id="workday_modal_title">YYYY-MM-DD</strong>&nbsp;
+			<span id="workday_modal_hours">(3.7 hours)</span>
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -36,33 +35,37 @@
                     <form class="user" [formGroup]="workdayForm">
 
                         <!-- Clock ins -->
-                        <div class="mb-3">
+                        <!--<div class="mb-3">
                             <label for="t_timestamps">Clock ins</label>
                             <textarea id="t_timestamps" class="clock-in-textarea form-control w-100" type="text" placeholder="Textarea input" readonly>{{clock_ins}}</textarea>
-                        </div>
+			</div>-->
 
-                        <!--  -->
-                        <div class="mb-3">
-                            <input class="form-control form-control-user" type="text" placeholder="Whole row input">
-                        </div>
-
-                        <!--  -->
+                        <!-- Clock in & out -->
                         <div class="row pb-3">
 
-                            <!--  -->
+                            <!-- Clock in -->
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input class="form-control form-control-user" type="text" placeholder="Half row input">
+				<label>Clock in</label>
+                                <input class="form-control form-control-user" type="text" placeholder="Clock in">
                             </div>
 
-                            <!--  -->
+                            <!-- Clock out -->
                             <div class="col-sm-6">
-                                <input class="form-control form-control-user" type="text" placeholder="Half row input">
+				<label>Clock out</label>
+                                <input class="form-control form-control-user" type="text" placeholder="Clock out">
                             </div>
                         </div>
 
-                        <!--  -->
+                        <!-- Project -->
+                        <div class="mb-3">
+			    <label>Project</label>
+                            <input class="form-control form-control-user" type="text" placeholder="Time period project">
+                        </div>
+
+                        <!-- Description -->
                         <div class="">
-                            <textarea class="form-control w-100" type="text" placeholder="Textarea input"></textarea>
+			    <label>Description</label>
+                            <textarea class="form-control w-100" type="text" placeholder="Time period description"></textarea>
                         </div>
 
                     </form>
@@ -70,7 +73,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button id="workday_save_b" type="button" class="btn btn-primary">Save</button>
+                    <button id="workday_save_b" type="button" class="btn btn-primary">Save all</button>
                 </div>
             </div>
         </div>

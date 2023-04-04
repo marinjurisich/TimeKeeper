@@ -7,13 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ClockInComponent implements OnInit {
 
-  clocked_in: boolean = false
+  clocked_in: boolean = false;
 
-  clock_in_arr: any[]
+  clock_in_arr: any[];
+
 
 
   constructor() {
-    this.clock_in_arr = []
+    this.clock_in_arr = [];
 
     // For demo, put curr time
     this.clock_in();
