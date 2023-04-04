@@ -14,7 +14,12 @@ export class CalendarComponent implements OnInit {
   // Workday form
   workdayForm: FormGroup;
 
+  clock_ins: string;
+
   constructor() {
+
+    this.clock_ins = "8:59 - 15:00\n" +
+      "16:57 - 18:59";
 
     this.workdayForm = new FormGroup({
 

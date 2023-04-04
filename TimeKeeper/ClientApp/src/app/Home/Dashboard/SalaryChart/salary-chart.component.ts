@@ -59,16 +59,9 @@ export class SalaryChartComponent implements OnInit {
 
       // Chart options
       options: {
-        // aspectRatio: 2.5,
-        animation: {
-            onComplete: function(animation) {
-              // Center
-              let canvas = document.getElementById("workDataChart");
-              if (canvas) {
-                canvas.style.margin = "0 auto";
-              }
-            }
-        }
+        responsive: true,
+        maintainAspectRatio: false,
+        // animation: false,
       }
     });
   }
