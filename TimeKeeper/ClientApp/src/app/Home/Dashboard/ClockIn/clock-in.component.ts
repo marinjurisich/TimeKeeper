@@ -36,6 +36,10 @@ export class ClockInComponent implements OnInit {
       time: time
     });
     this.clocked_in = false;
+
+    // On clock out, open workday modal
+    let fp_input: any = document.getElementById("fpWorkday");
+    fp_input.open_modal_day(curr_time);
   }
 
   clock_in() {

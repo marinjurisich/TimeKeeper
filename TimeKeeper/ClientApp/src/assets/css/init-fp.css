@@ -9,7 +9,13 @@
 } */
 
 .flatpickr-day.weekend {
-    background: #ffecb1;
+    background: #ffecb1 !important;
+    border: none !important;
+}
+
+.flatpickr-day.today {
+    background: #c5c5c5 !important;
+    border: none !important;
 }
 
 .flatpickr-day.editable::before {
