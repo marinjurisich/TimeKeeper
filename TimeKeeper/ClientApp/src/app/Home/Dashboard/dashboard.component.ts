@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientAppRoutes } from '../../Shared/Routes/ClientAppRoutes';
+import { ClockInItem } from 'src/app/Shared/Models/clock-in-item';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,6 +11,21 @@ import { ClientAppRoutes } from '../../Shared/Routes/ClientAppRoutes';
 export class DashboardComponent implements OnInit {
 
   readonly clientAppRoutes: ClientAppRoutes;
+
+  clock_in_arr: ClockInItem[] = [
+    // Demo dates
+    // 2023-03-30
+    new ClockInItem("clock_in", new Date("2023-03-30 8:58:00")),
+    new ClockInItem("clock_out", new Date("2023-03-30 16:02:00")),
+    new ClockInItem("clock_in", new Date("2023-03-30 17:49:00")),
+    new ClockInItem("clock_out", new Date("2023-03-30 18:52:00")),
+    // 2023-03-31
+    new ClockInItem("clock_in", new Date("2023-03-31 8:59:00")),
+    new ClockInItem("clock_out", new Date("2023-03-31 17:03:00")),
+  ];
+
+  curr_year = new Date().getFullYear();
+
 
   constructor(private _router: Router) {
     this.clientAppRoutes = new ClientAppRoutes(this._router);
