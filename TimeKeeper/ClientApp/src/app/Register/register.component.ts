@@ -22,7 +22,9 @@ export class RegisterComponent implements OnInit {
   // User form
   registerUserForm: FormGroup;
 
-  // Button [disabled] update
+  // UI helpers
+  errorMessage: string = "";
+  registerFinished: boolean = true;
   register_disabled: boolean = true;
 
   constructor(private _dataService: DataService, private _router: Router) {
@@ -43,16 +45,13 @@ export class RegisterComponent implements OnInit {
       confirmPassword: new FormControl(null, Validators.required),
 
       // Company ID field is hidden and is added through JS
-      companyId: new FormControl("0", Validators.required) // Hardcoded to 0 for now
-
-
-
+      companyId: new FormControl(1, Validators.required), // Hardcoded to 1 for now
+      isAdmin: new FormControl(true, Validators.required),
+      payPerHour: new FormControl(10, Validators.required),
     });
 
     // Listen for form changes
     this.registerUserForm.valueChanges.subscribe(data => {
-
-      console.log(data);
 
       // Check validity on form input
       let form_valid = this.registerUserForm.invalid;
@@ -68,6 +67,10 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  private showErrorMessage(message: string | null): void {
+    this.errorMessage = message || "";
+  }
+
   onSubmit(): void {
 
     if (confirm(
@@ -75,16 +78,30 @@ export class RegisterComponent implements OnInit {
       JSON.stringify(
         this.registerUserForm.getRawValue(), null, 2
       )
-    ))
-    {
-      // Successful login
-      this.clientAppRoutes.navigateToDashboard();
+    )
+    && !this.registerUserForm.invalid
+    ) {
+
+      debugger;
+      this.registerFinished = false;
+      this.showErrorMessage(null);
+      let form_data = this.registerUserForm.getRawValue();
+
+      this._dataService.userRegistration(null, form_data)
+        .then(success => {
+          if (success) {
+            this.showErrorMessage(null);
+            this.clientAppRoutes.navigateToDashboard();
+          }
+          else {
+            this.showErrorMessage("Unsucessful registration!");
+          }
+        })
+        .finally(() => {
+          this.registerFinished = true;
+        });
     }
     
-    // if(!this.registrationForm.invalid) {
-    //   let registrationData = this.registrationForm.getRawValue();
-    //   this._dataService.userRegistration(registrationData);
-    // }
   }
 
 }
