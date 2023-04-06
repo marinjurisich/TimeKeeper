@@ -21,16 +21,14 @@ export class LoginComponent implements OnInit {
   // Form elements
   loginForm: FormGroup;
   rememberMe: boolean = false;
-  submitButton: HTMLElement | null;
-  errorSpan: HTMLElement | null;
+  submitButton: HTMLButtonElement | null = null;
 
-  showError: boolean = false;
+  // UI helpers
+  errorMessage: string = "";
+  loginFinished: boolean = true;
 
   constructor(private _dataService: DataService, private _router: Router) {
     this.clientAppRoutes = new ClientAppRoutes(this._router);
-
-    this.submitButton = document.getElementById("loginSubmitButton");
-    this.errorSpan = document.getElementById("errorSpan");
 
     this.loginForm = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
@@ -40,43 +38,38 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.displaySpan(false, "");
+    this.submitButton = <HTMLButtonElement | null> document.getElementById("loginSubmitButton");
+    this.showErrorMessage(null);
 
     this.loginForm.valueChanges.subscribe((value: any) => {
-      //@ts-ignore
-      //this.submitButton.disabled = this.loginForm.invalid;
     });
+  }
+
+  private showErrorMessage(message: string | null): void {
+    this.errorMessage = message || "";
   }
 
   onLogin(event: any): void {
 
-    if (!this.loginForm.invalid) {
+    if (!this.loginForm.invalid && this.loginFinished) {
 
+      this.loginFinished = false;
+      this.showErrorMessage(null);
       let loginData = this.loginForm.getRawValue();
 
       this._dataService.userLogin(loginData, this.rememberMe)
         .then(success => {
           if (success) {
-            this.displaySpan(false, "");
+            this.showErrorMessage(null);
             this.clientAppRoutes.navigateToDashboard();
           }
           else {
-            this.displaySpan(true, "Invalid login!");
+            this.showErrorMessage("Unsuccessful login!");
           }
         })
-    }
-    else {
-      this.displaySpan(true, "Incomplete data!");
-    }
-  }
-
-  private displaySpan(show: boolean, message: string): void {
-
-    console.log("Trying to " + (show ? "show" : "hide") + " the span... (old login)");
-
-    this.showError = show;
-    if (this.errorSpan) {
-      this.errorSpan.innerText = message;
+        .finally(() => {
+          this.loginFinished = true;
+        });
     }
   }
 

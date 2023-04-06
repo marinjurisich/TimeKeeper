@@ -1,9 +1,13 @@
 
 // A script used for initializing flatpickr calendar inside
 // component /src/app/Home/Dashboard/Calendar
-function init_fp(fp) {
+// opt = {
+//   "clock_in_arr": ClockInItem[]
+// }
+function init_fp(opt) {
 
     let today = new Date();
+    let clock_in_dates = opt["clock_in_arr"].map(cid => cid.getDate());
     
     // Decide how many calendars to show
     let show_months = 1;
@@ -37,7 +41,8 @@ function init_fp(fp) {
             }
             else {
                 // Call modal open function stored in HTML element
-                fp_inst._input.open_modal_day(dateStr)
+                if (confirm("open " + dateStr))
+                    window.time_keeper.open_workday_modal(dateStr);
             }
         },
 
@@ -45,8 +50,7 @@ function init_fp(fp) {
             // Utilize dayElem.dateObj, which is the corresponding Date
     
             dateObj = dayElem.dateObj;
-
-            console.log(`Generating ${flatpickr.formatDate(dateObj, "Y-m-d")}`)
+            let date_iso = flatpickr.formatDate(dateObj, "Y-m-d");
 
             if (dateObj.getDay() == 0 || dateObj.getDay() == 6) {
                 dayElem.classList.add("weekend");
@@ -56,7 +60,8 @@ function init_fp(fp) {
 
                 // DEMO: randomly set dates of current month as editable
                 // if (Math.random() < 0.25) {
-                if (dateObj.getDay() < 4) {
+                //if (dateObj.getDay() < 4) {
+                if (clock_in_dates.includes(date_iso)) {
                     dayElem.classList.add("editable");
                 }
             }
@@ -66,25 +71,5 @@ function init_fp(fp) {
     // Change months so that current month is last one
     if (show_months > 1) {
         fp_inst.changeMonth(-show_months + 1);
-    }
-
-    // Set function to the HTML element
-    document.getElementById("fpWorkday").open_modal_day = async function(date) {
-
-        // Create date from string
-        date = new Date(date);
-
-        // Set up modal
-
-        workday_modal_title.innerText = flatpickr.formatDate(date, "Y-m-d");
-
-        // await fetch('...')
-
-        workday_save_b.onclick = function () { // fetch() // POST
-        }
-
-        // Open modal
-        workdayModalOpen.click();
-
     }
 }
