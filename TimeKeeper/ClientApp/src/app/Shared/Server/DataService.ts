@@ -23,37 +23,18 @@ export class DataService {
     let isLoggedIn = false;
     try {
 
-      debugger;
-
       let apiUrl: string = environment.API_URL + '/user/loginuser';
       let body = await fetch(apiUrl, {
         method: "POST",
         body: JSON.stringify(credentials)
-      }).then(res => {
-        if (res.status === 200) {
-          return res.json();
-        }
-        else {
-          return null;
-        }
-      });
+      }).then(
+        res => res.status == 200 ? res.json() : null
+      );
 
       if (body) {
         Storage.saveUser(new User(body), rememberMe);
+        isLoggedIn = true;
       }
-
-      true || this._ajaxService.userLogin(credentials)
-        .subscribe((res: any) => {
-
-          this.loggedUserBehaviorSubject.next(res);
-
-          if (res["status"] == "OK") {
-            Storage.saveUser(new User(credentials), rememberMe);
-          }
-          else {
-            console.log("Login FAILED");
-          }
-        });
     }
     catch (exc) {
       console.log(exc)
@@ -63,19 +44,44 @@ export class DataService {
   }
 
   /***** Registration *****/
-  userRegistration(credentials: any, rememberMe: boolean = false): void {
+  async userRegistration(companyData: any, userData: any): Promise<boolean> {
+    
+    let successfulRegister = false;
+    try {
 
-    this._ajaxService.userRegistration(credentials)
-      .subscribe((res: any) => {
+      let companyCreate: string = environment.API_URL + "/company/register";
 
-        if (res["status"] == "OK") {
-          Storage.saveUser(new User(credentials), rememberMe);
-        }
-        else {
-          console.log("Registration FAILED");
-        }
-      }
+      let userCreate: string = environment.API_URL + '/user/register';
+      let userBody = await fetch(userCreate, {
+        method: "POST",
+        body: JSON.stringify(userData)
+      }).then(
+        res => res.status == 200 ? res.json() : null
       );
+
+      if (userBody) {
+        Storage.saveUser(new User(userBody), false);
+        successfulRegister = true;
+      }
+    }
+    catch (exc) {
+      console.log(exc)
+    }
+    return successfulRegister;
+  }
+
+  // List users (e.g. for company 1)
+  async listUsers(companyId: Number): Promise<User[] | null> {
+
+    let apiUrl: string = environment.API_URL + '/user/getallusers/' + companyId;
+    let response = await fetch(apiUrl).then(
+      res => res.status == 200 ? res.json() : null
+    );
+
+    if (response) {
+      return response.map((userJson: any) => new User(userJson));
+    }
+    return null;
   }
 
 }

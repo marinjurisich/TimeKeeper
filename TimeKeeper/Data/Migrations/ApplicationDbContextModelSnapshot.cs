@@ -179,10 +179,10 @@ namespace TimeKeeper.Data.Migrations
                             email = "demo@mail.com",
                             firstName = "Demo",
                             grade = 0.0,
-                            guid = "not-a-guid",
+                            guid = "c2dfa247-a2f1-483d-958f-fbb60a5ec527",
                             isAdmin = true,
                             lastName = "Account",
-                            password = "pass",
+                            password = "80EA7B3C979BF51045EA9EB2FAABBBFC858BECABA5A653EC9E06965DF5FA95843045C25BFD66E63F202FA5E04A9CF7C1F2889F769C0AEEB2458D3F373D1BE439",
                             payPerHour = 4.4500000000000002
                         });
                 });
@@ -199,6 +199,13 @@ namespace TimeKeeper.Data.Migrations
                     b.HasKey("email");
 
                     b.ToTable("UserSalts");
+
+                    b.HasData(
+                        new
+                        {
+                            email = "demo@mail.com",
+                            salt = new byte[] { 76, 21, 201, 90, 10, 67, 184, 0, 230, 125, 191, 193, 4, 83, 66, 74, 110, 198, 237, 92, 28, 181, 15, 231, 47, 56, 55, 77, 245, 188, 7, 41, 59, 7, 158, 72, 86, 100, 9, 108, 228, 219, 74, 165, 157, 245, 117, 229, 50, 89, 57, 158, 126, 51, 249, 168, 172, 221, 240, 81, 210, 73, 143, 176 }
+                        });
                 });
 
             modelBuilder.Entity("TimeKeeper.Models.Workday", b =>

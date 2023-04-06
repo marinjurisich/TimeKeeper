@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientAppRoutes } from '../../Shared/Routes/ClientAppRoutes';
 import { ClockInItem } from 'src/app/Shared/Models/clock-in-item';
+import { User } from 'src/app/Shared/Models/User';
+import { Storage } from 'src/app/Shared/Misc/Storage';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,9 +28,16 @@ export class DashboardComponent implements OnInit {
 
   curr_year = new Date().getFullYear();
 
+  user: User | null;
 
   constructor(private _router: Router) {
     this.clientAppRoutes = new ClientAppRoutes(this._router);
+    
+    // Get logged in user
+    this.user = Storage.getUser();
+    if (!this.user) {
+      this.clientAppRoutes.navigateToLogin();
+    }
   }
 
   ngOnInit(): void {

@@ -16,7 +16,7 @@
             </div>
 
             <!-- Form -->
-            <form class="user" [formGroup]="registerUserForm">
+            <form class="user" [formGroup]="registerUserForm" [ngStyle]="{'opacity': registerFinished === true ? '1.0': '0.5'}">
 
               <!-- Company register section -->
               <div class="text-left">
@@ -68,25 +68,34 @@
                 <!-- Repeat password -->
                 <div class="col-sm-6">
                   <input class="form-control form-control-user" type="password" formControlName="confirmPassword" placeholder="Repeat Password">
-
                 </div>
               </div>
 
               <!-- Company ID (set through JS) -->
-              <input type="hidden" formControlName="companyId" value="13">
+              <input type="hidden" formControlName="companyId">
+              <input type="hidden" formControlName="isAdmin">
+              <input type="hidden" formControlName="payPerHour">
 
               <!-- Register button -->
               <button class="btn btn-primary d-block btn-user w-100" type="submit"
-                      (click)="onSubmit()" [disabled]="register_disabled">
+                      (click)="onSubmit()" [disabled]="!registerFinished || register_disabled">
                 Register Account
               </button>
               <hr>
             </form>
 
+            <!-- Go to login -->
             <div class="text-center">
               <span class="subtext btn btn-link" (click)="clientAppRoutes.navigateToLogin()">
                 Already have an account? Login!
               </span>
+            </div>
+
+            <!-- Error message -->
+            <div class="text-center">
+                <span id="errorSpan" class="text-danger">
+                  {{errorMessage}}
+                </span>
             </div>
           </div>
         </div>

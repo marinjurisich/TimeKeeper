@@ -15,7 +15,7 @@
                                 <div class="text-center">
                                     <h4 class="text-dark mb-4">Welcome Back!</h4>
                                 </div>
-                                <form class="user" [formGroup]="loginForm">
+                                <form class="user" [formGroup]="loginForm" [ngStyle]="{'opacity': loginFinished === true ? '1.0': '0.5'}">
                                     <div class="mb-3">
                                         <input class="form-control form-control-user" type="email"
                                             id="email_address" formControlName="email"
@@ -37,7 +37,7 @@
                                     </div>
 
                                     <!-- Placeholder button -->
-                                    <button id="loginSubmitButton" class="btn btn-primary d-block btn-user w-100" type="submit" (click)="onLogin($event)">
+                                    <button id="loginSubmitButton" class="btn btn-primary d-block btn-user w-100" type="submit" (click)="onLogin($event)" [disabled]="!loginFinished || loginForm.invalid">
                                         Login
                                     </button>
                                     <!-- <button class="btn btn-primary d-block btn-user w-100" type="submit">
@@ -51,13 +51,19 @@
                                         Forgot password?
                                     </span>
                                 </div> -->
+
+                                <!-- Create an account -->
                                 <div class="text-center">
                                     <span class="subtext btn btn-link" (click)="clientAppRoutes.navigateToRegister()">
                                         Create an Account!
                                     </span>
                                 </div>
-                                <div class="text-center" [ngStyle]="{'visibility': showError ? 'visible': 'hidden'}">
-                                    <span id="errorSpan" class="text-danger"></span>
+
+                                <!-- Error message -->
+                                <div class="text-center">
+                                    <span id="errorSpan" class="text-danger">
+                                        {{errorMessage}}
+                                    </span>
                                 </div>
                             </div>
                         </div>

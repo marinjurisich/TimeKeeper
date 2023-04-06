@@ -1,4 +1,5 @@
 import {Router} from "@angular/router";
+import { Storage } from "../Misc/Storage";
 
 export class ClientAppRoutes {
 
@@ -19,6 +20,7 @@ export class ClientAppRoutes {
 
   /***** Login route *****/
   navigateToLogin(): Promise<boolean> | null {
+    Storage.deleteUser()  // This function is Log out, so delete user data
     let path: string = 'Login';
     return this._router ? this._router.navigate([path]) : null;
   }
