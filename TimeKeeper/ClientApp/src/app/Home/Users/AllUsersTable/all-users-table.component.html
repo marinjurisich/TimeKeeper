@@ -1,0 +1,141 @@
+<div class="container-fluid">
+  <h3 class="text-dark mb-4"></h3>
+
+  <div class="card shadow">
+    <div class="card-header py-3">
+      <p class="text-primary m-0 fw-bold">Employees</p>
+    </div>
+    <div class="card-body">
+      <div class="row d-flex justify-content-center">
+        <!--<div class="col-md-6 text-nowrap">
+          <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable">
+            <label class="form-label">
+              Show&nbsp;<select class="d-inline-block form-select form-select-sm">
+                <option value="10" selected="">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>&nbsp;
+            </label>
+          </div>
+        </div>-->
+        <div class="col-md-6 d-flex justify-content-between align-items-center flex-grow-1">
+          <div>
+            <p d="dataTable_info" class="dataTables_info fw-bold" role="status" aria-live="polite">Employees: &nbsp; {{filteredUsers.length}}</p>
+          </div>
+          <!--BEGINNING OF ROW-->
+          <div class="text-md-end dataTables_filter d-flex justify-content-center" id="dataTable_filter">
+
+            <!--FILTER NAME-->
+            <label class="form-label">
+              <input id="search_by_name_input" type="text" class="form-control" aria-controls="dataTable" placeholder="Search by name">
+            </label>
+
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+        <table id="dataTable">
+          <thead>
+            <tr>
+              <th style="min-width:30px"></th>
+              <th>
+                <p>Name</p>
+                <!--ARROW UP-->
+                <a (click)="sortingUsers_ASC('Name')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                  </svg>
+                </a>
+                <!--ARROW DOWN-->
+                <a (click)="sortingUsers_DESC('Name')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                  </svg>
+                </a>
+              </th>
+              <th>
+                <p>Email</p>
+                <!--ARROW UP-->
+                <a (click)="sortingUsers_ASC('Email')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                  </svg>
+                </a>
+                <!--ARROW DOWN-->
+                <a (click)="sortingUsers_DESC('Email')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                  </svg>
+                </a>
+              </th>
+              <th class="text-center">Admin permission</th>
+              <th class="text-center">
+                <p>Pay / Hour</p>
+                <!--ARROW UP-->
+                <a (click)="sortingUsers_ASC('PayPerHour')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-up-fill" viewBox="0 0 16 16">
+                    <path d="m7.247 4.86-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                  </svg>
+                </a>
+                <!--ARROW DOWN-->
+                <a (click)="sortingUsers_DESC('PayPerHour')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                    <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                  </svg>
+                </a>
+              </th>
+              <th class="text-center">Account</th>
+              <th class="text-center">TimeKeeper</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of filteredUsers; let itemIndex = index">
+              <td><img class="rounded-circle me-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg"></td>
+              <td>{{item.firstName}} {{item.lastName}}</td>
+              <td>{{item.emailAddress}}</td>
+              <td class="text-center">
+                <input *ngIf="item.isAdmin; else elseBlock" class="form-check-input" type="checkbox" checked="checked" disabled>
+                <ng-template #elseBlock>
+                  <input class="form-check-input" type="checkbox" disabled>
+                </ng-template>
+              </td>
+              <td class="text-center">{{item.payPerHour}}</td>
+              <td class="text-center">
+                <a class="btn btn-primary bg-primary" data-bs-toggle="modal" data-bs-target="#userEditingModal" (click)="setCurrentlyEditingUser($event, item)">
+                  <i class="fas fa-user fa-1x"></i>
+                </a>
+              </td>
+              <td class="text-center">
+                <a class="btn btn-primary bg-primary" data-bs-toggle="modal" data-bs-target="#userTimeKeeperModal" (click)="setCurrentlyEditingUser($event, item)">
+                  <i class="fas fa-calendar fa-1x"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!--<div class="row">
+        <div class="col-md-6 align-self-center">
+          <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
+        </div>
+        <div class="col-md-6">
+          <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+            <ul class="pagination">
+              <li class="page-item disabled"><a class="page-link" aria-label="Previous" href="#"><span aria-hidden="true">«</span></a></li>
+              <li class="page-item active"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item"><a class="page-link" aria-label="Next" href="#"><span aria-hidden="true">»</span></a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>-->
+    </div>
+  </div>
+
+</div>
+
+<!-- Modals -->
+<app-user-editing-modal [receivedUser]="currentlyEditingUser" (userDeletedEmit)="deleteUser($event)"></app-user-editing-modal>
+<app-user-time-keeper-modal [receivedUser]="currentlyEditingUser"></app-user-time-keeper-modal>
