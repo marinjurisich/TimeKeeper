@@ -65,10 +65,13 @@ export class RegisterComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.showErrorMessage(null);
   }
 
   private showErrorMessage(message: string | null): void {
-    this.errorMessage = message || "";
+    // _no_err_ is trigger for making the error transparent
+    console.log(`Setting error: "${message}"`)
+    this.errorMessage = message || "_no_err_";
   }
 
   onSubmit(): void {
@@ -82,7 +85,6 @@ export class RegisterComponent implements OnInit {
     && !this.registerUserForm.invalid
     ) {
 
-      debugger;
       this.registerFinished = false;
       this.showErrorMessage(null);
       let form_data = this.registerUserForm.getRawValue();

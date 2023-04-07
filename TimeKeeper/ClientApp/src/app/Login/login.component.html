@@ -61,7 +61,7 @@
 
                                 <!-- Error message -->
                                 <div class="text-center">
-                                    <span id="errorSpan" class="text-danger">
+                                    <span id="errorSpan" [class.text-danger]="errorMessage !== '_no_err_'">
                                         {{errorMessage}}
                                     </span>
                                 </div>
