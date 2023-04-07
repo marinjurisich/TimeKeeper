@@ -16,6 +16,6 @@ namespace TimeKeeper.Data.DbOperations {
         IActionResult CreateMonth(int userId);
         ObjectResult statusResponse(int status, object? obj = null);
         string ValidatePassword(string password, byte[] salt);
-        string HashPasword(string password, out byte[] salt);
+        string HashPassword(string password, out byte[] salt);
     }
 }
