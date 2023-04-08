@@ -15,10 +15,19 @@ import { ReactiveFormsModule } from '@angular/forms';
     CalendarComponent,
     ClockInComponent,
     SalaryChartComponent,
-    SummaryComponent],
+    SummaryComponent
+  ],
 
   imports: [
     CommonModule, HeaderModule, ReactiveFormsModule
+  ],
+
+  exports: [
+    DashboardComponent,
+    CalendarComponent,
+    ClockInComponent,
+    SalaryChartComponent,
+    SummaryComponent
   ]
 })
 export class DashboardModule { }

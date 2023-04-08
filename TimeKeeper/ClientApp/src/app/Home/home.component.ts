@@ -7,6 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
+  loggedUser: any = {
+    firstName: "Name_A",
+    lastName: "Surname_A"
+  }
+
   constructor() { }
 
   ngOnInit(): void {

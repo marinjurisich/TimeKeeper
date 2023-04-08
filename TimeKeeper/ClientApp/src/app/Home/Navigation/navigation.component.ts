@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {ClientAppRoutes} from "../../Shared/Routes/ClientAppRoutes";
-import {Router} from "@angular/router";
+import { Component, Input, OnInit } from '@angular/core';
+import { ClientAppRoutes } from "../../Shared/Routes/ClientAppRoutes";
+import { Router } from "@angular/router";
 
 // Declare vanilly JS function that handles sidebar collapsing
 declare function setupSidebarToggle(): any;
@@ -14,7 +14,9 @@ export class NavigationComponent implements OnInit {
 
   readonly clientAppRoutes: ClientAppRoutes;
 
-  constructor(private _router:Router) {
+  @Input() loggedUser: any = null;
+
+  constructor(private _router: Router) {
     this.clientAppRoutes = new ClientAppRoutes(this._router);
   }
 

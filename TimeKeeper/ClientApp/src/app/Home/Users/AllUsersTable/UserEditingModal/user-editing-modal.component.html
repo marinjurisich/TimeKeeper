@@ -1,0 +1,77 @@
+<!-- Modal -->
+<div class="modal fade " id="userEditingModal" tabindex="-1" aria-labelledby="userEditingModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content" style="width:100%">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userEditingModalLabel">Editing user</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form class="user" id="edit_user_form">
+
+          <div>
+            <div class="row mb-3">
+
+              <div class="col-sm-6 mb-1">
+                <label for="first_name" class="form-label">First name</label>
+                <input class="form-control form-control-user" id="first_name" type="text" placeholder="{{receivedUser?.firstName}}" value="{{receivedUser?.firstName}}" required>
+              </div>
+
+              <div class="col-sm-6 mb-1">
+                <label for="last_name" class="form-label">Last name</label>
+                <input class="form-control form-control-user" id="last_name" type="text" placeholder="{{receivedUser?.lastName}}" value="{{receivedUser?.lastName}}" required>
+              </div>
+
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-sm-6 mb-1">
+                <label for="email_address" class="form-label">Email address</label>
+                <input class="form-control form-control-user" id="email_address" type="email" placeholder="{{receivedUser?.emailAddress}}" value="{{receivedUser?.emailAddress}}" required>
+              </div>
+
+              <div class="col-sm-6 mb-1">
+                <label for="pay_per_hour" class="form-label">Pay per hour</label>
+                <input class="form-control form-control-user" id="pay_per_hour" type="text" placeholder="{{receivedUser?.payPerHour}}" value="{{receivedUser?.payPerHour}}" required pattern="^\d*\.?\d*$">
+              </div>
+
+            </div>
+
+            <div class="row mb-4">
+
+              <div class="col-sm-6 mb-1">
+                <label for="password_1" class="form-label">Password</label>
+                <input class="form-control form-control-user" id="password_1" type="text" placeholder="{{receivedUser?.password}}" value="{{receivedUser?.password}}" required minlength="2">
+              </div>
+
+              <div class="col-sm-6 mb-1">
+                <label for="password_2" class="form-label">Repeat password</label>
+                <input class="form-control form-control-user" id="password_2" type="password" placeholder="{{receivedUser?.password}}" value="{{receivedUser?.password}}" required minlength="2">
+              </div>
+
+            </div>
+
+            <div class="row mb-1">
+
+              <div class="col-sm-12 mb-1 d-flex justify-content-center">
+                <label for="is_admin_checkbox" class="form-label text-center">Admin &nbsp;</label>
+                <input *ngIf="receivedUser?.isAdmin; else elseBlock" id="is_admin_checkbox" class="form-check-input" type="checkbox" checked="checked">
+                <ng-template #elseBlock>
+                  <input id="is_admin_checkbox" class="form-check-input" type="checkbox">
+                </ng-template>
+              </div>
+
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="emitUserDeleting($event)" data-bs-dismiss="modal">Delete user</button>
+        <button type="button" class="btn btn-primary bg-primary" (click)="editingDone($event)" data-bs-dismiss="modal">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,65 @@
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- Adding new user - modal -->
+    <div class="col-3 mb-4 d-flex justify-content-start align-items-center align-content-center">
+      <button class="btn btn-primary bg-primary" data-bs-toggle="modal" data-bs-target="#userAddingModal">Add new user</button>
+    </div>
+
+    <!-- Count employees -->
+    <div class="col-3 mb-4 ">
+      <div class="card shadow border-start-primary py-2">
+        <div class="card-body">
+          <div class="row align-items-center no-gutters">
+            <div class="col me-2">
+              <div class="text-uppercase text-primary fw-bold text-09rem mb-1">
+                <span>Total number of employees</span>
+              </div>
+              <div class="text-dark fw-bold h5 mb-0"><span>{{totalNumberOfEmployees}}</span></div>
+            </div>
+            <div class="col-auto"><i class="fas fa-user fa-2x text-gray-300"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total pay / hour -->
+    <div class="col-3 mb-4">
+      <div class="card shadow border-start-success py-2">
+        <div class="card-body">
+          <div class="row align-items-center no-gutters">
+            <div class="col me-2">
+              <div class="text-uppercase text-success fw-bold text-09rem mb-1">
+                <span>Total pay / hour</span>
+              </div>
+              <div class="text-dark fw-bold h5 mb-0"><span>$&nbsp;{{totalPayPerHour}}</span></div>
+            </div>
+            <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Average pay / hour -->
+    <div class="col-3 mb-4">
+      <div class="card shadow border-start-success py-2">
+        <div class="card-body">
+          <div class="row align-items-center no-gutters">
+            <div class="col me-2">
+              <div class="text-uppercase text-info fw-bold text-09rem mb-1">
+                <span>Average pay / hour</span>
+              </div>
+              <div class="text-dark fw-bold h5 mb-0"><span>$&nbsp;{{averagePayPerHour}}</span></div>
+            </div>
+            <div class="col-auto"><i class="fas fa-dollar-sign fa-2x text-gray-300"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Modals -->
+<app-user-adding-modal></app-user-adding-modal>
