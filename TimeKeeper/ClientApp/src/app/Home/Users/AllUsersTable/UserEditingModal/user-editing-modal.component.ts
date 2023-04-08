@@ -8,7 +8,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class UserEditingModalComponent implements OnInit {
 
   @Input() receivedUser: any = null;
+
   @Output() userDeletedEmit = new EventEmitter<any>();
+  @Output() userEditedEmit = new EventEmitter<any>();
 
   constructor() { }
 
@@ -44,10 +46,8 @@ export class UserEditingModalComponent implements OnInit {
         this.receivedUser.password = password_1;
         this.receivedUser.payPerHour = pay_per_hour;
         this.receivedUser.isAdmin = isAdminCheck;
-
-        console.log("\nUSER EDITED: ")
-        console.dir(this.receivedUser);
-        console.log("\n");
+        
+        this.userEditedEmit.emit(this.receivedUser);
       }
     }
 

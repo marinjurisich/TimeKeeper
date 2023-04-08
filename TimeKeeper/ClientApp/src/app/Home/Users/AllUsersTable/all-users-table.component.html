@@ -137,5 +137,5 @@
 </div>
 
 <!-- Modals -->
-<app-user-editing-modal [receivedUser]="currentlyEditingUser" (userDeletedEmit)="deleteUser($event)"></app-user-editing-modal>
+<app-user-editing-modal [receivedUser]="currentlyEditingUser" (userDeletedEmit)="deleteUser($event)" (userEditedEmit)="editUser($event)"></app-user-editing-modal>
 <app-user-time-keeper-modal [receivedUser]="currentlyEditingUser"></app-user-time-keeper-modal>

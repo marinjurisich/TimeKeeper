@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { DataService } from '../../../Shared/Server/DataService';
 
 @Component({
   selector: 'app-all-users-table',
@@ -8,16 +9,15 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class AllUsersTableComponent implements OnInit {
 
   @Input() users: any[] = [];
-  @Input() isUsersListLoaded: boolean = false;
+  @Input() filteredUsers: any[] = [];
 
-  filteredUsers: any[] = [];
   currentlyEditingUser: any = null;
 
   public static adminViewingSelectedUser: any = null;
 
   private search_by_name_input: any = null;
 
-  constructor() { }
+  constructor(private _dataService: DataService) { }
 
   ngOnInit(): void {
 
@@ -25,19 +25,6 @@ export class AllUsersTableComponent implements OnInit {
     calculateMyCSSVariables();
     window.onresize = () => { calculateMyCSSVariables(); }
 
-    // Checking if done loading users in parent component
-    let myInterval: any = setInterval(() => {
-      console.log("Checking for users to display in table");
-
-      if (this.isUsersListLoaded) {
-        clearInterval(myInterval);
-        console.log("Fetched list of users and it is displaying in table");
-         //On init filtered users are equal to all users
-        this.loadFilteredUsers();
-      }
-    }, 500);
-  
- 
     //Filtering by name
     this.search_by_name_input = document.getElementById("search_by_name_input");
     //@ts-ignore
@@ -122,22 +109,46 @@ export class AllUsersTableComponent implements OnInit {
 
 
   //When modal send user to delete
-  deleteUser(event: any): void {
-
-    //Remove user from array of users
-    if (this.users.indexOf(event) > -1) { this.users.splice(this.users.indexOf(event), 1); }
+  deleteUser(user: any): void {
 
     //Here goes API for deleting user from database
-    // ...
-    // ...
-    // ...
+    this._dataService.deleteUser(Number(user.id)).then((res) => {
 
-    console.log("\nUSER DELETED: ")
-    console.dir(event);
-    console.log("\n");
+      if (res == "OK") {
 
-    //@ts-ignore
-    this.filterUsersbyName(document.getElementById("search_by_name_input").value);
+        //Remove user from array of users
+        if (this.users.indexOf(user) > -1) { this.users.splice(this.users.indexOf(user), 1); }
+
+        console.log("\nUSER DELETED: ")
+        console.dir(user);
+        console.log("\n");
+
+        //@ts-ignore
+        this.filterUsersbyName(document.getElementById("search_by_name_input").value);
+      }
+    });
+  }
+
+  //When modal send user to edit
+  editUser(user: any): void {
+
+    this._dataService.updateUser(user).then((res) => {
+      if (res == "OK") {
+
+        //Refresh users list
+        let thisUserIndex = this.users.indexOf(user);
+        if (thisUserIndex > -1) {
+          this.users[thisUserIndex] = user;
+        }
+
+        console.log("\nUSER UPDATED: ")
+        console.dir(user);
+        console.log("\n");
+
+        //@ts-ignore
+        this.filterUsersbyName(document.getElementById("search_by_name_input").value);
+      }
+    });
   }
 
 

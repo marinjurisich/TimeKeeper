@@ -84,4 +84,44 @@ export class DataService {
     return null;
   }
 
+  //Admin creating new USER
+  async userRegistrationModal(data: any): Promise<string | null> {
+
+    let apiUrl: string = environment.API_URL + '/user/register';
+    let response = await fetch(apiUrl, {
+      method: "POST",
+      body: JSON.stringify(data)
+    }).then(
+      res => res.status == 200 ? "OK" : null
+    );
+    return response;
+  }
+
+  //Admin deleting user
+  async deleteUser(userId: Number): Promise<string | null> {
+
+    let apiUrl: string = environment.API_URL + '/user/delete/' + userId;
+    let response = await fetch(apiUrl, {
+      method:"DELETE"
+    }).then(
+      res => res.status == 200 ? "OK" : null
+    );
+    return response;
+  }
+
+  //Admin updating user
+  async updateUser(data: any): Promise<string | null> {
+
+    let apiUrl: string = environment.API_URL + '/user/update';
+    let response = await fetch(apiUrl, {
+      method: "PUT",
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8'
+      },
+      body: JSON.stringify(data)
+    }).then(
+      res => res.status == 200 ? "OK" : null
+    );
+    return response;
+  }
 }

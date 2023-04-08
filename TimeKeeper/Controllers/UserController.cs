@@ -73,5 +73,14 @@ namespace TimeKeeper.Controllers
 
         }
 
+
+
+        //Napraviti /user/delete/ + id
+        //Id je broj pomoću kojeg se radi delete usera
+
+
+        //Napraviti /user/update
+        //Prima objekt u bodiju koji sadrži više propertija nego što treba
+
     }
 }
