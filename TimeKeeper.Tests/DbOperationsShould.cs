@@ -22,8 +22,8 @@ namespace TimeKeeper.Tests {
 
             string password = "TestPassword";
 
-            string hashedPassword1 = sut.HashPassword(password, out salt);
-            string hashedPassword2 = sut.HashPassword(password, out salt);
+            string hashedPassword1 = sut.HashPasword(password, out salt);
+            string hashedPassword2 = sut.HashPasword(password, out salt);
 
 
             Assert.NotEqual(hashedPassword1, hashedPassword2);
