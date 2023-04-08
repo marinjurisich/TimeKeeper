@@ -1,0 +1,73 @@
+<!-- Modal -->
+<div class="modal fade " id="userAddingModal" tabindex="-1" aria-labelledby="userAddingModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content" style="width:100%">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userAddingModalLabel">Adding new user</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form class="user" id="add_user_form" [formGroup]="addNewUserForm">
+
+          <div>
+            <div class="row mb-3">
+
+              <div class="col-sm-6 mb-1">
+                <label class="form-label">First name</label>
+                <input class="form-control form-control-user" type="text" placeholder="Firstname" formControlName="userFirstName">
+              </div>
+
+              <div class="col-sm-6 mb-1">
+                <label class="form-label">Last name</label>
+                <input class="form-control form-control-user" type="text" placeholder="Lastname" formControlName="userLastName">
+              </div>
+
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-sm-6 mb-1">
+                <label class="form-label">Email address</label>
+                <input class="form-control form-control-user" type="email" placeholder="Email address" formControlName="userEmailAddress">
+              </div>
+
+              <div class="col-sm-6 mb-1">
+                <label class="form-label">Pay per hour</label>
+                <input class="form-control form-control-user" type="text" placeholder="Pay per hour" formControlName="userPayPerHour">
+              </div>
+
+            </div>
+
+            <div class="row mb-4">
+
+              <div class="col-sm-6 mb-1">
+                <label class="form-label">Password</label>
+                <input class="form-control form-control-user" type="text" placeholder="Password" formControlName="userPassword1">
+              </div>
+
+              <div class="col-sm-6 mb-1">
+                <label class="form-label">Repeat password</label>
+                <input class="form-control form-control-user" type="password" placeholder="Repeat password" formControlName="userPassword2">
+              </div>
+
+            </div>
+
+            <div class="row mb-3">
+
+              <div class="col-sm-12 mb-1 d-flex justify-content-center">
+                <label for="is_admin_checkbox_adding_user" class="form-label text-center">Admin &nbsp;</label>
+                <input id="is_admin_checkbox_adding_user" class="form-check-input" type="checkbox">
+              </div>
+
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary bg-primary" (click)="savingDone($event)" data-bs-dismiss="modal">Save new user</button>
+      </div>
+    </div>
+  </div>
+</div>

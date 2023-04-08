@@ -8,6 +8,7 @@ export class User {
   password: string | null;
   password2: string | null;
   payPerHour: string | null;
+  isAdmin: string | null;
 
 
 
@@ -24,5 +25,6 @@ export class User {
     this.password2 = credentials.adminPassword2 || credentials.userPassword2 || credentials.password2;
 
     this.payPerHour = credentials.payPerHour;
+    this.isAdmin = credentials.isAdmin;
   }
 }
