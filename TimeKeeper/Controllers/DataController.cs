@@ -187,6 +187,7 @@ public class DataController : ControllerBase
                         grade: 1.0 * (d.Day % 5),
                         attachment: null
                     );
+                    tempWorkdays.Add(wd);
                 }
 
                 // After generating workdays, extend the original list
@@ -207,6 +208,7 @@ public class DataController : ControllerBase
                     workHours: (float)(tempWorkdays.Sum(workday => workday.workHours) ?? 0.0),
                     payPerHour: user.payPerHour
                     );
+                months.Add(month);
 
                 #endregion
             }

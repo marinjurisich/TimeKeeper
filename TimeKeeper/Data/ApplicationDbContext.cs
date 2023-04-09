@@ -218,6 +218,7 @@ namespace TimeKeeper.Data {
                         grade: random.NextDouble() * 5.0,
                         attachment: null
                     );
+                    monthWorkdays.Add(wd);
                 }
 
                 // Generate month summary
