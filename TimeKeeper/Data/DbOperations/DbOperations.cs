@@ -201,7 +201,7 @@ namespace TimeKeeper.Data.DbOperations {
 
                 ValidateUser(user);
 
-                string hashedPassword = HashPasword(user.password, out salt);
+                string hashedPassword = HashPassword(user.password, out salt);
                 user.password = hashedPassword;
 
                 UserSalt s = new UserSalt(user.email, salt);
@@ -360,7 +360,7 @@ namespace TimeKeeper.Data.DbOperations {
 
         }
 
-        public string HashPasword(string password, out byte[] salt) {
+        public string HashPassword(string password, out byte[] salt) {
 
             try {
                 salt = RandomNumberGenerator.GetBytes(keySize);
