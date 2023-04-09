@@ -195,7 +195,7 @@ namespace TimeKeeper.Data {
                 List<Workday> monthWorkdays = new List<Workday>(30);
 
                 // For each day, from start to end (if current month, then stop at today's date)
-                for (DateTime d = startDay; d.Month == startDay.Month && d.Date < DateTime.Now.Date; d.AddDays(1))
+                for (DateTime d = startDay; d.Month == startDay.Month && d.Date < DateTime.Now.Date; d = d.AddDays(1))
                 {
                     DateTime clockIn = new DateTime(d.Year, d.Month, d.Day, 8, 50, 0).AddMinutes(random.Next(10));
                     DateTime clockOut = new DateTime(d.Year, d.Month, d.Day, 17, 0, 0).AddMinutes(random.Next(10));
