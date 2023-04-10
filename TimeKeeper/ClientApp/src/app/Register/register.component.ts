@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {DataService} from "../Shared/Server/DataService";
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { DataService } from "../Shared/Server/DataService";
 import { ClientAppRoutes } from '../Shared/Routes/ClientAppRoutes';
 import { Router } from '@angular/router';
 
@@ -65,10 +65,13 @@ export class RegisterComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.showErrorMessage(null);
   }
 
   private showErrorMessage(message: string | null): void {
-    this.errorMessage = message || "";
+    // _no_err_ is trigger for making the error transparent
+    console.log(`Setting error: "${message}"`)
+    this.errorMessage = message || "_no_err_";
   }
 
   onSubmit(): void {
@@ -79,10 +82,9 @@ export class RegisterComponent implements OnInit {
         this.registerUserForm.getRawValue(), null, 2
       )
     )
-    && !this.registerUserForm.invalid
+      && !this.registerUserForm.invalid
     ) {
 
-      debugger;
       this.registerFinished = false;
       this.showErrorMessage(null);
       let form_data = this.registerUserForm.getRawValue();
@@ -101,7 +103,7 @@ export class RegisterComponent implements OnInit {
           this.registerFinished = true;
         });
     }
-    
+
   }
 
 }

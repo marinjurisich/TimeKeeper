@@ -46,7 +46,8 @@ export class LoginComponent implements OnInit {
   }
 
   private showErrorMessage(message: string | null): void {
-    this.errorMessage = message || "";
+    // _no_err_ is trigger for making the error transparent
+    this.errorMessage = message || "_no_err_";
   }
 
   onLogin(event: any): void {

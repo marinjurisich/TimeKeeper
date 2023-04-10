@@ -1,0 +1,6 @@
+
+/* If error message not shown, do not hide but just make invisible */
+#errorSpan:not(.text-danger) {
+    color: transparent;
+    user-select: none;
+}

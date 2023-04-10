@@ -10,6 +10,7 @@ import {RegisterComponent} from "./Register/register.component";
 import {HomeModule} from "./Home/home.module";
 import { DashboardComponent } from './Home/Dashboard/dashboard.component';
 import { UsersComponent } from './Home/Users/users.component';
+import { ErrorMessageComponent } from './Login/ErrorMessage/error-message.component';
 
 
 
@@ -18,7 +19,8 @@ import { UsersComponent } from './Home/Users/users.component';
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ErrorMessageComponent
   ],
 
   imports: [
