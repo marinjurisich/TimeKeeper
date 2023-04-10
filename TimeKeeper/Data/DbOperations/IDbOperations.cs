@@ -9,6 +9,7 @@ namespace TimeKeeper.Data.DbOperations {
         IActionResult UpdateWorkday(Workday workday);
         IActionResult GetAllDaysInAMonth(string dateAsString);
         IActionResult ScannerClockInOut(string guid);
+        public User? GetUser(int user_id);
         IActionResult CreateUser(User user);
         IActionResult LoginUser(LoginDTO loginData);
         void ValidateUser(User user);

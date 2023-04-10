@@ -36,6 +36,21 @@ namespace TimeKeeper.Models {
             this.GenerateRandomPassword();
         }
 
+        //constructor called when creating a new user
+        public User (string firstName, string lastName, string email, string password, bool isAdmin, double payPerHour, int companyId) {
+
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.email = email;
+            this.password = password;
+            this.isAdmin = isAdmin;
+            this.payPerHour = payPerHour;
+            this.companyId = companyId;
+            this.grade = 0;
+            this.guid = System.Guid.NewGuid().ToString();
+            this.GenerateRandomPassword();
+        }
+
         //constructor called when fetching from DB
         public User(int id, string firstName, string lastName, string email, string password, bool isAdmin, double payPerHour, int companyId, double? grade, string guid) {
             this.id = id;

@@ -190,6 +190,15 @@ namespace TimeKeeper.Data.DbOperations {
         #endregion
 
         #region User
+
+        public User? GetUser(int user_id) {
+            if (_context != null) {
+                var user = _context.Users.Single(user => user.id == user_id);
+                return user;
+            }
+            return null;
+        }
+
         public IActionResult CreateUser(User user) {
 
             try {
@@ -265,7 +274,6 @@ namespace TimeKeeper.Data.DbOperations {
             }
 
         }
-
         #endregion
 
         #region Company
