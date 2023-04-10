@@ -285,6 +285,28 @@ namespace TimeKeeper.Data.DbOperations {
             }
         }
 
+        public void CompanyAdd(params Company[] companies) {
+            if (_context != null) {
+                for (int i = 0; i < companies.Length; ++i) {
+                    _context.Companies.Add(companies[i]);
+                }
+                _context.SaveChanges();
+            }
+        }
+
+        #endregion
+
+        #region Projects
+
+        public void ProjectAdd(params Project[] projects) {
+            if (_context != null) {
+                for (int i = 0; i < projects.Length; ++i) {
+                    _context.Projects.Add(projects[i]);
+                }
+                _context.SaveChanges();
+            }
+        }
+
         #endregion
 
         #region Month

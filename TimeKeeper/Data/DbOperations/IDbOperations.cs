@@ -13,6 +13,8 @@ namespace TimeKeeper.Data.DbOperations {
         IActionResult LoginUser(LoginDTO loginData);
         void ValidateUser(User user);
         IActionResult RegisterCompany(Company company);
+        public void CompanyAdd(params Company[] companies);
+        public void ProjectAdd(params Project[] projects);
         IActionResult CreateMonth(int userId);
         ObjectResult statusResponse(int status, object? obj = null);
         string ValidatePassword(string password, byte[] salt);
