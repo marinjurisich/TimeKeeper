@@ -94,8 +94,14 @@ namespace TimeKeeper.Data
             List<Workday> workdays = new List<Workday>(days_count);
 
             // Iterate from start to end date (only allow generating days that have already passed)
-            for (var d = start_d; d.Date <= end_d.Date && d.Date < DateTime.Now; d = d.AddDays(1))
+            for (var d = start_d; d.Date <= end_d.Date && d.Date < DateTime.Now.Date; d = d.AddDays(1))
             {
+                // Do not seed weekends
+                if (d.DayOfWeek == DayOfWeek.Sunday || d.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    continue;
+                }
+
                 // Prepare workday clcockin and clock out
                 DateTime clockIn = new DateTime(d.Year, d.Month, d.Day, 8, 50, 0).AddMinutes(random.Next(10));
                 DateTime clockOut = new DateTime(d.Year, d.Month, d.Day, 17, 0, 0).AddMinutes(random.Next(10));
@@ -107,6 +113,7 @@ namespace TimeKeeper.Data
                     clockOut.AddHours(-(d.Day % 3));
                 }
 
+                // Generate workday
                 Workday wd = new Workday(
                     userId: user.id,
                     date: d,
@@ -119,11 +126,16 @@ namespace TimeKeeper.Data
                     attachment: null
                 );
 
+                // Save to list
                 workdays.Add(wd);
-                _operations.ClockInOut(wd);
             }
 
-            return workdays.ToArray();
+            // Update workdays in DB
+            var workdaysArr = workdays.ToArray();
+            _operations.WorkdayAdd(workdaysArr);
+
+            // Return array
+            return workdaysArr;
         }
 
     }

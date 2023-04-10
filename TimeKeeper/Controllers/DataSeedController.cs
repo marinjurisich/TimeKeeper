@@ -11,12 +11,11 @@ namespace TimeKeeper.Controllers;
 public class DataSeedController : ControllerBase {
 
     private readonly ApplicationDbContext _context;
-    private readonly IDbOperations _operations;
     private readonly DBDataSeed dataSeed;
 
     public DataSeedController(ApplicationDbContext context, IDbOperations operations) {
         _context = context;
-        _operations = operations;
+        dataSeed = new DBDataSeed(operations);
     }
 
     [HttpGet]

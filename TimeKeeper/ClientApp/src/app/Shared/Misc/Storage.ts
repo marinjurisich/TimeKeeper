@@ -1,9 +1,12 @@
 import { User } from "../Models/User";
+import { Workday } from "../Models/Workday";
 
 export class Storage {
 
   // Key under which user will be stored
   private static userKey: string = "user_session";
+
+  private static workdayKey: string = "workday_data";
 
   // Save user either to sessionStorage or to localStorage
   public static saveUser(user: User, rememberMe: boolean = false) {
@@ -36,6 +39,18 @@ export class Storage {
   public static deleteUser(): void {
     sessionStorage.removeItem(this.userKey);
     localStorage.removeItem(this.userKey);
+  }
+
+  public static saveWorkdays(wdArr: Workday[]) {
+    sessionStorage.setItem(this.workdayKey, JSON.stringify(wdArr));
+  }
+
+  public static getWorkdays(): Workday[] {
+    let workday_json = sessionStorage.getItem(this.workdayKey);
+    if (workday_json) {
+      return JSON.parse(workday_json);
+    }
+    return [];
   }
 
 }
