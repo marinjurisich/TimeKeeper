@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-user-editing-modal',
@@ -8,11 +8,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class UserEditingModalComponent implements OnInit {
 
   @Input() receivedUser: any = null;
+
   @Output() userDeletedEmit = new EventEmitter<any>();
+  @Output() userEditedEmit = new EventEmitter<any>();
 
   constructor() { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   editingDone(event: any): void {
 
@@ -30,28 +32,18 @@ export class UserEditingModalComponent implements OnInit {
       //@ts-ignore
       let pay_per_hour = document.getElementById("pay_per_hour").value;
       //@ts-ignore
-      let password_1 = document.getElementById("password_1").value;
-      //@ts-ignore
-      let password_2 = document.getElementById("password_2").value;
-      //@ts-ignore
       let isAdminCheck = document.getElementById("is_admin_checkbox").checked;
 
-      if (password_1 == password_2) {
 
-        this.receivedUser.firstName = first_name;
-        this.receivedUser.lastName = last_name;
-        this.receivedUser.emailAddress = email_address;
-        this.receivedUser.password = password_1;
-        this.receivedUser.payPerHour = pay_per_hour;
-        this.receivedUser.isAdmin = isAdminCheck;
+      this.receivedUser.firstName = first_name;
+      this.receivedUser.lastName = last_name;
+      this.receivedUser.emailAddress = email_address;
+      this.receivedUser.payPerHour = pay_per_hour;
+      this.receivedUser.isAdmin = isAdminCheck;
 
-        console.log("\nUSER EDITED: ")
-        console.dir(this.receivedUser);
-        console.log("\n");
-      }
-    }
-
-    this.setDefaultFormValues(this.receivedUser);
+      this.userEditedEmit.emit(this.receivedUser);
+      
+    } 
   }
 
   //Emitting user to parent component
@@ -59,20 +51,5 @@ export class UserEditingModalComponent implements OnInit {
     this.userDeletedEmit.emit(this.receivedUser);
   }
 
-  private setDefaultFormValues(user: any): void {
-    //@ts-ignore
-    document.getElementById("first_name").value = user.firstName;
-    //@ts-ignore
-    document.getElementById("last_name").value = user.lastName;
-    //@ts-ignore
-    document.getElementById("email_address").value = user.emailAddress;
-    //@ts-ignore
-    document.getElementById("pay_per_hour").value = user.payPerHour;
-    //@ts-ignore
-    document.getElementById("password_1").value = user.password;
-    //@ts-ignore
-    document.getElementById("password_2").value = user.password;
-    //@ts-ignore
-    document.getElementById("is_admin_checkbox").checked = user.isAdmin;
-  }
+  
 }

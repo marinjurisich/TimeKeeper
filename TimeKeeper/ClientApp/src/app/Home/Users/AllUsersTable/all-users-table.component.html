@@ -107,7 +107,7 @@
                 </a>
               </td>
               <td class="text-center">
-                <a class="btn btn-primary bg-primary" data-bs-toggle="modal" data-bs-target="#userTimeKeeperModal" (click)="setCurrentlyEditingUser($event, item)">
+                <a class="btn btn-primary bg-primary" data-bs-toggle="modal" data-bs-target="#userTimeKeeperModal" (click)="setCurrentlyEditingUser($event, item); increaseClicksCounter($event)">
                   <i class="fas fa-calendar fa-1x"></i>
                 </a>
               </td>
@@ -137,5 +137,5 @@
 </div>
 
 <!-- Modals -->
-<app-user-editing-modal [receivedUser]="currentlyEditingUser" (userDeletedEmit)="deleteUser($event)"></app-user-editing-modal>
-<app-user-time-keeper-modal [receivedUser]="currentlyEditingUser"></app-user-time-keeper-modal>
+ <app-user-editing-modal [receivedUser]="currentlyEditingUser" (userDeletedEmit)="deleteUser($event)" (userEditedEmit)="editUser($event)"></app-user-editing-modal>
+ <app-user-time-keeper-modal [receivedUser]="currentlyEditingUser" [clicksCounterInModal]="clicksCounterInModal"></app-user-time-keeper-modal>

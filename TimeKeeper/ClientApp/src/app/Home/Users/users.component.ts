@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from '../../Shared/Models/User';
+import { Storage } from 'src/app/Shared/Misc/Storage';
+import { DataService } from '../../Shared/Server/DataService';
+import { ClientAppRoutes } from '../../Shared/Routes/ClientAppRoutes';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users',
@@ -7,49 +12,75 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UsersComponent implements OnInit {
 
-  isUsersListLoaded: boolean = false;
+  loggedUser: User | null;
 
-  users: any[] = [
-    {
-      firstName: "Name_A",
-      lastName: "Surname_A",
-      emailAddress: "a@gmail.com",
-      password: "pass1",
-      isAdmin: false,
-      payPerHour: "10"
-    },
-    {
-      firstName: "Name_B",
-      lastName: "Surname_B",
-      emailAddress: "b@gmail.com",
-      password: "pass2",
-      isAdmin: true,
-      payPerHour: "2"
-    },
-    {
-      firstName: "Name_C",
-      lastName: "Surname_C",
-      emailAddress: "c@gmail.com",
-      password: "pass3",
-      isAdmin: false,
-      payPerHour: "7"
+  users: any[] = [];
+  filteredUsers: any = [];
+
+  totalNumberOfEmployees: number = 0;
+  totalPayPerHour: number = 0;
+  averagePayPerHour: number = 0;
+
+  readonly clientAppRoutes: ClientAppRoutes;
+
+  constructor(private _router: Router, private _dataService: DataService) {
+
+    this.clientAppRoutes = new ClientAppRoutes(this._router);
+    // Get logged in user
+    this.loggedUser = Storage.getUser();
+    if (!this.loggedUser) {
+      this.clientAppRoutes.navigateToLogin();
     }
-  ];
-
-  constructor() { }
+  }
 
   ngOnInit(): void {
     console.log("USERS COMPONENT INITIALIZATION");
 
-    this.isUsersListLoaded = false;
+    this.loadList();
+  }
 
-    //When data fetched - this block goes in subscribe
-    if (this.users.length > 0) {
-      this.isUsersListLoaded = true;
+  listenForRefreshingUsersEmitter(data: number): void {
+    if (data == 1) { this.loadList(); }
+  }
+
+  private loadList(): void {
+    if (this.loggedUser) {
+      /*FETCH DATA*/
+      this._dataService.listUsers(Number(this.loggedUser.companyId)).then(res => {
+
+        this.users = [];
+        this.filteredUsers = [];
+
+        //@ts-ignore
+        if (res?.length > 0) {
+
+          res?.forEach((element: any, index: any) => {
+            this.users.push(element);
+            this.filteredUsers.push(element);
+          });
+
+          console.dir(this.users);
+      
+          this.totalNumberOfEmployees = this.users.length;
+          this.totalPayPerHour = this.calculateTotalPayPerHour(this.users);
+          this.averagePayPerHour = this.calculateAveragePayPerHour(this.users);
+        }
+      });
     }
   }
 
   scrollToTop(): void {
     window.scrollTo(0, 0);
+  }
+
+
+  private calculateTotalPayPerHour(users: any): any {
+    let sumPayPerHour = 0;
+    users.forEach((element: any, index: any) => sumPayPerHour += parseFloat(element.payPerHour));
+    return sumPayPerHour.toFixed(2);
+  }
+
+  private calculateAveragePayPerHour(users: any): any {
+    return (this.calculateTotalPayPerHour(users) / users.length).toFixed(2);
   }
 }

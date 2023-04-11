@@ -9,6 +9,8 @@ export class UserTimeKeeperModalComponent implements OnInit {
 
   @Input() receivedUser: any = null;
 
+  @Input() clicksCounterInModal: number = 0;
+
   constructor() { }
 
   ngOnInit(): void {
