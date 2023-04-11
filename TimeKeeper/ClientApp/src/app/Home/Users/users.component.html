@@ -12,9 +12,9 @@
         </div>
       </div>
 
-      <app-all-users-statistics [isUsersListLoaded]="isUsersListLoaded" [users]="users"></app-all-users-statistics>
+      <app-all-users-statistics [totalNumberOfEmployees]="totalNumberOfEmployees" [totalPayPerHour]="totalPayPerHour" [averagePayPerHour]="averagePayPerHour" (emitRefreshingUsersFlag)="listenForRefreshingUsersEmitter($event)"></app-all-users-statistics>
 
-      <app-all-users-table [isUsersListLoaded]="isUsersListLoaded" [users]="users"></app-all-users-table>
+      <app-all-users-table [users]="users" [filteredUsers]="filteredUsers"></app-all-users-table>
 
     </div>
     <footer class="bg-white sticky-footer">

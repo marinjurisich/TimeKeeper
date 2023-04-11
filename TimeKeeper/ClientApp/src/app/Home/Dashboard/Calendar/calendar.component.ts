@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ClockInItem } from 'src/app/Shared/Models/clock-in-item';
 
@@ -12,6 +12,8 @@ declare function init_fp(opt: any): any;
 })
 export class CalendarComponent implements OnInit {
 
+ 
+
   // Workday form
   workdayForm: FormGroup;
 
@@ -24,6 +26,7 @@ export class CalendarComponent implements OnInit {
   modal_close: HTMLElement | null = document.getElementById("workday_close_b");
 
   @Input() clock_in_arr!: ClockInItem[];
+  @Input() receivedClicksCounterFromModal: number = 0;
 
   time_periods: any[] = [
     {
@@ -55,6 +58,13 @@ export class CalendarComponent implements OnInit {
     let _win = (<any>window);
     _win.time_keeper = _win.time_keeper || {};
     _win.time_keeper.open_workday_modal = this.open_workday_modal;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    setTimeout(() => {
+      // Initialize calendar
+      init_fp({ "clock_in_arr": this.clock_in_arr, });
+    }, 1000);
   }
 
   open_workday_modal(dateIso: string) {
