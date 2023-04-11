@@ -190,6 +190,20 @@ namespace TimeKeeper.Data.DbOperations {
         #endregion
 
         #region User
+
+        public IActionResult RegisterAdmin(RegistrationDTO data) {
+
+            try {
+                var company = RegisterCompany(data.Company);
+                data.User.companyId = company.id;
+
+                return CreateUser(data.User);
+
+            } catch {
+                return statusResponse(500, "Error when registering user or company");
+            }
+
+        }
         public IActionResult CreateUser(User user) {
 
             try {
@@ -270,19 +284,18 @@ namespace TimeKeeper.Data.DbOperations {
 
         #region Company
 
-        public IActionResult RegisterCompany(Company company) {
-            try {
+        public Company RegisterCompany(Company company) {
 
-                _context.Companies.Add(company);
-                _context.SaveChanges();
+            _context.Companies.Add(company);
+            _context.SaveChanges();
 
-                return statusResponse(200, company);
-
-            } catch (Exception ex) {
-
-                return statusResponse(500,ex.Message);
-
+            if(company.id != null) {
+                return company;
+            } else {
+                throw new Exception("Error when creating company");
             }
+
+             
         }
 
         #endregion

@@ -73,5 +73,17 @@ namespace TimeKeeper.Controllers
 
         }
 
+        [HttpPost]
+        public IActionResult RegisterAdmin() {
+
+            using var bodyStream = new StreamReader(Request.Body);
+            var jsonString = bodyStream.ReadToEndAsync().Result;
+
+            RegistrationDTO data = JsonSerializer.Deserialize<RegistrationDTO>(jsonString);
+
+            return _operations.RegisterAdmin(data);
+
+        }
+
     }
 }
