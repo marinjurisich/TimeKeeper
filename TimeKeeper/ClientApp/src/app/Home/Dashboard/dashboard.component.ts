@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientAppRoutes } from '../../Shared/Routes/ClientAppRoutes';
 import { ClockInItem } from 'src/app/Shared/Models/clock-in-item';
@@ -28,7 +28,8 @@ export class DashboardComponent implements OnInit {
 
   curr_year = new Date().getFullYear();
 
-  user: User | null;
+  @Input() user: User | null;
+  @Input() receivedClicksCounterFromModal: number = 0;
 
   constructor(private _router: Router) {
     this.clientAppRoutes = new ClientAppRoutes(this._router);
