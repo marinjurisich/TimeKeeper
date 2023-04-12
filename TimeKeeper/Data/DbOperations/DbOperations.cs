@@ -35,14 +35,14 @@ namespace TimeKeeper.Data.DbOperations {
             return statusResponse(200, workday);
         }
 
-        public IActionResult ListWorkdays(int user_id, DateTime start, DateTime end)
+        public IActionResult ListWorkdays(int userId, DateTime start, DateTime end)
         {
             Workday[] workdays = new Workday[] { };
 
             if (_context != null)
             {
                 workdays = _context.Workdays.Where(workday =>
-                    workday.userId == user_id
+                    workday.userId == userId
                     && workday.date.Date >= start.Date
                     && workday.date.Date <= end.Date
                 ).ToArray();
@@ -249,9 +249,9 @@ namespace TimeKeeper.Data.DbOperations {
 
         #region User
 
-        public User? GetUser(int user_id) {
+        public User? GetUser(int userId) {
             if (_context != null) {
-                var user = _context.Users.Single(user => user.id == user_id);
+                var user = _context.Users.Single(user => user.id == userId);
                 return user;
             }
             return null;
@@ -377,32 +377,25 @@ namespace TimeKeeper.Data.DbOperations {
 
         #region Month
 
-        public IActionResult CreateMonth(int userId) {
+        public IActionResult CreateMonth(int userId, DateTime? month = null) {
 
-            DateTime date = DateTime.Now;
-            if (date.Day > 1) {
-                date = date.AddDays(-(date.Day - 1));
+            if (month == null)
+            {
+                month = DateTime.Now;
+            }
+
+            if (month.Value.Day > 1)
+            {
+                month.Value.AddDays(-(month.Value.Day - 1));
             }
 
             double payPerHour = _context.Users.Where(u => u.id == userId).Select(u => u.payPerHour).First();
 
-            Month month = new Month(date, userId, 0, null, 0, payPerHour);
+            Month monthDb = new Month(month.Value, userId, 0, null, 0, payPerHour);
 
-            _context.Months.Add(month);
+            _context.Months.Add(monthDb);
             _context.SaveChanges();
-
             return statusResponse(200);
-        }
-
-        public void CreateMonth(int userId, DateTime month)
-        {
-            if (_context != null)
-            {
-                double payPerHour = _context.Users.Where(u => u.id == userId).Select(u => u.payPerHour).First();
-                Month monthDb = new Month(month.Date, userId, 0, null, 0, payPerHour);
-                _context.Months.Add(monthDb);
-                _context.SaveChanges();
-            }
         }
 
         public void CalculateMonthlySalary(Workday day) {

@@ -48,7 +48,6 @@ namespace TimeKeeper.Models {
             this.companyId = companyId;
             this.grade = 0;
             this.guid = System.Guid.NewGuid().ToString();
-            this.GenerateRandomPassword();
         }
 
         //constructor called when fetching from DB
