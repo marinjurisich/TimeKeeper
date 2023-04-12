@@ -208,7 +208,9 @@ namespace TimeKeeper.Data.DbOperations {
 
             try {
 
-                user.guid = Guid.NewGuid().ToString();
+                if(String.IsNullOrWhiteSpace(user.guid)) {
+                    user.guid = Guid.NewGuid().ToString();
+                }
                 if(String.IsNullOrWhiteSpace(user.password)) {
                     user.GenerateRandomPassword();
                 }

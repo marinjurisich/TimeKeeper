@@ -44,17 +44,17 @@ export class DataService {
   }
 
   /***** Registration *****/
-  async userRegistration(companyData: any, userData: any): Promise<boolean> {
+  async userRegistration(data: any): Promise<boolean> {
     
     let successfulRegister = false;
     try {
 
-      let companyCreate: string = environment.API_URL + "/company/register";
+      //let companyCreate: string = environment.API_URL + "/company/register";
 
-      let userCreate: string = environment.API_URL + '/user/register';
+      let userCreate: string = environment.API_URL + '/user/registerAdmin';
       let userBody = await fetch(userCreate, {
         method: "POST",
-        body: JSON.stringify(userData)
+        body: JSON.stringify(data)
       }).then(
         res => res.status == 200 ? res.json() : null
       );

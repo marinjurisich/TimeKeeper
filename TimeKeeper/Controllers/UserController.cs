@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System.ComponentModel.Design;
 using System.Text.Json;
 using TimeKeeper.Data;
@@ -79,7 +80,23 @@ namespace TimeKeeper.Controllers
             using var bodyStream = new StreamReader(Request.Body);
             var jsonString = bodyStream.ReadToEndAsync().Result;
 
-            RegistrationDTO data = JsonSerializer.Deserialize<RegistrationDTO>(jsonString);
+            JObject json = JObject.Parse(jsonString);
+
+            Company company = new Company(
+                json.GetValue("name").ToString(),
+                json.GetValue("address").ToString()
+            );
+
+            User user = new User(
+                json.GetValue("firstName").ToString(),
+                json.GetValue("lastName").ToString(),
+                json.GetValue("email").ToString(),
+                Boolean.Parse(json.GetValue("isAdmin").ToString()),
+                Double.Parse(json.GetValue("payPerHour").ToString()),
+                0
+            );
+
+            RegistrationDTO data = new RegistrationDTO(company, user);
 
             return _operations.RegisterAdmin(data);
 

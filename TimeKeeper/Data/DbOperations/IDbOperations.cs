@@ -10,9 +10,10 @@ namespace TimeKeeper.Data.DbOperations {
         IActionResult GetAllDaysInAMonth(string dateAsString);
         IActionResult ScannerClockInOut(string guid);
         IActionResult CreateUser(User user);
+        IActionResult RegisterAdmin(RegistrationDTO data);
         IActionResult LoginUser(LoginDTO loginData);
         void ValidateUser(User user);
-        IActionResult RegisterCompany(Company company);
+        Company RegisterCompany(Company company);
         IActionResult CreateMonth(int userId);
         ObjectResult statusResponse(int status, object? obj = null);
         string ValidatePassword(string password, byte[] salt);
