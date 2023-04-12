@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-all-users-statistics',
@@ -7,37 +7,18 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class AllUsersStatisticsComponent implements OnInit {
 
-  @Input() users: any[] = [];
-  @Input() isUsersListLoaded: boolean = false;
+  @Input() totalNumberOfEmployees: number = 0;
+  @Input() totalPayPerHour: number = 0;
+  @Input() averagePayPerHour: number = 0;
 
-  totalNumberOfEmployees: number = 0;
-  totalPayPerHour: number = 0;
-  averagePayPerHour: number = 0;
+  @Output() emitRefreshingUsersFlag = new EventEmitter<number>();
 
   constructor() { }
 
   ngOnInit(): void {
-
-    // Checking if done loading users in parent component
-    let myInterval: any = setInterval(() => {
-      if (this.isUsersListLoaded) {
-        clearInterval(myInterval);
-        this.totalNumberOfEmployees = this.users.length;
-        this.totalPayPerHour = this.calculateTotalPayPerHour(this.users);
-        this.averagePayPerHour = this.calculateAveragePayPerHour(this.users);
-      }
-    }, 500);
-
   }
 
-  private calculateTotalPayPerHour(users:any): any {
-    let sumPayPerHour = 0;
-    users.forEach((element: any, index: any) => sumPayPerHour += parseFloat(element.payPerHour));
-    return sumPayPerHour;
+  passEmit(data: number) {
+    this.emitRefreshingUsersFlag.emit(data);
   }
-
-  private calculateAveragePayPerHour(users: any): any {
-    return (this.calculateTotalPayPerHour(users) / users.length).toFixed(2);
-  }
-
 }

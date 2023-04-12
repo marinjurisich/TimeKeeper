@@ -91,7 +91,10 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of filteredUsers; let itemIndex = index">
-              <td><img class="rounded-circle me-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg"></td>
+              <td>
+                <p class="p-0 m-0">{{itemIndex+1}}.</p>
+                    <!--<img class="rounded-circle me-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg">-->
+              </td>
               <td>{{item.firstName}} {{item.lastName}}</td>
               <td>{{item.emailAddress}}</td>
               <td class="text-center">
@@ -107,7 +110,7 @@
                 </a>
               </td>
               <td class="text-center">
-                <a class="btn btn-primary bg-primary" data-bs-toggle="modal" data-bs-target="#userTimeKeeperModal" (click)="setCurrentlyEditingUser($event, item)">
+                <a class="btn btn-primary bg-primary" data-bs-toggle="modal" data-bs-target="#userTimeKeeperModal" (click)="setCurrentlyEditingUser($event, item); increaseClicksCounter($event)">
                   <i class="fas fa-calendar fa-1x"></i>
                 </a>
               </td>
@@ -137,5 +140,5 @@
 </div>
 
 <!-- Modals -->
-<app-user-editing-modal [receivedUser]="currentlyEditingUser" (userDeletedEmit)="deleteUser($event)"></app-user-editing-modal>
-<app-user-time-keeper-modal [receivedUser]="currentlyEditingUser"></app-user-time-keeper-modal>
+ <app-user-editing-modal [receivedUser]="currentlyEditingUser" (userDeletedEmit)="deleteUser($event)" (userEditedEmit)="editUser($event)"></app-user-editing-modal>
+ <app-user-time-keeper-modal [receivedUser]="currentlyEditingUser" [clicksCounterInModal]="clicksCounterInModal"></app-user-time-keeper-modal>

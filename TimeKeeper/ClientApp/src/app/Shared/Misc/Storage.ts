@@ -30,7 +30,8 @@ export class Storage {
 
     let userJson = sessionStorage.getItem(this.userKey) || localStorage.getItem(this.userKey);
     if (userJson) {
-      let user = new User(userJson);
+      // let user = new User(userJson);
+      let user = new User(JSON.parse(userJson));
       return user;
     }
     return null;

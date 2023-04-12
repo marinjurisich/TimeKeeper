@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Storage } from 'src/app/Shared/Misc/Storage';
 import { User } from 'src/app/Shared/Models/User';
@@ -26,6 +26,8 @@ export class CalendarComponent implements OnInit {
   // Modal data
   modal_workdays: Workday[] = [];  // A day can have several clockins
   modal_hours_total: number = 0;
+
+  @Input() receivedClicksCounterFromModal: number = 0;
 
   constructor() {
   }
@@ -57,6 +59,13 @@ export class CalendarComponent implements OnInit {
       this.clock_in_arr = workdays;
       Storage.saveWorkdays(this.clock_in_arr);
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    setTimeout(() => {
+      // Initialize calendar
+      init_fp({ "clock_in_arr": this.clock_in_arr, });
+    }, 1000);
   }
 
   open_workday_modal(dateIso: string) {
