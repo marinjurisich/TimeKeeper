@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Storage } from 'src/app/Shared/Misc/Storage';
 import { User } from 'src/app/Shared/Models/User';
 import { Workday } from 'src/app/Shared/Models/Workday';
+import { ClockInItem } from '../../../Shared/Models/ClockInItem';
 
 // Defined in /src/assets/js/init-fp.js
 declare function init_fp(opt: any): any;
@@ -39,8 +40,9 @@ export class CalendarComponent implements OnInit {
     _win.time_keeper.open_workday_modal = this.open_workday_modal;
 
     // Initialize calendar
+    let dates = this.clock_in_arr.map(o => new ClockInItem("clock_in", new Date(o.date)));
     this.fp_inst = init_fp({
-      "clock_in_arr": this.clock_in_arr,
+      "clock_in_arr": dates,
     });
 
     // Initialize dates
@@ -64,7 +66,8 @@ export class CalendarComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     setTimeout(() => {
       // Initialize calendar
-      init_fp({ "clock_in_arr": this.clock_in_arr, });
+      let dates = this.clock_in_arr.map(o => new ClockInItem("clock_in", new Date(o.date)));
+      init_fp({ "clock_in_arr": dates, });
     }, 1000);
   }
 
