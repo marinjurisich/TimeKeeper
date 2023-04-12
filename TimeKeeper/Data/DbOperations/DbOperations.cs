@@ -1,6 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
+using OfficeOpenXml;
+using System.ComponentModel;
+using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -288,6 +294,47 @@ namespace TimeKeeper.Data.DbOperations {
         #endregion
 
         #region Month
+
+        public MemoryStream ExportWorkdays(int userId) {
+
+            var monthsList = _context.Months.Where(m => m.userId == userId).ToList();
+            var monthsDT = DataTableExtension.ToDataTable(monthsList);
+
+            string expression = "Date > #" + DateTime.Now.Date.AddYears(-1).ToShortDateString() + "# And Date <= #" + DateTime.Now.Date.ToShortDateString() + "#";
+
+            var filteredRows = monthsDT.Select(expression);
+
+            DataTable filteredTable = monthsDT.Clone();
+            foreach (DataRow row in filteredRows) {
+                filteredTable.ImportRow(row);
+            }
+
+            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+            using (ExcelPackage package = new ExcelPackage()) {
+                var ws = package.Workbook.Worksheets.Add("Months");
+                //true generates headers
+                ws.Cells["A1"].LoadFromDataTable(filteredTable, true);
+
+                //set column data format so dates are shown
+                ws.Column(2).Style.Numberformat.Format = DateTimeFormatInfo.CurrentInfo.ShortDatePattern;
+
+                //set column with so data is displayed correctly
+                ws.Column(1).Width = 5;
+                ws.Column(2).Width = 15;
+                ws.Column(3).Width = 10;
+                ws.Column(4).Width = 15;
+                ws.Column(5).Width = 15;
+                ws.Column(6).Width = 20;
+                ws.Column(7).Width = 20;
+
+                var stream = new MemoryStream();
+                package.SaveAs(stream);
+
+                stream.Position = 0;
+
+                return stream;
+            }
+        }
 
         public IActionResult CreateMonth(int userId) {
 

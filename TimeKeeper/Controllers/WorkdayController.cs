@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Globalization;
 using System.Text.Json;
 using TimeKeeper.Data;
 using TimeKeeper.Data.DbOperations;
@@ -66,7 +68,6 @@ namespace TimeKeeper.Controllers {
             return _operations.ScannerClockInOut(guid);
 
         }
-
 
     }
 }

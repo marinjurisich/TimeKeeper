@@ -44,5 +44,15 @@ namespace TimeKeeper.Controllers
             return _operations.GetAllDaysInAMonth(date);
 
         }
+
+        [HttpGet]
+        public IActionResult Export(int userId) {
+
+            string fileName = "yearlyReport.xlsx";
+            string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            MemoryStream stream = _operations.ExportWorkdays(userId);
+
+            return File(stream, contentType, fileName);
+        }
     }
 }
