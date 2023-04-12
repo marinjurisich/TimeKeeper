@@ -91,6 +91,7 @@ namespace TimeKeeper.Controllers
                 json.GetValue("firstName").ToString(),
                 json.GetValue("lastName").ToString(),
                 json.GetValue("email").ToString(),
+                json.GetValue("password").ToString(),
                 Boolean.Parse(json.GetValue("isAdmin").ToString()),
                 Double.Parse(json.GetValue("payPerHour").ToString()),
                 0
