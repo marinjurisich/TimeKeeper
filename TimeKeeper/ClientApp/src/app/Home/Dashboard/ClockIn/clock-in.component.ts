@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { ClockInItem } from 'src/app/Shared/Models/clock-in-item';
+import { ClockInItem } from 'src/app/Shared/Models/ClockInItem';
 
 @Component({
   selector: 'app-clock-in',
@@ -10,8 +10,8 @@ export class ClockInComponent implements OnInit {
 
   clocked_in: boolean = false;
 
-  @Input() clock_in_arr!: ClockInItem[];
-  @Output() clock_in_arrChange = new EventEmitter<ClockInItem>()
+  @Input() clock_ins_today!: ClockInItem[];
+  @Output() clock_ins_todayChange = new EventEmitter<ClockInItem>()
 
 
   constructor() {
@@ -29,7 +29,7 @@ export class ClockInComponent implements OnInit {
     let curr_time = new Date();
     let time = curr_time.getHours() + ":" + ("0" + curr_time.getMinutes()).slice(-2);
 
-    this.clock_in_arrChange.emit(new ClockInItem("clock_out", curr_time));
+    this.clock_ins_todayChange.emit(new ClockInItem("clock_out", new Date(curr_time)));
     this.clocked_in = false;
 
     // On clock out, open workday modal
@@ -48,7 +48,7 @@ export class ClockInComponent implements OnInit {
     let curr_time = new Date();
     let time = curr_time.getHours() + ":" + ("0" + curr_time.getMinutes()).slice(-2);
 
-    this.clock_in_arrChange.emit(new ClockInItem("clock_in", curr_time));
+    this.clock_ins_todayChange.emit(new ClockInItem("clock_in", new Date(curr_time)));
     this.clocked_in = true;
   }
 

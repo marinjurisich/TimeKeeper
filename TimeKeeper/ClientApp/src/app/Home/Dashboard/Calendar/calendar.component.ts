@@ -1,6 +1,9 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ClockInItem } from 'src/app/Shared/Models/clock-in-item';
+import { Storage } from 'src/app/Shared/Misc/Storage';
+import { User } from 'src/app/Shared/Models/User';
+import { Workday } from 'src/app/Shared/Models/Workday';
+import { ClockInItem } from '../../../Shared/Models/ClockInItem';
 
 // Defined in /src/assets/js/init-fp.js
 declare function init_fp(opt: any): any;
@@ -12,75 +15,104 @@ declare function init_fp(opt: any): any;
 })
 export class CalendarComponent implements OnInit {
 
- 
+  @Input() clock_in_arr!: Workday[];
+  @Input() user!: User | null;
+  @Input() fetch_workdays!: (flatpickr_inst: any) => Promise<Workday[]>;
+  @Input() seed_workdays!: (flatpickr_inst: any) => Promise<Workday[]>;
 
-  // Workday form
-  workdayForm: FormGroup;
+  neka_varijabla: string = "asd";
 
-  clock_ins: string;
+  fp_inst: any | null;
 
-  // Modal management
-  modal_title: HTMLElement | null = document.getElementById("workday_modal_title");
-  modal_save: HTMLElement | null = document.getElementById("workday_save_b");
-  modal_open: HTMLElement | null = document.getElementById("workday_modal_open");
-  modal_close: HTMLElement | null = document.getElementById("workday_close_b");
+  // Modal data
+  modal_workdays: Workday[] = [];  // A day can have several clockins
+  modal_hours_total: number = 0;
 
-  @Input() clock_in_arr!: ClockInItem[];
   @Input() receivedClicksCounterFromModal: number = 0;
 
-  time_periods: any[] = [
-    {
-      "clock_in": "13:52",
-      "clock_out": "15:50",
-      "project_id": 0,
-      "project_name": "Some proj",
-      "description": "Some desc",
-    }
-  ];
-
   constructor() {
-
-    this.clock_ins = "8:59 - 15:00\n" +
-      "16:57 - 18:59";
-
-    this.workdayForm = new FormGroup({
-    });
   }
 
   ngOnInit(): void {
 
-    // Initialize calendar
-    init_fp({
-      "clock_in_arr": this.clock_in_arr,
-      // "clock_in_arr": [ new ClockInItem("clock_in", new Date("2023-04-03")) ],
-    });
-
     let _win = (<any>window);
     _win.time_keeper = _win.time_keeper || {};
     _win.time_keeper.open_workday_modal = this.open_workday_modal;
+
+    // Initialize calendar
+    let dates = this.clock_in_arr.map(o => new ClockInItem("clock_in", new Date(o.date)));
+    this.fp_inst = init_fp({
+      "clock_in_arr": dates,
+    });
+
+    // Initialize dates
+    this.init_workdays();
+  }
+
+  async init_workdays() {
+    this.fetch_workdays(this.fp_inst).then((workdays: Workday[]) => {
+      this.clock_in_arr = workdays;
+      Storage.saveWorkdays(this.clock_in_arr);
+    });
+  }
+
+  async init_seed_workdays() {
+    this.seed_workdays(this.fp_inst).then((workdays: Workday[]) => {
+      this.clock_in_arr = workdays;
+      Storage.saveWorkdays(this.clock_in_arr);
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
     setTimeout(() => {
       // Initialize calendar
-      init_fp({ "clock_in_arr": this.clock_in_arr, });
+      let dates = this.clock_in_arr.map(o => new ClockInItem("clock_in", new Date(o.date)));
+      init_fp({ "clock_in_arr": dates, });
     }, 1000);
   }
 
   open_workday_modal(dateIso: string) {
 
-    if (!this.modal_title || !this.modal_save || !this.modal_open || this.modal_close) {
+    // Initialize modal elements
+    let modal_title = document.getElementById("workday_modal_title");
+    let modal_save = document.getElementById("workday_save_b");
+    let modal_open = document.getElementById("workday_modal_open");
+    let modal_close = document.getElementById("workday_close_b");
+    let workday_modal_hours = document.getElementById("workday_modal_hours");
+
+    if (!modal_title || !modal_save || !modal_open || !modal_close || !workday_modal_hours) {
       console.log("Cannot find modal elements.");
       return;
     }
 
+    // Initialize arr if needed
+    if (!this.clock_in_arr) {
+      console.log("Fetching clock_in_arr from session");
+      this.clock_in_arr = Storage.getWorkdays();
+    }
+
     // Set up modal
-    
-    let modal_close : HTMLElement | null = this.modal_close;
+    modal_title.innerText = dateIso;
 
-    this.modal_title.innerText = dateIso;
+    // Which workdays to show in modal
+    this.modal_workdays = this.clock_in_arr.filter(wd => {
+      let wd_date_iso = wd.date.substring(0, 10);
+      return wd_date_iso == dateIso;
+    })
 
-    this.modal_save.onclick = function () {
+    // Calculate total work hours
+    let total_hours = 0;
+    this.modal_workdays.forEach(wd => {
+      let clock_in = new Date(wd.clockIn);
+      let clock_out = new Date(wd.clockOut);
+
+      let clock_in_hours = (clock_out.getTime() - clock_in.getTime()) / (60 * 60 * 1000);
+      total_hours += clock_in_hours;
+    });
+    total_hours = Math.round(total_hours * 100) / 100;
+    workday_modal_hours.innerText = "(" + total_hours + " hours)";
+
+    modal_save.onclick = function () {
       // fetch() // POST
       if (modal_close) {
         modal_close.click();
@@ -88,7 +120,7 @@ export class CalendarComponent implements OnInit {
     }
 
     // Open modal
-    this.modal_open.click();
+    modal_open.click();
   }
 
 }
