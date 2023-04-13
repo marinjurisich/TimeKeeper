@@ -11,6 +11,7 @@ import {HomeModule} from "./Home/home.module";
 import { DashboardComponent } from './Home/Dashboard/dashboard.component';
 import { UsersComponent } from './Home/Users/users.component';
 import { ErrorMessageComponent } from './Login/ErrorMessage/error-message.component';
+import { FlatpickrModule } from 'angularx-flatpickr';
 
 
 
@@ -39,7 +40,7 @@ import { ErrorMessageComponent } from './Login/ErrorMessage/error-message.compon
       },
       { path: 'Login', component: LoginComponent },
       { path: 'Register', component: RegisterComponent }
-    ])
+    ]),
   
   ],
   providers: [],

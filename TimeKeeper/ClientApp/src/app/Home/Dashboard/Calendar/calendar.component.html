@@ -7,7 +7,23 @@
         </h3>
     </div>
 
+    <!-- FP Calendar -->
+    <div
+        mwlFlatpickr
+        instance="fp_inst"
+        [options]="fp_options"
+        (flatpickrChange)="fp_on_change($event)"
+        (flatpickrDayCreate)="fp_on_day_create($event)"
+    ></div>
+
     <!-- FP Calendar (Warning - do not change ID) -->
+    <p>
+        <button (click)="init_workdays()">Fetch clock in array</button>
+        <button (click)="redrawFp()">Redraw</button>
+    </p>
+    <p>
+        Clock in array length: {{clock_in_arr.length}}
+    </p>
     <div id="fpWorkday"></div>
 
     <!-- Seed data (debugging) -->

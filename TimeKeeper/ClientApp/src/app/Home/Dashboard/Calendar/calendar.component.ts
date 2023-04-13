@@ -4,6 +4,9 @@ import { Storage } from 'src/app/Shared/Misc/Storage';
 import { User } from 'src/app/Shared/Models/User';
 import { Workday } from 'src/app/Shared/Models/Workday';
 import { ClockInItem } from '../../../Shared/Models/ClockInItem';
+import { FlatpickrDefaultsInterface, FlatpickrDirective } from 'angularx-flatpickr';
+import { FlatPickrDayCreateOutputOptions } from 'angularx-flatpickr/lib/flatpickr.directive';
+import { FlatPickrOutputOptions } from 'angularx-flatpickr/lib/flatpickr.directive';
 
 // Defined in /src/assets/js/init-fp.js
 declare function init_fp(opt: any): any;
@@ -11,18 +14,29 @@ declare function init_fp(opt: any): any;
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss']
+  styleUrls: ['./calendar.component.scss'],
+  providers: [FlatpickrDirective]
 })
 export class CalendarComponent implements OnInit {
 
   @Input() clock_in_arr!: Workday[];
   @Input() user!: User | null;
-  @Input() fetch_workdays!: (flatpickr_inst: any) => Promise<Workday[]>;
-  @Input() seed_workdays!: (flatpickr_inst: any) => Promise<Workday[]>;
+  @Input() fetch_workdays!: () => Promise<void>;
+  @Input() seed_workdays!: () => Promise<void>;
 
-  neka_varijabla: string = "asd";
+  clock_in_dates: string[];
 
-  fp_inst: any | null;
+  flatpickrDirective: FlatpickrDirective;
+  fp_date: string = "";
+  fp_options: FlatpickrDefaultsInterface = {
+    dateFormat: "Y-m-d",
+    inline: true,
+    locale: {
+      firstDayOfWeek: 1
+    },
+    showMonths: 2,
+    maxDate: new Date(),
+  }
 
   // Modal data
   modal_workdays: Workday[] = [];  // A day can have several clockins
@@ -30,7 +44,9 @@ export class CalendarComponent implements OnInit {
 
   @Input() receivedClicksCounterFromModal: number = 0;
 
-  constructor() {
+  constructor(_fp_inst: FlatpickrDirective) {
+    this.flatpickrDirective = _fp_inst;
+    this.clock_in_dates = [];
   }
 
   ngOnInit(): void {
@@ -38,29 +54,6 @@ export class CalendarComponent implements OnInit {
     let _win = (<any>window);
     _win.time_keeper = _win.time_keeper || {};
     _win.time_keeper.open_workday_modal = this.open_workday_modal;
-
-    // Initialize calendar
-    let dates = this.clock_in_arr.map(o => new ClockInItem("clock_in", new Date(o.date)));
-    this.fp_inst = init_fp({
-      "clock_in_arr": dates,
-    });
-
-    // Initialize dates
-    this.init_workdays();
-  }
-
-  async init_workdays() {
-    this.fetch_workdays(this.fp_inst).then((workdays: Workday[]) => {
-      this.clock_in_arr = workdays;
-      Storage.saveWorkdays(this.clock_in_arr);
-    });
-  }
-
-  async init_seed_workdays() {
-    this.seed_workdays(this.fp_inst).then((workdays: Workday[]) => {
-      this.clock_in_arr = workdays;
-      Storage.saveWorkdays(this.clock_in_arr);
-    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -69,6 +62,53 @@ export class CalendarComponent implements OnInit {
       let dates = this.clock_in_arr.map(o => new ClockInItem("clock_in", new Date(o.date)));
       init_fp({ "clock_in_arr": dates, });
     }, 1000);
+  }
+
+  async init_workdays() {
+
+    // Update clock_in_array (through parent)
+    await this.fetch_workdays();
+
+    // Save array and update component
+    Storage.saveWorkdays(this.clock_in_arr);
+    this.clock_in_dates = this.clock_in_arr.map(wd => wd.getDateIso());
+    this.flatpickrDirective.instance.redraw();
+  }
+
+  async init_seed_workdays() {
+
+    // Update clock_in_array (through parent)
+    this.seed_workdays();
+
+    // Save array and update component
+    Storage.saveWorkdays(this.clock_in_arr);
+    this.clock_in_dates = this.clock_in_arr.map(wd => wd.getDateIso());
+    this.flatpickrDirective.instance.redraw();
+  }
+
+  // fp_on_change(date: Date, date_iso: string, instance: any) {
+  fp_on_change(event: FlatPickrOutputOptions) {
+    console.log(event.instance);
+  }
+
+  redrawFp() {
+    console.log(this.flatpickrDirective);
+    this.flatpickrDirective.disable = []
+    this.flatpickrDirective.instance.redraw();
+  }
+
+  // fp_on_day_create(dayElement: HTMLElement) {
+  fp_on_day_create(event: FlatPickrDayCreateOutputOptions) {
+
+    console.log("- Generating day...");
+
+    let date: Date = (<any> event.dayElement).dateObj;
+    let dateIso = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
+
+    // If there are clock ins for this date
+    if (this.clock_in_dates.includes(dateIso)) {
+      event.dayElement.classList.add("editable");
+    }
   }
 
   open_workday_modal(dateIso: string) {
