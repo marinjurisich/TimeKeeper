@@ -62,7 +62,7 @@ sqlcmd -S localhost -U sa -P '<YourPassword>'
     # `-P` is password
 ```
 
-Note: If you can connection to the SQL client in the terminal, but not through the app, consider adding username and password fields to the connection string.
+Note: If you can connect to the SQL client in the terminal, but not through the app, consider adding username and password fields to the connection string.
 
 <hr />
 
