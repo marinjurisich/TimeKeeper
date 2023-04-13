@@ -249,6 +249,20 @@ namespace TimeKeeper.Data.DbOperations {
 
         #region User
 
+        public IActionResult RegisterAdmin(RegistrationDTO data) {
+
+            try {
+                var company = RegisterCompany(data.Company);
+                data.User.companyId = company.id;
+
+                return CreateUser(data.User);
+
+            } catch {
+                return statusResponse(500, "Error when registering user or company");
+            }
+
+        }
+
         public User? GetUser(int userId) {
             if (_context != null) {
                 var user = _context.Users.Single(user => user.id == userId);
@@ -261,7 +275,9 @@ namespace TimeKeeper.Data.DbOperations {
 
             try {
 
-                user.guid = Guid.NewGuid().ToString();
+                if(String.IsNullOrWhiteSpace(user.guid)) {
+                    user.guid = Guid.NewGuid().ToString();
+                }
                 if(String.IsNullOrWhiteSpace(user.password)) {
                     user.GenerateRandomPassword();
                 }
@@ -336,19 +352,18 @@ namespace TimeKeeper.Data.DbOperations {
 
         #region Company
 
-        public IActionResult RegisterCompany(Company company) {
-            try {
+        public Company RegisterCompany(Company company) {
 
-                _context.Companies.Add(company);
-                _context.SaveChanges();
+            _context.Companies.Add(company);
+            _context.SaveChanges();
 
-                return statusResponse(200, company);
-
-            } catch (Exception ex) {
-
-                return statusResponse(500,ex.Message);
-
+            if(company.id != null) {
+                return company;
+            } else {
+                throw new Exception("Error when creating company");
             }
+
+             
         }
 
         public void CompanyAdd(params Company[] companies) {
