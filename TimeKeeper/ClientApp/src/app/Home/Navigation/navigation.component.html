@@ -21,7 +21,7 @@
       <!--          <i class="fas fa-user"></i><span>Profile</span>-->
       <!--        </a>-->
       <!--      </li>-->
-      <li class="nav-item" (click)="clientAppRoutes.navigateToUsers()">
+      <li class="nav-item" (click)="clientAppRoutes.navigateToUsers()" *ngIf="loggedUser.isAdmin">
         <a class="nav-link">
           <i class="fas fa-table"></i>
           <span>Users</span>

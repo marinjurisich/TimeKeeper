@@ -10,8 +10,17 @@
     <!-- FP Calendar (Warning - do not change ID) -->
     <div id="fpWorkday"></div>
 
+    <!-- Seed data (debugging) -->
+    <div class="mt-4 text-center" *ngIf="clock_in_arr.length == 0">
+        <p>
+            No workdays found.
+        </p>
+        <button class="btn btn-success" (click)="init_seed_workdays()">Generate randomly</button>
+    </div>
+
     <!-- Button trigger modal -->
-    <button id="workday_modal_open" type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#workDayModal"></button>
+    <button id="workday_modal_open" type="button" class="d-none" data-bs-toggle="modal"
+        data-bs-target="#workDayModal"></button>
 
     <!-- Modal -->
     <div class="modal fade" id="workDayModal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="workDayModalLabel"
@@ -23,52 +32,78 @@
                         <!-- Edit -->
                         <i class="fa-solid fa-calendar"></i>&nbsp;
                         <strong id="workday_modal_title">YYYY-MM-DD</strong>&nbsp;
-			<span id="workday_modal_hours">(3.7 hours)</span>
+                        <span id="workday_modal_hours">(0 hours)</span>
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
 
-                    <!-- Workday form -->
+                    <!-- Workdays form -->
 
-                    <!-- Form -->
-                    <form class="user" [formGroup]="workdayForm">
-
-                        <!-- Clock ins -->
-                        <!--<div class="mb-3">
-                            <label for="t_timestamps">Clock ins</label>
-                            <textarea id="t_timestamps" class="clock-in-textarea form-control w-100" type="text" placeholder="Textarea input" readonly>{{clock_ins}}</textarea>
-			</div>-->
+                    <div *ngFor="let wd of modal_workdays">
 
                         <!-- Clock in & out -->
                         <div class="row pb-3">
 
                             <!-- Clock in -->
                             <div class="col-sm-6 mb-3 mb-sm-0">
-				<label>Clock in</label>
+                                <label>Clock in</label>
+                                <input class="form-control form-control-user" type="text" placeholder="Clock in" [value]="wd.getClockInTime()">
+                            </div>
+
+                            <!-- Clock out -->
+                            <div class="col-sm-6">
+                                <label>Clock out</label>
+                                <input class="form-control form-control-user" type="text" placeholder="Clock out" [value]="wd.getClockOutTime()">
+                            </div>
+                        </div>
+
+                        <!-- Project -->
+                        <div class="mb-3">
+                            <label>Project</label>
+                            <input class="form-control form-control-user" type="text" placeholder="Time period project" [value]="wd.projectId">
+                        </div>
+
+                        <!-- Description -->
+                        <div class="">
+                            <label>Description</label>
+                            <textarea class="form-control w-100" type="text"
+                                placeholder="Time period description">{{wd.description}}</textarea>
+                        </div>
+                    </div>
+
+
+                    <div>
+
+                        <!-- Clock in & out -->
+                        <div class="row pb-3">
+
+                            <!-- Clock in -->
+                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                <label>Clock in</label>
                                 <input class="form-control form-control-user" type="text" placeholder="Clock in">
                             </div>
 
                             <!-- Clock out -->
                             <div class="col-sm-6">
-				<label>Clock out</label>
+                                <label>Clock out</label>
                                 <input class="form-control form-control-user" type="text" placeholder="Clock out">
                             </div>
                         </div>
 
                         <!-- Project -->
                         <div class="mb-3">
-			    <label>Project</label>
+                            <label>Project</label>
                             <input class="form-control form-control-user" type="text" placeholder="Time period project">
                         </div>
 
                         <!-- Description -->
                         <div class="">
-			    <label>Description</label>
-                            <textarea class="form-control w-100" type="text" placeholder="Time period description"></textarea>
+                            <label>Description</label>
+                            <textarea class="form-control w-100" type="text"
+                                placeholder="Time period description"></textarea>
                         </div>
-
-                    </form>
+                    </div>
 
                 </div>
                 <div class="modal-footer">

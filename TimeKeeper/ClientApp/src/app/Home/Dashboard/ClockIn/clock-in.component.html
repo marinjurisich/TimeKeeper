@@ -50,7 +50,7 @@
         <div class="text-center small mt-4">
 
             <!-- Show times -->
-            <span *ngFor="let item of filter_today(clock_in_arr); index as idx;">
+            <span *ngFor="let item of clock_ins_today; index as idx;">
 
                 
 
@@ -58,7 +58,7 @@
                 <span *ngIf="item.type=='clock_in'">
 
                     <!-- If this is not last item, show with dash -->
-                    <span *ngIf="idx != clock_in_arr.length - 1; else elseBlock">
+                    <span *ngIf="idx != clock_ins_today.length - 1; else elseBlock">
                         <i class="fas fa-circle" style="color: #7ed1b3;"></i>&nbsp;{{item.getTime()}}
                         ->
                     </span>
@@ -73,7 +73,7 @@
                 <span *ngIf="item.type=='clock_out'">
 
                     <!-- If this is not last item, add space -->
-                    <span *ngIf="idx != clock_in_arr.length - 1; else elseBlock;">
+                    <span *ngIf="idx != clock_ins_today.length - 1; else elseBlock;">
                         <i class="fas fa-circle" style="color: #db7878"></i>&nbsp;{{item.getTime()}}
                         &nbsp;
                     </span>
