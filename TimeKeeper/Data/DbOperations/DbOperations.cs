@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using System.Linq;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using TimeKeeper.Models;
@@ -249,6 +250,28 @@ namespace TimeKeeper.Data.DbOperations {
 
         #region User
 
+        public IActionResult ResetPassword(User user) {
+
+            ValidateUser(user);
+
+            //save new password to DB
+            string plainPassword = user.password;
+            string hashedPassword = HashPasword(user.password, out salt);
+            user.password = hashedPassword;
+
+            UserSalt s = new UserSalt(user.email, salt);
+
+            _context.UserSalts.Update(s);
+            _context.Users.Update(user);
+            _context.SaveChanges();
+
+            //send email containing new password as plaintext
+            user.password = plainPassword;
+            SendPasswordResetMail(user);
+
+            return statusResponse(200);
+        }
+
         public IActionResult RegisterAdmin(RegistrationDTO data) {
 
             try {
@@ -271,7 +294,7 @@ namespace TimeKeeper.Data.DbOperations {
             return null;
         }
 
-        public IActionResult CreateUser(User user) {
+        public IActionResult CreateUser(User user, string? adminMail = null, string? adminName = null) {
 
             try {
 
@@ -284,6 +307,7 @@ namespace TimeKeeper.Data.DbOperations {
 
                 ValidateUser(user);
 
+                string plainPassword = user.password;
                 string hashedPassword = HashPasword(user.password, out salt);
                 user.password = hashedPassword;
 
@@ -292,6 +316,11 @@ namespace TimeKeeper.Data.DbOperations {
                 _context.UserSalts.Add(s);
                 _context.Users.Add(user);
                 _context.SaveChanges();
+
+                if(!String.IsNullOrWhiteSpace(adminMail) && !String.IsNullOrWhiteSpace(adminName)) {
+                    user.password = plainPassword;
+                    sendPasswordViaEmail(user, adminMail, adminName);
+                }
 
                 return statusResponse(200, user);
 
@@ -343,8 +372,11 @@ namespace TimeKeeper.Data.DbOperations {
                 throw new Exception("Missing user data!");
             }
 
-            if(_context.Users.Any(u => u.email.Equals(user.email))){
-                throw new Exception("User with this email already exists!");
+            //if a new user is being created then check for email
+            if(user.id == 0 || user.id == null) {
+                if(_context.Users.Any(u => u.email.Equals(user.email))){
+                    throw new Exception("User with this email already exists!");
+                }
             }
 
         }
@@ -441,6 +473,72 @@ namespace TimeKeeper.Data.DbOperations {
         #endregion
 
         #region Helpers
+
+        public void SendPasswordResetMail(User user) {
+
+            string to = user.email;
+            string from = "doNotReply@TimeKeeper.com";
+
+            MailMessage message = new MailMessage(from, to);
+            message.Subject = "Password reset";
+            message.Body = @$"Hi {user.firstName},
+you have successfuly changed your password!
+Your new password is '{user.password}'. DO NOT SHARE THIS PASSWORD WITH ANYONE!
+
+We hope you enjoy using our service.
+
+Kind regards,
+TimeKeeper Team";
+
+            SmtpClient client = new SmtpClient("127.0.0.1", 25);
+            // Credentials are necessary if the server requires the client
+            // to authenticate before it will send email on the client's behalf.
+            client.UseDefaultCredentials = true;
+
+            try {
+                client.Send(message);
+            } catch (Exception ex) {
+                Console.WriteLine("Exception caught in SendPasswordViaEmail(): {0}",
+                    ex.ToString());
+            }
+
+        }
+
+        public void sendPasswordViaEmail(User employee, string adminEmail, string adminName) {
+
+            string to = employee.email;
+            string from = adminEmail;
+
+            string companyName = _context.Companies.Where(c => c.id == employee.companyId).First().name;
+
+            MailMessage message = new MailMessage(from, to);
+            message.Subject = "You have been added to TimeKeeper!";
+            message.Body = @$"Hi { employee.firstName },
+we are happy to announce that you have been added to { companyName }s TimeKeeper workspace by { adminName }!
+Your password is '{ employee.password }'.
+DO NOT SHARE THIS PASSWORD WITH ANYONE!
+
+We hope you enjoy using our service.
+
+Kind regards,
+TimeKeeper Team";
+
+            SmtpClient client = new SmtpClient("127.0.0.1", 25);
+            // Credentials are necessary if the server requires the client
+            // to authenticate before it will send email on the client's behalf.
+            client.UseDefaultCredentials = true;
+
+            try {
+                client.Send(message);
+            } catch (Exception ex) {
+                Console.WriteLine("Exception caught in SendPasswordViaEmail(): {0}",
+                    ex.ToString());
+            }
+
+        }
+
+        
+
         public ObjectResult statusResponse (int status, object? obj=null) {
             var result = new ObjectResult(obj);
             result.StatusCode = status;
