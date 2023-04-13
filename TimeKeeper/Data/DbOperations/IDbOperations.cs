@@ -13,9 +13,10 @@ namespace TimeKeeper.Data.DbOperations {
         IActionResult ScannerClockInOut(string guid);
         public User? GetUser(int userId);
         IActionResult CreateUser(User user);
+        IActionResult RegisterAdmin(RegistrationDTO data);
         IActionResult LoginUser(LoginDTO loginData);
         void ValidateUser(User user);
-        IActionResult RegisterCompany(Company company);
+        Company RegisterCompany(Company company);
         public void CompanyAdd(params Company[] companies);
         public void ProjectAdd(params Project[] projects);
         IActionResult CreateMonth(int userId, DateTime? month);

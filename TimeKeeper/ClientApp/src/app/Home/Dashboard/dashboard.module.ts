@@ -7,6 +7,7 @@ import { SalaryChartComponent } from './SalaryChart/salary-chart.component';
 import { SummaryComponent } from './Summary/summary.component';
 import { HeaderModule } from '../Header/header.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FlatpickrModule } from 'angularx-flatpickr';
 
 
 @NgModule({
@@ -19,7 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
 
   imports: [
-    CommonModule, HeaderModule, ReactiveFormsModule
+    CommonModule, HeaderModule, ReactiveFormsModule, FlatpickrModule.forRoot()
   ],
 
   exports: [
