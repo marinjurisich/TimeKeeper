@@ -3,11 +3,14 @@
 
 ```bash
 
+# Connect to client
+sqlcmd -S localhost -U sa -P '<YourPassword>'
+
 # Verify that the service is running
 systemctl status mssql-server --no-pager
 
-# Connect to client
-sqlcmd -S localhost -U sa -P '<YourPassword>'
+# Restart the service
+systemctl restart mssql-server
 
 ```
 
@@ -78,14 +81,20 @@ It is mandatory to write `GO` for the commands before it to execute.
 It seems that writing commands in `sqlcmd` resembles writing a transaction.
 
 
-## Rename SQL Server
+## Some SQL commands
 
 Enter the SQL CLI:
 ```bash
 sqlcmd -S localhost -U sa -P '<YourPassword>'
 ```
 
-Follow these instructions.
+Show tables
+```bash
+SELECT name FROM sys.tables
+GO
+```
+
+Rename the SQL server
 ```bash
   # Find out current server name
 1> SELECT @@SERVERNAME
