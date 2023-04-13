@@ -74,6 +74,45 @@ namespace TimeKeeper.Controllers
 
         }
 
+        /*
+         * Accepts userId, returns userId if user is deleted, -1 if deleting fails
+         */
+
+        [HttpGet("{id}")]
+        public int Delete(int id) {
+            
+            User user = _context.Users.Where(u => u.id == id).First();
+
+            try {
+                
+                _context.Users.Remove(user);
+                _context.SaveChanges();
+
+                return id;
+            } catch (Exception ex) {
+                return -1;
+            }
+
+
+        }
+
+        /*
+         * Accepts user which MUST contain ALL data, returns updated user
+         */
+        [HttpPost]
+        public User Update() {
+
+            using var bodyStream = new StreamReader(Request.Body);
+            var jsonString = bodyStream.ReadToEndAsync().Result;
+
+            User user = JsonSerializer.Deserialize<User>(jsonString);
+
+            _context.Users.Update(user);
+            _context.SaveChanges();
+
+            return user;
+        }
+
         [HttpPost]
         public IActionResult RegisterAdmin() {
 
