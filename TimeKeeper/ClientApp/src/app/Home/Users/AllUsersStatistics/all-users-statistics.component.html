@@ -3,7 +3,7 @@
 
     <!-- Adding new user - modal -->
     <div class="col-3 mb-4 d-flex justify-content-start align-items-center align-content-center">
-      <button class="btn btn-primary bg-primary" data-bs-toggle="modal" data-bs-target="#userAddingModal">Add new user</button>
+      <button class="btn btn-primary bg-primary" data-bs-toggle="modal" data-bs-target="#userAddingModal" id="add_new_user">Add new user</button>
     </div>
 
     <!-- Count employees -->
@@ -62,4 +62,4 @@
 
 
 <!-- Modals -->
-<app-user-adding-modal></app-user-adding-modal>
+<app-user-adding-modal (emitRefreshingUsersFlag)="passEmit($event)"></app-user-adding-modal>

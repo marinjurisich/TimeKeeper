@@ -45,7 +45,7 @@ export class RegisterComponent implements OnInit {
       confirmPassword: new FormControl(null, Validators.required),
 
       // Company ID field is hidden and is added through JS
-      companyId: new FormControl(1, Validators.required), // Hardcoded to 1 for now
+      //companyId: new FormControl(1, Validators.required), // Hardcoded to 1 for now
       isAdmin: new FormControl(true, Validators.required),
       payPerHour: new FormControl(10, Validators.required),
     });
@@ -89,7 +89,18 @@ export class RegisterComponent implements OnInit {
       this.showErrorMessage(null);
       let form_data = this.registerUserForm.getRawValue();
 
-      this._dataService.userRegistration(null, form_data)
+      let data = {
+        name: form_data.name,
+        address: form_data.address,
+        firstName: form_data.firstName,
+        lastName: form_data.lastName,
+        email: form_data.email,
+        password: form_data.password,
+        isAdmin: form_data.isAdmin,
+        payPerHour: form_data.payPerHour
+      }
+
+      this._dataService.userRegistration(data)
         .then(success => {
           if (success) {
             this.showErrorMessage(null);
