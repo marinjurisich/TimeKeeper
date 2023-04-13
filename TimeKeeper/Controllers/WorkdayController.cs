@@ -27,6 +27,13 @@ namespace TimeKeeper.Controllers {
             return _operations.GetWorkday(date);
         }
 
+        // Fetch last 12 months of workdays
+        [HttpGet("{user_id}")]
+        public IActionResult List(int user_id)
+        {
+            return _operations.ListWorkdays(user_id, DateTime.Now.AddYears(-1), DateTime.Now);
+        }
+
         /*
          * Accepts Workday with all neccessary data, updates it and saves to DB
          * returns statusRespnose 200
@@ -40,7 +47,6 @@ namespace TimeKeeper.Controllers {
             Workday workday = JsonSerializer.Deserialize<Workday>(jsonString);
 
             return _operations.UpdateWorkday(workday);
-
         }
 
         /*Accepts a workday with:

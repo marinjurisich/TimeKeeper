@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
+﻿using Humanizer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +39,21 @@ namespace TimeKeeper.Data.DbOperations {
             Workday workday = _context.Workdays.Where(w => w.date.Equals(dateTime)).FirstOrDefault();
 
             return statusResponse(200, workday);
+        }
 
+        public IActionResult ListWorkdays(int userId, DateTime start, DateTime end)
+        {
+            Workday[] workdays = new Workday[] { };
+
+            if (_context != null)
+            {
+                workdays = _context.Workdays.Where(workday =>
+                    workday.userId == userId
+                    && workday.date.Date >= start.Date
+                    && workday.date.Date <= end.Date
+                ).ToArray();
+            }
+            return statusResponse(200, workdays);
         }
 
         public IActionResult UpdateWorkday(Workday workday) {
@@ -61,6 +76,49 @@ namespace TimeKeeper.Data.DbOperations {
             List<Workday> days = _context.Workdays.Where(w => w.date.Month == dateTime.Month && w.date.Year == dateTime.Year).ToList();
 
             return statusResponse(200, days);
+        }
+
+        public void WorkdayAdd(params Workday[] workdays)
+        {
+            if (_context != null)
+            {
+                // Calculate months stats
+                var months = new Dictionary<(int, int, int), Workday>();
+
+                // Iterate days
+                for (int i = 0; i < workdays.Length; ++i)
+                {
+                    // Add to DB
+                    _context.Workdays.Add(workdays[i]);
+
+                    // Save month
+                    var key = (workdays[i].userId, workdays[i].date.Year, workdays[i].date.Month);
+                    months[key] = workdays[i];
+                }
+                _context.SaveChanges();
+
+                // Update months' statistics
+                foreach(var month_workday in months)
+                {
+                    // Extract data
+                    Workday wd = month_workday.Value;
+
+                    // Create month if it does not exist
+                    Month? month = _context.Months.Where(m =>
+                        m.userId == wd.userId
+                        && m.date.Month == wd.date.Month
+                        && m.date.Year == wd.date.Year
+                    ).FirstOrDefault();
+
+                    if (month == null)
+                    {
+                        CreateMonth(wd.userId, wd.date);
+                    }
+
+                    // Calculate month statistics
+                    CalculateMonthlySalary(wd);
+                }
+            }
         }
 
         public IActionResult ClockInOut(Workday workday) {
@@ -196,11 +254,36 @@ namespace TimeKeeper.Data.DbOperations {
         #endregion
 
         #region User
+
+        public IActionResult RegisterAdmin(RegistrationDTO data) {
+
+            try {
+                var company = RegisterCompany(data.Company);
+                data.User.companyId = company.id;
+
+                return CreateUser(data.User);
+
+            } catch {
+                return statusResponse(500, "Error when registering user or company");
+            }
+
+        }
+
+        public User? GetUser(int userId) {
+            if (_context != null) {
+                var user = _context.Users.Single(user => user.id == userId);
+                return user;
+            }
+            return null;
+        }
+
         public IActionResult CreateUser(User user) {
 
             try {
 
-                user.guid = Guid.NewGuid().ToString();
+                if(String.IsNullOrWhiteSpace(user.guid)) {
+                    user.guid = Guid.NewGuid().ToString();
+                }
                 if(String.IsNullOrWhiteSpace(user.password)) {
                     user.GenerateRandomPassword();
                 }
@@ -271,23 +354,43 @@ namespace TimeKeeper.Data.DbOperations {
             }
 
         }
-
         #endregion
 
         #region Company
 
-        public IActionResult RegisterCompany(Company company) {
-            try {
+        public Company RegisterCompany(Company company) {
 
-                _context.Companies.Add(company);
+            _context.Companies.Add(company);
+            _context.SaveChanges();
+
+            if(company.id != null) {
+                return company;
+            } else {
+                throw new Exception("Error when creating company");
+            }
+
+             
+        }
+
+        public void CompanyAdd(params Company[] companies) {
+            if (_context != null) {
+                for (int i = 0; i < companies.Length; ++i) {
+                    _context.Companies.Add(companies[i]);
+                }
                 _context.SaveChanges();
+            }
+        }
 
-                return statusResponse(200, company);
+        #endregion
 
-            } catch (Exception ex) {
+        #region Projects
 
-                return statusResponse(500,ex.Message);
-
+        public void ProjectAdd(params Project[] projects) {
+            if (_context != null) {
+                for (int i = 0; i < projects.Length; ++i) {
+                    _context.Projects.Add(projects[i]);
+                }
+                _context.SaveChanges();
             }
         }
 
@@ -336,20 +439,24 @@ namespace TimeKeeper.Data.DbOperations {
             }
         }
 
-        public IActionResult CreateMonth(int userId) {
+        public IActionResult CreateMonth(int userId, DateTime? month = null) {
 
-            DateTime date = DateTime.Now;
-            if (date.Day > 1) {
-                date = date.AddDays(-(date.Day - 1));
+            if (month == null)
+            {
+                month = DateTime.Now;
+            }
+
+            if (month.Value.Day > 1)
+            {
+                month.Value.AddDays(-(month.Value.Day - 1));
             }
 
             double payPerHour = _context.Users.Where(u => u.id == userId).Select(u => u.payPerHour).First();
 
-            Month month = new Month(date, userId, 0, null, 0, payPerHour);
+            Month monthDb = new Month(month.Value, userId, 0, null, 0, payPerHour);
 
-            _context.Months.Add(month);
+            _context.Months.Add(monthDb);
             _context.SaveChanges();
-
             return statusResponse(200);
         }
 

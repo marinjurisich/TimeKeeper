@@ -41,8 +41,7 @@ function init_fp(opt) {
             }
             else {
                 // Call modal open function stored in HTML element
-                if (confirm("open " + dateStr))
-                    window.time_keeper.open_workday_modal(dateStr);
+                window.time_keeper.open_workday_modal(dateStr);
             }
         },
 
@@ -57,10 +56,6 @@ function init_fp(opt) {
             }
             else {
                 // This is workday
-
-                // DEMO: randomly set dates of current month as editable
-                // if (Math.random() < 0.25) {
-                //if (dateObj.getDay() < 4) {
                 if (clock_in_dates.includes(date_iso)) {
                     dayElem.classList.add("editable");
                 }
@@ -72,4 +67,6 @@ function init_fp(opt) {
     if (show_months > 1) {
         fp_inst.changeMonth(-show_months + 1);
     }
+
+    return fp_inst;
 }

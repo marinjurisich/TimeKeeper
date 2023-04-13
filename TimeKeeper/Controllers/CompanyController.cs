@@ -25,17 +25,17 @@ public class CompanyController : ControllerBase {
     }
 
     //Accepts Company name and address, returns created company(with id)
-    [HttpPost]
-    public IActionResult Register() {
+    //[HttpPost]
+    //public IActionResult Register() {
 
-        using var bodyStream = new StreamReader(Request.Body);
-        var jsonString = bodyStream.ReadToEndAsync().Result;
+    //    using var bodyStream = new StreamReader(Request.Body);
+    //    var jsonString = bodyStream.ReadToEndAsync().Result;
 
-        Company company = JsonSerializer.Deserialize<Company>(jsonString);
+    //    Company company = JsonSerializer.Deserialize<Company>(jsonString);
         
-        return _operations.RegisterCompany(company);
+    //    return _operations.RegisterCompany(company);
 
-    }
+    //}
 
 }
 

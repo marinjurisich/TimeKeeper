@@ -13,6 +13,6 @@ export class ClockInItem {
     }
 
     getDate() {
-        return this.time.toISOString().substring(0, 10);
+        return this.time.getFullYear() + "-" + ("0" + (this.time.getMonth() + 1)).slice(-2) + "-" + ("0" + this.time.getDate()).slice(-2);
     }
 }
