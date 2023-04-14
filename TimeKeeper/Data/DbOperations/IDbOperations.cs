@@ -13,7 +13,7 @@ namespace TimeKeeper.Data.DbOperations {
         void WorkdayAdd(params Workday[] workdays);
         IActionResult ScannerClockInOut(string guid);
         public User? GetUser(int userId);
-        IActionResult CreateUser(User user);
+        IActionResult CreateUser(User user, string? adminEmail = null, string? adminName = null);
         IActionResult RegisterAdmin(RegistrationDTO data);
         IActionResult LoginUser(LoginDTO loginData);
         void ValidateUser(User user);
@@ -21,6 +21,9 @@ namespace TimeKeeper.Data.DbOperations {
         public void CompanyAdd(params Company[] companies);
         public void ProjectAdd(params Project[] projects);
         IActionResult CreateMonth(int userId, DateTime? month);
+        IActionResult ResetPassword(User user);
+        void SendPasswordResetMail(User user);
+        void sendPasswordViaEmail(User user, string adminEmail, string adminName);
         ObjectResult statusResponse(int status, object? obj = null);
         string ValidatePassword(string password, byte[] salt);
         string HashPasword(string password, out byte[] salt);
