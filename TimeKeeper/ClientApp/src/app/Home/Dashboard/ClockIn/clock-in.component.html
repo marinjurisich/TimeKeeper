@@ -27,7 +27,7 @@
     <div class="card-body">
 
         <!-- SVG icons -->
-        <div class="chart-area clock-in-container">
+        <div class="chart-area clock-in-container" [style.opacity]="sending_request ? '0.5' : ''">
 
             <svg class="svg-clock-in" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" *ngIf="!clocked_in"
                 (click)="clock_in()">
@@ -50,40 +50,21 @@
         <div class="text-center small mt-4">
 
             <!-- Show times -->
-            <span *ngFor="let item of clock_ins_today; index as idx;">
-
-                
+            <span *ngFor="let item of filter_workdays_today(); let isLast = last;">
 
                 <!-- Show clock in -->
-                <span *ngIf="item.type=='clock_in'">
+                <span>
+                    <i class="fas fa-circle" style="color: #7ed1b3;"></i>&nbsp;{{ item.clockIn.split("T")[1] }}
+                </span>
+    
+                ->
 
-                    <!-- If this is not last item, show with dash -->
-                    <span *ngIf="idx != clock_ins_today.length - 1; else elseBlock">
-                        <i class="fas fa-circle" style="color: #7ed1b3;"></i>&nbsp;{{item.getTime()}}
-                        ->
-                    </span>
-
-                    <!-- Stronger color if last item -->
-                    <ng-template #elseBlock>
-                        <i class="fas fa-hourglass-half fa-fade" style="color: #00c47c;"></i>&nbsp;{{item.getTime()}}
-                    </ng-template>
+                <!-- Show clock out if exists -->
+                <span *ngIf="item.clockOut">
+                    <i class="fas fa-circle" style="color: #db7878"></i>&nbsp;{{ item.clockOut.split("T")[1] }}
                 </span>
 
-                <!-- Show clock out -->
-                <span *ngIf="item.type=='clock_out'">
-
-                    <!-- If this is not last item, add space -->
-                    <span *ngIf="idx != clock_ins_today.length - 1; else elseBlock;">
-                        <i class="fas fa-circle" style="color: #db7878"></i>&nbsp;{{item.getTime()}}
-                        &nbsp;
-                    </span>
-
-                    <!-- Stronger color if last item -->
-                    <ng-template #elseBlock>
-                        <i class="fas fa-hourglass-end" style="color: #cc2e2e"></i>&nbsp;{{item.getTime()}}
-                    </ng-template>
-                </span>
-
+                <hr *ngIf="!isLast">
             </span>
 
             <!-- <span class="me-2">

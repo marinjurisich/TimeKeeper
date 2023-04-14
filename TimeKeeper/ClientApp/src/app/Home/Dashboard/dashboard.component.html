@@ -26,7 +26,10 @@
 
                 <!-- Clock in -->
                 <div class="col-lg-5 col-xl-4">
-                    <app-clock-in [clock_ins_today]="clock_ins_today" (clock_ins_todayChange)="clock_ins_today = clock_ins_today.concat($event)"></app-clock-in>
+                    <app-clock-in
+                        [user_data]="user_data"
+                        (user_dataChange)="user_data = $event"
+                        ></app-clock-in>
                 </div>
 
             </div>
@@ -35,6 +38,7 @@
             <app-calendar
                 [user]="user"
                 [seed_workdays]="seed_workdays"
+                [user_data]="user_data"
                 [receivedClicksCounterFromModal]="receivedClicksCounterFromModal"
                 ></app-calendar>
 

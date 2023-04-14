@@ -8,13 +8,8 @@
     </div>
 
     <!-- FP Calendar -->
-    <input
-        mwlFlatpickr
-        instance="fp_inst"
-        [(ngModel)]="selected_date"
-        [options]="fp_options"
-        (flatpickrReady)="fp_on_ready($event)"
-        (flatpickrChange)="fp_on_change($event)"
+    <input mwlFlatpickr instance="fp_inst" [(ngModel)]="selected_date" [options]="fp_options"
+        (flatpickrReady)="fp_on_ready($event)" (flatpickrChange)="fp_on_change($event)"
         (flatpickrDayCreate)="fp_on_day_create($event)" />
 
     <!-- Seed data (debugging) -->
@@ -48,7 +43,8 @@
 
                     <!-- Workdays form -->
 
-                    <div *ngFor="let wd of filter_workday_days(selected_date); let isLast = last;" [attr.data-workdayId]="wd.id">
+                    <div *ngFor="let wd of filter_workday_days(selected_date); let isLast = last;"
+                        [attr.data-workday_id]="wd.id">
 
                         <!-- Clock in & out -->
                         <div class="row pb-3">
@@ -56,27 +52,42 @@
                             <!-- Clock in -->
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <label>Clock in</label>
-                                <input class="form-control form-control-user" type="text" placeholder="Clock in" [value]="(wd.clockIn || 'T').split('T')[1]">
+                                <input class="form-control form-control-user" type="text" placeholder="Clock in"
+                                    [attr.data-workday_clock_in_date]="(wd.clockIn || 'T').split('T')[0]"
+                                    [value]="(wd.clockIn || 'T').split('T')[1]">
                             </div>
 
                             <!-- Clock out -->
                             <div class="col-sm-6">
                                 <label>Clock out</label>
-                                <input class="form-control form-control-user" type="text" placeholder="Clock out" [value]="(wd.clockOut || 'T').split('T')[1]">
+                                <input class="form-control form-control-user" type="text" placeholder="Clock out"
+                                    [attr.data-workday_clock_in_date]="(wd.clockOut || 'T').split('T')[0]"
+                                    [value]="(wd.clockOut || 'T').split('T')[1]">
                             </div>
                         </div>
 
                         <!-- Project -->
                         <div class="mb-3">
-                            <label>Project</label>
-                            <input class="form-control form-control-user" type="text" placeholder="Time period project" [value]="wd.projectId">
+                            <label>
+                                Project
+                                <i class="fa-sharp fa-solid fa-circle-info" title="Hover an option to see project description"></i>
+                            </label>
+                            <select data-workday_project class="form-control form-control-user" [value]="wd.projectId">
+                                <option
+                                    *ngFor="let project of user_data.projects;"
+                                    [value]="project.id"
+                                    [title]="project.description"
+                                    >
+                                    {{project.name}}
+                                </option>
+                            </select>
                         </div>
 
                         <!-- Description -->
                         <div class="">
                             <label>Description</label>
-                            <textarea class="form-control w-100" type="text" placeholder="Time period description"
-                                >{{wd.description}}</textarea>
+                            <textarea class="form-control w-100" type="text"
+                                placeholder="Time period description">{{wd.description}}</textarea>
                         </div>
 
                         <div class="mt-3">
@@ -88,7 +99,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button id="workday_close_b" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="workday_close_b" type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Close</button>
                     <button id="workday_save_b" type="button" class="btn btn-primary">Save all</button>
                 </div>
             </div>

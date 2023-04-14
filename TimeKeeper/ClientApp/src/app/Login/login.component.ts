@@ -72,10 +72,10 @@ export class LoginComponent implements OnInit {
             // Load data
             this.showErrorMessage("Success! Loading data...");
 
-            let userId = Storage.getUser()?.id;
-            if (userId) {
+            let user = Storage.getUser();
+            if (user) {
               
-              let userData = await UserSession.fetchUserData(parseInt(userId));
+              let userData = await UserSession.fetchUserData(user);
               Storage.saveUserData(userData, this.rememberMe);
             }
 
