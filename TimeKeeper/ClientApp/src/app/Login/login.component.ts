@@ -69,8 +69,6 @@ export class LoginComponent implements OnInit {
           if (success) {
             // Successful login
 
-            debugger;
-
             // Load data
             this.showErrorMessage("Success! Loading data...");
 

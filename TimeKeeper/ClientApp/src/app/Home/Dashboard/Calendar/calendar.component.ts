@@ -7,6 +7,7 @@ import { ClockInItem } from '../../../Shared/Models/ClockInItem';
 import { FlatpickrDefaultsInterface, FlatpickrDirective } from 'angularx-flatpickr';
 import { FlatPickrDayCreateOutputOptions } from 'angularx-flatpickr/lib/flatpickr.directive';
 import { FlatPickrOutputOptions } from 'angularx-flatpickr/lib/flatpickr.directive';
+import { UserSession } from 'src/app/Shared/Models/UserSession';
 
 // Defined in /src/assets/js/init-fp.js
 declare function init_fp(opt: any): any;
@@ -21,6 +22,8 @@ export class CalendarComponent implements OnInit {
 
   @Input() clock_in_arr!: Workday[];
   @Input() user!: User | null;
+  @Input() seed_workdays!: () => Promise<void>;
+  user_data: UserSession;
 
   flatpickrDirective: FlatpickrDirective;
   fp_date: string = "";
@@ -30,7 +33,7 @@ export class CalendarComponent implements OnInit {
     locale: {
       firstDayOfWeek: 1
     },
-    showMonths: 2,
+    showMonths: 1,
     maxDate: new Date(),
   }
 
@@ -38,86 +41,104 @@ export class CalendarComponent implements OnInit {
 
   // Modal data
   selected_date: string = "";
-  clock_in_days: string[];
+  clock_in_days: string[] | null = null;
 
   @Input() receivedClicksCounterFromModal: number = 0;
 
+  modal_save: HTMLElement | null = null;
+  modal_open: HTMLElement | null = null;
+  modal_close: HTMLElement | null = null;
+
+
   constructor(_fp_inst: FlatpickrDirective) {
+
     this.flatpickrDirective = _fp_inst;
-    this.clock_in_days = this.clock_in_arr.map(wd => wd.getDateIso());
+    this.user_data = Storage.getUserData();
+    
+    // Decide how many calendars to show
+    if (window.innerWidth >= 1500) {
+      this.fp_options.showMonths = 4;
+    }
+    else if (window.innerWidth >= 1100) {
+      this.fp_options.showMonths = 3;
+    }
+    else if (window.innerWidth >= 750) {
+      this.fp_options.showMonths = 2;
+    }
   }
+
 
   ngOnInit(): void {
-
-    let _win = (<any>window);
-    _win.time_keeper = _win.time_keeper || {};
-    _win.time_keeper.open_workday_modal = this.open_workday_modal;
-
-    // Initialize calendar
-    let dates = this.clock_in_arr.map(o => new ClockInItem("clock_in", new Date(o.date)));
-    this.old_fp_inst = init_fp({
-      "clock_in_arr": dates,
-    });
-
+    this.modal_save = document.getElementById("workday_save_b");
+    this.modal_open = document.getElementById("workday_modal_open");
+    this.modal_close = document.getElementById("workday_close_b");
   }
 
-  ngOnChanges(changes: SimpleChanges) {
 
-    console.log(changes);
-    
+  ngOnChanges(changes: SimpleChanges) {
+   
     setTimeout(() => {
-      // Initialize calendar
-      let dates = this.clock_in_arr.map(o => new ClockInItem("clock_in", new Date(o.date)));
-      init_fp({ "clock_in_arr": dates, });
+      // TODO: fixati
+      // // Initialize calendar
+      // let dates = this.user_data.workdays.map(o => new ClockInItem("clock_in", new Date(o.date)));
+      // init_fp({ "clock_in_arr": dates, });
     }, 1000);
   }
 
-  // fp_on_change(date: Date, date_iso: string, instance: any) {
+
+  fp_on_ready(event: FlatPickrOutputOptions) { 
+
+    // Change months so that current month is last one
+    let showMonths = this.fp_options.showMonths || 1;
+    if (showMonths > 1) {
+      event.instance.changeMonth(-showMonths + 1);
+    }
+  }
+
+
   fp_on_change(event: FlatPickrOutputOptions) {
-    console.log(event.instance);
+
+    let self = this;
+    setTimeout(function() {
+
+      // If button is available and if there are workdays on this date
+      if (self.modal_open && self.selected_date && self.filter_workday_days(self.selected_date).length > 0) {
+        self.modal_open.click();
+      }
+    }, 10);
   }
 
-  redrawFp() {
-    console.log(this.flatpickrDirective);
-    this.flatpickrDirective.disable = []
-    this.flatpickrDirective.instance.redraw();
-  }
 
-  // fp_on_day_create(dayElement: HTMLElement) {
   fp_on_day_create(event: FlatPickrDayCreateOutputOptions) {
-
-    console.log("- Generating day...");
 
     let date: Date = (<any> event.dayElement).dateObj;
     let dateIso = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
+
+    // Update clock in dates if needed
+    if (!this.clock_in_days) {
+      this.clock_in_days = this.user_data.workdays.map(wd => wd.date.split("T")[0]);
+    }
 
     // If there are clock ins for this date
     if (this.clock_in_days.includes(dateIso)) {
       event.dayElement.classList.add("editable");
     }
+
+    // This is a weekend
+    if (date.getDay() == 0 || date.getDay() == 6) {
+      event.dayElement.classList.add("weekend");
+    }
   }
 
-  open_workday_modal(dateIso: string) {
-
-    // Initialize modal elements
-    let modal_save = document.getElementById("workday_save_b");
-    let modal_open = document.getElementById("workday_modal_open");
-    let modal_close = document.getElementById("workday_close_b");
-
-    if (!modal_save || !modal_open || !modal_close) {
-      console.log("Cannot find modal elements.");
-      return;
-    }
-
-    modal_save.onclick = function () {
-      // fetch() // POST
-      if (modal_close) {
-        modal_close.click();
-      }
-    }
-
-    // Open modal
-    modal_open.click();
+  
+  init_seed_workdays() {
+    this.seed_workdays();
   }
+
+
+  filter_workday_days(dateIso: string) {
+    return this.user_data.workdays.filter(wd => wd.date.startsWith(dateIso));
+  }
+
 
 }

@@ -2,7 +2,7 @@ export class Month {
 
     id: number;
     userId: number;
-    date: Date;
+    date: string;
     salary: number;
     grade: number;
     workHours: number;
