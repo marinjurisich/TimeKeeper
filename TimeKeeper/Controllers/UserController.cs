@@ -22,6 +22,22 @@ namespace TimeKeeper.Controllers
         }
 
         /*
+         * Accepts user in request body.
+         * user MUST contain ALL user data, missing user data WILL BE LOST!!!
+         * returns status 200
+         */
+        [HttpPost]
+        public IActionResult ResetPassword() {
+
+            using var bodyStream = new StreamReader(Request.Body);
+            var jsonString = bodyStream.ReadToEndAsync().Result;
+
+            User user = JsonSerializer.Deserialize<User>(jsonString);
+
+            return _operations.ResetPassword(user);
+        }
+
+        /*
             Accepts email and password in request body
             Returns response with User or Exception message in body
          */
@@ -57,7 +73,10 @@ namespace TimeKeeper.Controllers
         /*
          * Accepts User containing at least firstName, lastName, email,
          * isAdmin, payPerHour and companyId
-         * password is optional, if one is not provided it is randomly generated
+         * MUST contain adminEmail and adminName (mail and firstName + lastName of admin user that is 
+         * registering a new employee - if this data is missing, the new employee won't recieve email with
+         * their password, and therefore won't be able to login
+         * password is randomly generated
          * grade is optional
          * guid will always be randomly generated
          * Returns new User or Exception message
@@ -67,11 +86,61 @@ namespace TimeKeeper.Controllers
 
             using var bodyStream = new StreamReader(Request.Body);
             var jsonString = bodyStream.ReadToEndAsync().Result;
+            JObject json = JObject.Parse(jsonString);
+
+            User user = new User(
+                json.GetValue("firstName").ToString(),
+                json.GetValue("lastName").ToString(),
+                json.GetValue("email").ToString(),
+                Boolean.Parse(json.GetValue("isAdmin").ToString()),
+                Double.Parse(json.GetValue("payPerHour").ToString()),
+                Int32.Parse(json.GetValue("companyId").ToString())
+            );
+
+            string adminEmail = json.GetValue("adminEmail").ToString();
+            string adminName = json.GetValue("adminName").ToString();
+
+            return _operations.CreateUser(user, adminEmail, adminName);
+
+        }
+
+        /*
+         * Accepts userId, returns userId if user is deleted, -1 if deleting fails
+         */
+
+        [HttpGet("{id}")]
+        public int Delete(int id) {
+            
+            User user = _context.Users.Where(u => u.id == id).First();
+
+            try {
+                
+                _context.Users.Remove(user);
+                _context.SaveChanges();
+
+                return id;
+            } catch (Exception ex) {
+                return -1;
+            }
+
+
+        }
+
+        /*
+         * Accepts user which MUST contain ALL data, returns updated user
+         */
+        [HttpPost]
+        public User Update() {
+
+            using var bodyStream = new StreamReader(Request.Body);
+            var jsonString = bodyStream.ReadToEndAsync().Result;
 
             User user = JsonSerializer.Deserialize<User>(jsonString);
 
-            return _operations.CreateUser(user);
+            _context.Users.Update(user);
+            _context.SaveChanges();
 
+            return user;
         }
 
         [HttpPost]
