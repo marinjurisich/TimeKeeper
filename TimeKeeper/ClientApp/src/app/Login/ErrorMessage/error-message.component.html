@@ -1,3 +1,6 @@
-<span id="errorSpan" [class.text-danger]="message !== '_no_err_'">
+
+<span id="errorSpan"
+    [class.text-danger]="message !== '_no_err_' && !message.toLowerCase().startsWith('success')"
+    [class.text-success]="message.toLowerCase().startsWith('success')">
     {{message}}
 </span>

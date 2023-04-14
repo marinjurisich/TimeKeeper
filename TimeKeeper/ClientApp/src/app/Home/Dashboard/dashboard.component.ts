@@ -6,6 +6,7 @@ import { User } from 'src/app/Shared/Models/User';
 import { Storage } from 'src/app/Shared/Misc/Storage';
 import { environment } from 'src/environments/environment';
 import { Workday } from 'src/app/Shared/Models/Workday';
+import { UserSession } from 'src/app/Shared/Models/UserSession';
 
 // Defined in /src/assets/js/init-fp.js
 declare function init_fp(opt: any): any;
@@ -32,13 +33,14 @@ export class DashboardComponent implements OnInit {
     new ClockInItem("clock_out", new Date("2023-03-31 17:03:00")),
   ];
 
-  // Clock ins of last few months
-  clock_in_arr: Workday[] = [];
-
-  curr_year = new Date().getFullYear();
-
   @Input() user: User | null;
   @Input() receivedClicksCounterFromModal: number = 0;
+  // Clock ins of last few months
+
+  user_data: UserSession;
+  clock_in_arr: Workday[] = [];
+  curr_year = new Date().getFullYear();
+
 
   constructor(private _router: Router) {
     this.clientAppRoutes = new ClientAppRoutes(this._router);
@@ -47,6 +49,10 @@ export class DashboardComponent implements OnInit {
     this.user = Storage.getUser();
     if (!this.user) {
       this.clientAppRoutes.Logout();
+      this.user_data = new UserSession(0, [], []);
+    }
+    else {
+      this.user_data = Storage.getUserData();
     }
   }
 
