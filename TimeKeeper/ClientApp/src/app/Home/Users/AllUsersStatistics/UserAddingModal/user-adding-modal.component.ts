@@ -61,7 +61,7 @@ export class UserAddingModalComponent implements OnInit {
       }
     } else {
 
-      this.clientAppRoutes.navigateToLogin();
+      this.clientAppRoutes.Logout();
     }
   }
 

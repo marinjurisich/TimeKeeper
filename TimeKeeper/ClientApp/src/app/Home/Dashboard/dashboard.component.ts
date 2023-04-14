@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit {
     // Get logged in user
     this.user = Storage.getUser();
     if (!this.user) {
-      this.clientAppRoutes.navigateToLogin();
+      this.clientAppRoutes.Logout();
     }
   }
 

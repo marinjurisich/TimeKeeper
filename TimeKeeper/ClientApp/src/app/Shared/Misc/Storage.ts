@@ -37,7 +37,7 @@ export class Storage {
     return null;
   }
 
-  public static deleteUser(): void {
+  public static userLogout(): void {
     sessionStorage.removeItem(this.userKey);
     localStorage.removeItem(this.userKey);
   }
