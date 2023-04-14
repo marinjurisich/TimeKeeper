@@ -4,6 +4,7 @@ using TimeKeeper.Models;
 namespace TimeKeeper.Data.DbOperations {
     public interface IDbOperations {
 
+        MemoryStream ExportWorkdays(int userId);
         IActionResult ClockInOut(Workday workday);
         IActionResult GetWorkday(string dateAsString);
         IActionResult ListWorkdays(int userId, DateTime start, DateTime end);
