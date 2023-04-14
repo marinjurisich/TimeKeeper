@@ -19,8 +19,8 @@ export class ClientAppRoutes {
   }
 
   /***** Login route *****/
-  navigateToLogin(): Promise<boolean> | null {
-    Storage.deleteUser()  // This function is Log out, so delete user data
+  Logout(): Promise<boolean> | null {
+    Storage.userLogout()  // This function is Log out, so delete user data
     let path: string = 'Login';
     return this._router ? this._router.navigate([path]) : null;
   }

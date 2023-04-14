@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
     // Get logged in user
     this.loggedUser = Storage.getUser();
     if (!this.loggedUser) {
-      this.clientAppRoutes.navigateToLogin();
+      this.clientAppRoutes.Logout();
     }
 
   }
