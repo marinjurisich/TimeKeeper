@@ -34,7 +34,7 @@ namespace TimeKeeper.Controllers
         //Accepts user id, returns last 12 months
         [HttpGet]
         public List<Month> GetLastTwelveMonths(int userId) {
-            return _context.Months.Where(m => m.userId == userId).TakeLast(12).ToList();
+            return _context.Months.Where(m => m.userId == userId).OrderByDescending(m => m.id).Take(12).ToList();
         }
 
         //Accepts date as a string, returns all days with matching month and year
