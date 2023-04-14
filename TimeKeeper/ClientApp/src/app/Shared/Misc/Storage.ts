@@ -1,27 +1,25 @@
 import { User } from "../Models/User";
+import { UserSession } from "../Models/UserSession";
 import { Workday } from "../Models/Workday";
 
 export class Storage {
 
-  // Key under which user will be stored
+  // Keys in session
   private static userKey: string = "user_session";
-
-  private static workdayKey: string = "workday_data";
+  private static userDataKey: string = "user_data_session";
 
   // Save user either to sessionStorage or to localStorage
   public static saveUser(user: User, rememberMe: boolean = false) {
 
-    if (user) {
-      let val = JSON.stringify(user);
+    let val = JSON.stringify(user);
 
-      if (rememberMe) {
-        localStorage.setItem(this.userKey, val);  // Save to perm memory
-        sessionStorage.removeItem(this.userKey);  // Delete any leftover logins from session
-      }
-      else {
-        sessionStorage.setItem(this.userKey, val);  // Do not save to perm memory
-        localStorage.removeItem(this.userKey);  // Delete any previous logins in localStorage
-      }
+    if (rememberMe) {
+      localStorage.setItem(this.userKey, val);  // Save to perm memory
+      sessionStorage.removeItem(this.userKey);  // Delete any leftover logins from session
+    }
+    else {
+      sessionStorage.setItem(this.userKey, val);  // Do not save to perm memory
+      localStorage.removeItem(this.userKey);  // Delete any previous logins in localStorage
     }
   }
 
@@ -37,21 +35,47 @@ export class Storage {
     return null;
   }
 
-  public static deleteUser(): void {
+  public static userLogout(): void {
+
+    // Remove user from session
     sessionStorage.removeItem(this.userKey);
     localStorage.removeItem(this.userKey);
+
+    // Remove user data from session
+    Storage.deleteUserData();
   }
 
-  public static saveWorkdays(wdArr: Workday[]) {
-    sessionStorage.setItem(this.workdayKey, JSON.stringify(wdArr));
-  }
+  public static saveUserData(userData: UserSession, rememberMe: boolean): void {
 
-  public static getWorkdays(): Workday[] {
-    let workday_json = sessionStorage.getItem(this.workdayKey);
-    if (workday_json) {
-      return JSON.parse(workday_json);
+    let val = JSON.stringify(userData);
+
+    if (rememberMe) {
+      localStorage.setItem(this.userDataKey, val);  // Save to perm memory
+      sessionStorage.removeItem(this.userDataKey);  // Delete any leftover logins from session
     }
-    return [];
+    else {
+      sessionStorage.setItem(this.userDataKey, val);  // Do not save to perm memory
+      localStorage.removeItem(this.userDataKey);  // Delete any previous logins in localStorage
+    }
+  }
+
+  public static getUserData() : UserSession {
+
+    let userDataJson = sessionStorage.getItem(this.userDataKey) || localStorage.getItem(this.userDataKey);
+    if (userDataJson) {
+      let userDataObj = JSON.parse(userDataJson);
+      let userData = new UserSession(userDataObj.userId, userDataObj.months, userDataObj.workdays);
+      return userData;
+    }
+    else {
+      let userData = new UserSession(-1, [], []);
+      return userData;
+    }
+  }
+
+  public static deleteUserData(): void {
+    sessionStorage.removeItem(this.userDataKey);
+    localStorage.removeItem(this.userDataKey);
   }
 
 }

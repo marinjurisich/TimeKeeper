@@ -29,7 +29,7 @@ export class UsersComponent implements OnInit {
     // Get logged in user
     this.loggedUser = Storage.getUser();
     if (!this.loggedUser) {
-      this.clientAppRoutes.navigateToLogin();
+      this.clientAppRoutes.Logout();
     } else {
       if (!this.loggedUser.isAdmin) {
         this.clientAppRoutes.navigateToDashboard();

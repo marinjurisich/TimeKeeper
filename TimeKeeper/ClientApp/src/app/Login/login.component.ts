@@ -5,6 +5,7 @@ import { ClientAppRoutes } from '../Shared/Routes/ClientAppRoutes';
 import { Router } from '@angular/router';
 import { User } from 'oidc-client';
 import { Storage } from '../Shared/Misc/Storage';
+import { UserSession } from '../Shared/Models/UserSession';
 
 @Component({
   selector: 'app-login',
@@ -54,17 +55,39 @@ export class LoginComponent implements OnInit {
 
     if (!this.loginForm.invalid && this.loginFinished) {
 
+      // Setup loading
       this.loginFinished = false;
       this.showErrorMessage(null);
+
+      // Get data
       let loginData = this.loginForm.getRawValue();
 
+      // Make request
       this._dataService.userLogin(loginData, this.rememberMe)
-        .then(success => {
+        .then(async (success) => {
+
           if (success) {
+            // Successful login
+
+            debugger;
+
+            // Load data
+            this.showErrorMessage("Success! Loading data...");
+
+            let userId = Storage.getUser()?.id;
+            if (userId) {
+              
+              let userData = await UserSession.fetchUserData(parseInt(userId));
+              Storage.saveUserData(userData, this.rememberMe);
+            }
+
             this.showErrorMessage(null);
+
+            // Redirect to dashboard
             this.clientAppRoutes.navigateToDashboard();
           }
           else {
+            // Invalid login
             this.showErrorMessage("Unsuccessful login!");
           }
         })

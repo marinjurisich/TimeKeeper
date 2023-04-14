@@ -6,9 +6,7 @@ import { User } from 'src/app/Shared/Models/User';
 import { Storage } from 'src/app/Shared/Misc/Storage';
 import { environment } from 'src/environments/environment';
 import { Workday } from 'src/app/Shared/Models/Workday';
-
-// Defined in /src/assets/js/init-fp.js
-declare function init_fp(opt: any): any;
+import { UserSession } from 'src/app/Shared/Models/UserSession';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,22 +30,25 @@ export class DashboardComponent implements OnInit {
     new ClockInItem("clock_out", new Date("2023-03-31 17:03:00")),
   ];
 
-  // Clock ins of last few months
-  clock_in_arr: Workday[];
-
-  curr_year = new Date().getFullYear();
-
   @Input() user: User | null;
   @Input() receivedClicksCounterFromModal: number = 0;
+  // Clock ins of last few months
+
+  user_data: UserSession;
+  curr_year = new Date().getFullYear();
+
 
   constructor(private _router: Router) {
     this.clientAppRoutes = new ClientAppRoutes(this._router);
-    this.clock_in_arr = [];
     
     // Get logged in user
     this.user = Storage.getUser();
     if (!this.user) {
-      this.clientAppRoutes.navigateToLogin();
+      this.clientAppRoutes.Logout();
+      this.user_data = new UserSession(0, [], []);
+    }
+    else {
+      this.user_data = Storage.getUserData();
     }
   }
 
@@ -58,19 +59,8 @@ export class DashboardComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
-  async fetch_workdays() {
-    if (this.user) {
-      // Prepare URL
-      let workdays_url = environment.API_URL + "/workday/list/" + this.user.id
-  
-      // Fetch workdays
-      let workdays = await fetch(workdays_url).then(res => res.json());
-      this.clock_in_arr = workdays.map((wd: any) => new Workday(wd));
-    }
-  }
-
   async seed_workdays() {
-    if (this.user) {
+    if (this.user && confirm("Seeding data manually will redirect you to login. Continue?")) {
       
       // Set seed parameters
       let user_id = this.user.id;
@@ -88,9 +78,11 @@ export class DashboardComponent implements OnInit {
         "&date_end_iso=" + d_end_iso;
       let url = environment.API_URL + "/DataSeed/Workdays/?" + url_args;
   
-      // Fetch and save dates
-      let workdays = await fetch(url).then(res => res.json());
-      this.clock_in_arr = workdays.map((wd: any) => new Workday(wd));
+      // Seed dates to DB
+      await fetch(url).then(res => res.json());
+
+      // Request log in again to initialize data to Session
+      this.clientAppRoutes.Logout();
     }
   }
 

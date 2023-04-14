@@ -6,6 +6,7 @@ import { ClockInComponent } from './ClockIn/clock-in.component';
 import { SalaryChartComponent } from './SalaryChart/salary-chart.component';
 import { SummaryComponent } from './Summary/summary.component';
 import { HeaderModule } from '../Header/header.module';
+import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlatpickrModule } from 'angularx-flatpickr';
 
@@ -20,7 +21,7 @@ import { FlatpickrModule } from 'angularx-flatpickr';
   ],
 
   imports: [
-    CommonModule, HeaderModule, ReactiveFormsModule, FlatpickrModule.forRoot()
+    CommonModule, HeaderModule, ReactiveFormsModule, FormsModule, FlatpickrModule.forRoot()
   ],
 
   exports: [
