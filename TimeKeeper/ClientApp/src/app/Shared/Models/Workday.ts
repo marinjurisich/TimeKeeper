@@ -12,15 +12,15 @@ export class Workday {
     attachment: string | null;
 
     constructor(workday_obj: any) {
-        this.id = workday_obj["id"];
-        this.userId = workday_obj["userId"];
+        this.id = parseInt(workday_obj["id"]);
+        this.userId = parseInt(workday_obj["userId"]);
         this.date = workday_obj["date"];
-        this.projectId = workday_obj["projectId"];
+        this.projectId = parseInt(workday_obj["projectId"]);
         this.clockIn = workday_obj["clockIn"];
         this.clockOut = workday_obj["clockOut"];
-        this.workHours = workday_obj["workHours"];
+        this.workHours = parseFloat(workday_obj["workHours"]);
         this.description = workday_obj["description"];
-        this.grade = workday_obj["grade"];
+        this.grade = parseFloat(workday_obj["grade"]);
         this.attachment = workday_obj["attachment"];
     }
 

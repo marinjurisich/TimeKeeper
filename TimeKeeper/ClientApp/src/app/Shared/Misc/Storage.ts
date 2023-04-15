@@ -5,8 +5,8 @@ import { Workday } from "../Models/Workday";
 export class Storage {
 
   // Keys in session
-  private static userKey: string = "user_session";
-  private static userDataKey: string = "user_data_session";
+  public static userKey: string = "user_session";
+  public static userDataKey: string = "user_data_session";
 
   // Save user either to sessionStorage or to localStorage
   public static saveUser(user: User, rememberMe: boolean = false) {

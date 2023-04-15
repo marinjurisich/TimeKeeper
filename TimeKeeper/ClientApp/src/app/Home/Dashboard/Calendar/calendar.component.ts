@@ -8,6 +8,7 @@ import { FlatpickrDefaultsInterface, FlatpickrDirective } from 'angularx-flatpic
 import { FlatPickrDayCreateOutputOptions } from 'angularx-flatpickr/lib/flatpickr.directive';
 import { FlatPickrOutputOptions } from 'angularx-flatpickr/lib/flatpickr.directive';
 import { UserSession } from 'src/app/Shared/Models/UserSession';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-calendar',
@@ -67,6 +68,9 @@ export class CalendarComponent implements OnInit {
     this.modal_save = document.getElementById("workday_save_b");
     this.modal_open = document.getElementById("workday_modal_open");
     this.modal_close = document.getElementById("workday_close_b");
+
+    // Refresh workdays
+    this.reload_workdays();
   }
 
 
@@ -81,7 +85,24 @@ export class CalendarComponent implements OnInit {
   }
 
 
-  fp_on_ready(event: FlatPickrOutputOptions) { 
+  async reload_workdays() {
+    
+    let workdaysUrl = environment.API_URL + "/Workday/List/" + this.user?.id;
+    let workdaysLastYear = await fetch(workdaysUrl).then(res => res.json());
+    this.user_data.workdays = workdaysLastYear;
+    if (sessionStorage.getItem(Storage.userKey)) {
+      Storage.saveUserData(this.user_data, false);
+    }
+    else {
+      Storage.saveUserData(this.user_data, true);
+    }
+  }
+
+
+  async fp_on_ready(event: FlatPickrOutputOptions) {
+
+    // Wait 50ms for DOM to render
+    await new Promise(resolve => setTimeout(resolve, 50));
 
     // Change months so that current month is last one
     let showMonths = this.fp_options.showMonths || 1;
@@ -135,5 +156,74 @@ export class CalendarComponent implements OnInit {
     return this.user_data.workdays.filter(wd => wd.date.startsWith(dateIso));
   }
 
+
+  async save_workday(workday_id: number, eventTarget: EventTarget | null) {
+
+    debugger;
+
+    // Get HTML containers
+    let wd_container = document.querySelector("#workDayModal [data-workday_id='" + workday_id + "']");
+    let i_clockin:     HTMLInputElement | null | undefined = wd_container?.querySelector("[data-workday_clock_in_date]");
+    let i_clockout:    HTMLInputElement | null | undefined = wd_container?.querySelector("[data-workday_clock_out_date]");
+    let i_project:     HTMLInputElement | null | undefined = wd_container?.querySelector("[data-workday_project]");
+    let i_description: HTMLInputElement | null | undefined = wd_container?.querySelector("[data-workday_description]");
+    let button = <HTMLButtonElement>eventTarget;
+
+    // Check if containers found
+    if (!wd_container || !i_clockin || !i_clockout || !i_project || !i_description) {
+      console.log("Cannot find workday with ID " + workday_id);
+      return;
+    }
+
+    // Validate dates
+    let clockInString = i_clockin.dataset.workday_clock_in_date + "T" + i_clockin.value
+    let clockIn = new Date(clockInString);
+    let clockOutString = i_clockout.dataset.workday_clock_out_date + "T" + i_clockout.value;
+    let clockOut = new Date(clockOutString);
+
+    if (clockOut < clockIn) {
+      console.log("Clock in must come after clock out");
+      return;
+    }
+
+    if (!(clockIn instanceof Date && !isNaN(clockIn.getTime()))
+      || !(clockOut instanceof Date && !isNaN(clockOut.getTime()))
+      ) {
+      console.log("Dates are invalid");
+    }
+    
+    // Create workday
+    let userId = (<HTMLElement>wd_container).dataset.user_id;
+    let date = (<HTMLElement>wd_container).dataset.workday_date;
+    let workHours = (clockOut.getTime() - clockIn.getTime()) / (60*60*1000);
+    let workday_update = new Workday({
+      id: workday_id,
+      userId: userId,
+      date: date,
+      projectId: i_project.value,
+      clockIn: clockInString,
+      clockOut: clockOutString,
+      workHours: workHours,
+      description: i_description.value,
+      grade: 5.0,
+      attachment: "-"
+    });
+
+    // Disable until request is finished
+    button.disabled = true;
+
+    // Save workday
+    let updateWorkdayUrl = environment.API_URL + "/Workday/Update"
+    await fetch(updateWorkdayUrl, {
+      method: "POST",
+      body: JSON.stringify(workday_update)
+    });
+
+    // Refill user data with reload of page
+    location.reload();
+
+    // Now enable saving
+    button.disabled = false;
+  }
 
 }
