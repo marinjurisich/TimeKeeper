@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import Chart from 'chart.js/auto';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-salary-chart',
@@ -64,6 +65,14 @@ export class SalaryChartComponent implements OnInit {
         // animation: false,
       }
     });
+  }
+
+  async exportGraph() {
+
+    var id = JSON.parse(sessionStorage.user_session).id;
+    let url = environment.API_URL + "/Month/Export?userId=" + id;
+    window.open(url,"_blank");
+
   }
 
   // We can use this chart (for now it contains dummy data)
