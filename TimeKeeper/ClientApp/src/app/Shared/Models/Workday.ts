@@ -31,4 +31,8 @@ export class Workday {
     public getClockOutTime(): string {
         return this.clockOut.split("T")[1];
     }
+
+    public getDateIso(): string {
+        return this.date.split("T")[0];
+    }
 }

@@ -7,11 +7,18 @@
         </h3>
     </div>
 
-    <!-- FP Calendar (Warning - do not change ID) -->
-    <div id="fpWorkday"></div>
+    <!-- FP Calendar -->
+    <input
+        mwlFlatpickr
+        instance="fp_inst"
+        [(ngModel)]="selected_date"
+        [options]="fp_options"
+        (flatpickrReady)="fp_on_ready($event)"
+        (flatpickrChange)="fp_on_change($event)"
+        (flatpickrDayCreate)="fp_on_day_create($event)" />
 
     <!-- Seed data (debugging) -->
-    <div class="mt-4 text-center" *ngIf="clock_in_arr.length == 0">
+    <div class="mt-4 text-center" *ngIf="user_data.workdays.length == 0">
         <p>
             No workdays found.
         </p>
@@ -31,8 +38,9 @@
                     <h1 class="modal-title fs-5" id="workDayModalLabel">
                         <!-- Edit -->
                         <i class="fa-solid fa-calendar"></i>&nbsp;
-                        <strong id="workday_modal_title">YYYY-MM-DD</strong>&nbsp;
-                        <span id="workday_modal_hours">(0 hours)</span>
+                        <strong id="workday_modal_title">
+                            {{selected_date}}
+                        </strong>
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -40,7 +48,7 @@
 
                     <!-- Workdays form -->
 
-                    <div *ngFor="let wd of modal_workdays">
+                    <div *ngFor="let wd of filter_workday_days(selected_date); let isLast = last;" [attr.data-workdayId]="wd.id">
 
                         <!-- Clock in & out -->
                         <div class="row pb-3">
@@ -48,13 +56,13 @@
                             <!-- Clock in -->
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <label>Clock in</label>
-                                <input class="form-control form-control-user" type="text" placeholder="Clock in" [value]="wd.getClockInTime()">
+                                <input class="form-control form-control-user" type="text" placeholder="Clock in" [value]="(wd.clockIn || 'T').split('T')[1]">
                             </div>
 
                             <!-- Clock out -->
                             <div class="col-sm-6">
                                 <label>Clock out</label>
-                                <input class="form-control form-control-user" type="text" placeholder="Clock out" [value]="wd.getClockOutTime()">
+                                <input class="form-control form-control-user" type="text" placeholder="Clock out" [value]="(wd.clockOut || 'T').split('T')[1]">
                             </div>
                         </div>
 
@@ -67,47 +75,20 @@
                         <!-- Description -->
                         <div class="">
                             <label>Description</label>
-                            <textarea class="form-control w-100" type="text"
-                                placeholder="Time period description">{{wd.description}}</textarea>
-                        </div>
-                    </div>
-
-
-                    <div>
-
-                        <!-- Clock in & out -->
-                        <div class="row pb-3">
-
-                            <!-- Clock in -->
-                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                <label>Clock in</label>
-                                <input class="form-control form-control-user" type="text" placeholder="Clock in">
-                            </div>
-
-                            <!-- Clock out -->
-                            <div class="col-sm-6">
-                                <label>Clock out</label>
-                                <input class="form-control form-control-user" type="text" placeholder="Clock out">
-                            </div>
+                            <textarea class="form-control w-100" type="text" placeholder="Time period description"
+                                >{{wd.description}}</textarea>
                         </div>
 
-                        <!-- Project -->
-                        <div class="mb-3">
-                            <label>Project</label>
-                            <input class="form-control form-control-user" type="text" placeholder="Time period project">
+                        <div class="mt-3">
+                            <button id="workday_save_b" type="button" class="btn btn-primary">Save</button>
                         </div>
 
-                        <!-- Description -->
-                        <div class="">
-                            <label>Description</label>
-                            <textarea class="form-control w-100" type="text"
-                                placeholder="Time period description"></textarea>
-                        </div>
+                        <hr *ngIf="!isLast" />
                     </div>
 
                 </div>
                 <div class="modal-footer">
-                    <button id="workday_close_b" type="button" class="btn btn-secondary">Close</button>
+                    <button id="workday_close_b" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button id="workday_save_b" type="button" class="btn btn-primary">Save all</button>
                 </div>
             </div>
