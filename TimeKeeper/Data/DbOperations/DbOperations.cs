@@ -131,9 +131,9 @@ namespace TimeKeeper.Data.DbOperations {
 
             try {
 
-                var days = _context.Workdays.Where(w => w.Equals(workday));
+                var days = _context.Workdays.Where(w => w.date.Day == workday.date.Day && w.date.Month == workday.date.Month && w.date.Year == workday.date.Year).ToList();
 
-                if (days == null) {
+                if (days == null || days.Count() == 0) {
 
                     //check if month exists, if not, create it
                     if (_context.Months.Where(m => m.date.Month == workday.date.Month
@@ -143,6 +143,7 @@ namespace TimeKeeper.Data.DbOperations {
 
                     //clockIn if no record for this day
                     _context.Workdays.Add(workday);
+                    days.Add(workday);
 
                 } else {
 
@@ -187,56 +188,48 @@ namespace TimeKeeper.Data.DbOperations {
 
             try {
 
-                var days = _context.Workdays.Join(_context.Users,
-                    w => w.userId,
-                    u=> u.id,
-                    (w,u) => new {
-                        workday = w,
-                        guid = u.guid
-                    }).Where(x => x.guid == guid && x.workday.date.Equals(new DateTime()));
-
                 var userId = _context.Users.Where(u => u.guid == guid).Select(u => u.id).FirstOrDefault();
 
+                if(userId == null) {
+                    throw new Exception("Missing user guid");
+                }
 
-                if (days == null) {
+                var days = _context.Workdays.Where(w => w.userId == userId
+                && w.date.Day == DateTime.Now.Day && w.date.Month == DateTime.Now.Month && w.date.Year == DateTime.Now.Year).ToList();
+
+                if (!days.Any() || days.Count() == 0) {
 
                     //clockIn if no record for this day
 
-                    if (userId != null) {
+                    Workday workday = new Workday {
+                        userId = userId,
+                        date = DateTime.Now,
+                        clockIn = DateTime.Now
+                    };
 
-                        Workday workday = new Workday {
-                            userId = userId,
-                            date = new DateTime(),
-                            clockIn = new DateTime()
-                        };
-
-                        //check if month exists, if not, create it
-                        if (_context.Months.Where(m => m.date.Month == workday.date.Month
-                        && m.date.Year == workday.date.Year).FirstOrDefault() == null) {
-                            CreateMonth(userId);
-                        }
-                        _context.Workdays.Add(workday);
-                        status = Status.ClockedIn;
-
-
-                    } else {
-                        throw new Exception("Missing user guid");
+                    //check if month exists, if not, create it
+                    if (_context.Months.Where(m => m.date.Month == workday.date.Month
+                    && m.date.Year == workday.date.Year).FirstOrDefault() == null) {
+                        CreateMonth(userId);
                     }
+                    _context.Workdays.Add(workday);
+                    days.Add(workday);
+                    status = Status.ClockedIn;
 
                 } else {
 
-                    var day = days.Last();
+                    var day = days.OrderByDescending(d => d.id).Last();
 
-                    if (day.workday.clockOut == null) {
+                    if (day.clockOut == null) {
 
                         //clockOut if exists a record without clockOut time
 
-                        day.workday.clockOut = new DateTime();
-                        DateTime temp = (DateTime) day.workday.clockOut;
-                        day.workday.workHours = temp.Subtract((DateTime) day.workday.clockIn).TotalHours;
+                        day.clockOut = DateTime.Now;
+                        DateTime temp = (DateTime) day.clockOut;
+                        day.workHours = temp.Subtract((DateTime) day.clockIn).TotalHours;
 
 
-                        _context.Update(day.workday);
+                        _context.Update(day);
                         status = Status.ClockedOut;
 
                     } else {
@@ -244,10 +237,11 @@ namespace TimeKeeper.Data.DbOperations {
 
                         Workday workday = new Workday {
                             userId = userId,
-                            date = new DateTime(),
-                            clockIn = new DateTime()
+                            date = DateTime.Now,
+                            clockIn = DateTime.Now
                         };
-                        _context.Workdays.Add(day.workday);
+                        _context.Workdays.Add(workday);
+                        days.Add(workday);
                         status = Status.ClockedIn;
                     }
 
@@ -256,7 +250,7 @@ namespace TimeKeeper.Data.DbOperations {
 
                 _context.SaveChanges();
 
-                CalculateMonthlySalary(days.Last().workday);
+                CalculateMonthlySalary(days.Last());
 
                 return statusResponse(200, status);
 
@@ -494,7 +488,7 @@ namespace TimeKeeper.Data.DbOperations {
 
             if (month.Value.Day > 1)
             {
-                month.Value.AddDays(-(month.Value.Day - 1));
+                month = month.Value.AddDays(-(month.Value.Day - 1));
             }
 
             double payPerHour = _context.Users.Where(u => u.id == userId).Select(u => u.payPerHour).First();
@@ -502,11 +496,15 @@ namespace TimeKeeper.Data.DbOperations {
             Month monthDb = new Month(month.Value, userId, 0, null, 0, payPerHour);
 
             _context.Months.Add(monthDb);
-            _context.SaveChanges();
+            //_context.SaveChanges();
             return statusResponse(200);
         }
 
         public void CalculateMonthlySalary(Workday day) {
+
+            if(day.workHours == null) {
+                return;
+            }
 
             Month month = _context.Months.Where(m => m.userId == day.userId
             && m.date.Month == day.date.Month && m.date.Year == day.date.Year).FirstOrDefault();
@@ -520,6 +518,7 @@ namespace TimeKeeper.Data.DbOperations {
 
             double monthlyWorkHours = 0;
             foreach (Workday workday in workdays) {
+                if (workday.workHours == null) continue;
                 monthlyWorkHours += (double) workday.workHours;
             }
 
