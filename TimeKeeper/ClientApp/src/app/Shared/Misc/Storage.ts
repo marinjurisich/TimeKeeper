@@ -64,11 +64,10 @@ export class Storage {
     let userDataJson = sessionStorage.getItem(this.userDataKey) || localStorage.getItem(this.userDataKey);
     if (userDataJson) {
       let userDataObj = JSON.parse(userDataJson);
-      let userData = new UserSession(userDataObj.userId, userDataObj.months, userDataObj.workdays);
-      return userData;
+      return userDataObj;
     }
     else {
-      let userData = new UserSession(-1, [], []);
+      let userData = new UserSession(-1, [], [], []);
       return userData;
     }
   }

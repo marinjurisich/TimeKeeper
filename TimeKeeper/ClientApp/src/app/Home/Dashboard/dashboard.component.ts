@@ -37,18 +37,14 @@ export class DashboardComponent implements OnInit {
   user_data: UserSession;
   curr_year = new Date().getFullYear();
 
-
   constructor(private _router: Router) {
     this.clientAppRoutes = new ClientAppRoutes(this._router);
     
     // Get logged in user
     this.user = Storage.getUser();
+    this.user_data = Storage.getUserData();
     if (!this.user) {
       this.clientAppRoutes.Logout();
-      this.user_data = new UserSession(0, [], []);
-    }
-    else {
-      this.user_data = Storage.getUserData();
     }
   }
 

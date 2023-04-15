@@ -9,9 +9,6 @@ import { FlatPickrDayCreateOutputOptions } from 'angularx-flatpickr/lib/flatpick
 import { FlatPickrOutputOptions } from 'angularx-flatpickr/lib/flatpickr.directive';
 import { UserSession } from 'src/app/Shared/Models/UserSession';
 
-// Defined in /src/assets/js/init-fp.js
-declare function init_fp(opt: any): any;
-
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -23,7 +20,7 @@ export class CalendarComponent implements OnInit {
   @Input() clock_in_arr!: Workday[];
   @Input() user!: User | null;
   @Input() seed_workdays!: () => Promise<void>;
-  user_data: UserSession;
+  @Input() user_data!: UserSession;
 
   flatpickrDirective: FlatpickrDirective;
   fp_date: string = "";
@@ -49,11 +46,9 @@ export class CalendarComponent implements OnInit {
   modal_open: HTMLElement | null = null;
   modal_close: HTMLElement | null = null;
 
-
   constructor(_fp_inst: FlatpickrDirective) {
 
     this.flatpickrDirective = _fp_inst;
-    this.user_data = Storage.getUserData();
     
     // Decide how many calendars to show
     if (window.innerWidth >= 1500) {
@@ -130,7 +125,7 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  
+
   init_seed_workdays() {
     this.seed_workdays();
   }
