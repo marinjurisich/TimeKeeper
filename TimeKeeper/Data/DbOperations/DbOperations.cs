@@ -24,6 +24,11 @@ namespace TimeKeeper.Data.DbOperations {
         const int keySize = 64;
         const int iterations = 350000;
         HashAlgorithmName hashAlgorithm = HashAlgorithmName.SHA512;
+        public enum Status {
+            Error = -1,
+            ClockedOut = 0,
+            ClockedIn = 1
+        }
 
         public DbOperations(ApplicationDbContext context) {
             _context = context;
@@ -177,6 +182,9 @@ namespace TimeKeeper.Data.DbOperations {
         }
 
         public IActionResult ScannerClockInOut(string guid) {
+
+            Status status = Status.ClockedOut;
+
             try {
 
                 var days = _context.Workdays.Join(_context.Users,
@@ -208,6 +216,8 @@ namespace TimeKeeper.Data.DbOperations {
                             CreateMonth(userId);
                         }
                         _context.Workdays.Add(workday);
+                        status = Status.ClockedIn;
+
 
                     } else {
                         throw new Exception("Missing user guid");
@@ -218,13 +228,16 @@ namespace TimeKeeper.Data.DbOperations {
                     var day = days.Last();
 
                     if (day.workday.clockOut == null) {
+
                         //clockOut if exists a record without clockOut time
+
                         day.workday.clockOut = new DateTime();
                         DateTime temp = (DateTime) day.workday.clockOut;
                         day.workday.workHours = temp.Subtract((DateTime) day.workday.clockIn).TotalHours;
 
 
                         _context.Update(day.workday);
+                        status = Status.ClockedOut;
 
                     } else {
                         //clockIn again if the last workday has clocked out
@@ -235,6 +248,7 @@ namespace TimeKeeper.Data.DbOperations {
                             clockIn = new DateTime()
                         };
                         _context.Workdays.Add(day.workday);
+                        status = Status.ClockedIn;
                     }
 
 
@@ -244,11 +258,11 @@ namespace TimeKeeper.Data.DbOperations {
 
                 CalculateMonthlySalary(days.Last().workday);
 
-                return statusResponse(200);
+                return statusResponse(200, status);
 
             } catch (Exception ex) {
 
-                return statusResponse(500, ex.Message);
+                return statusResponse(500, Status.Error);
 
             }
         }
