@@ -47,6 +47,9 @@ export class CalendarComponent implements OnInit {
   modal_open: HTMLElement | null = null;
   modal_close: HTMLElement | null = null;
 
+  // Workday creation
+  show_create_workday: boolean = true;
+
   constructor(_fp_inst: FlatpickrDirective) {
 
     this.flatpickrDirective = _fp_inst;
@@ -109,6 +112,13 @@ export class CalendarComponent implements OnInit {
     if (showMonths > 1) {
       event.instance.changeMonth(-showMonths + 1);
     }
+  }
+
+
+  get_today_iso_date() {
+    let d = new Date();
+    let isoDate = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+    return isoDate;
   }
 
 
@@ -224,6 +234,11 @@ export class CalendarComponent implements OnInit {
 
     // Now enable saving
     button.disabled = false;
+  }
+
+  // Create workday from template
+  async create_workday() {
+
   }
 
 }
