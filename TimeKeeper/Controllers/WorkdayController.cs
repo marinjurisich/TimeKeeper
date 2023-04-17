@@ -68,11 +68,9 @@ namespace TimeKeeper.Controllers {
         }
         
         //Accepts guid as string, returns staus response 200
-        [HttpGet]
+        [HttpGet("{guid}")]
         public IActionResult ScannerClockInOut(string guid) {
-
             return _operations.ScannerClockInOut(guid);
-
         }
 
     }
