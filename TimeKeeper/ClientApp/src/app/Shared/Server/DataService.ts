@@ -97,29 +97,24 @@ export class DataService {
   }
 
   //Admin deleting user
-  async deleteUser(userId: Number): Promise<string | null> {
-
+  async deleteUser(userId: Number): Promise<any | null> {
     let apiUrl: string = environment.API_URL + '/user/delete/' + userId;
-    let response = await fetch(apiUrl, {
-      method:"DELETE"
-    }).then(
-      res => res.status == 200 ? "OK" : null
-    );
+    let response = await fetch(apiUrl).then((res) => res.status == 200 ? res.json() : null);
     return response;
   }
 
   //Admin updating user
-  async updateUser(data: any): Promise<string | null> {
+  async updateUser(data: any): Promise<any | null> {
 
-    let apiUrl: string = environment.API_URL + '/user/update';
+    let apiUrl: string = environment.API_URL + '/user/update/';
     let response = await fetch(apiUrl, {
-      method: "PUT",
+      method: "POST",
       headers: {
         'Content-type': 'application/json; charset=UTF-8'
       },
       body: JSON.stringify(data)
     }).then(
-      res => res.status == 200 ? "OK" : null
+      res => res.status == 200 ? res.json() : null
     );
     return response;
   }

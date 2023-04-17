@@ -39,9 +39,11 @@ export class UserAddingModalComponent implements OnInit {
     if (loggedUser) {
 
       newUserData.companyId = loggedUser.companyId;
-      newUserData.grade = loggedUser.grade;
+      newUserData.grade = 0;
+      newUserData.adminEmail = loggedUser.emailAddress;
+      newUserData.adminName = loggedUser.firstName + " " + loggedUser.lastName;
 
-      if (!this.addNewUserForm.invalid && this.addNewUserForm.controls['password'].value == this.addNewUserForm.controls['confirmPassword'].value) {
+      if (!this.addNewUserForm.invalid) {
 
         /*Convert pay per hour to number*/
         newUserData.payPerHour = parseFloat(newUserData.payPerHour);
@@ -78,8 +80,6 @@ export class UserAddingModalComponent implements OnInit {
       lastName: new FormControl(null, Validators.required),
       email: new FormControl(null, [Validators.required, Validators.email]),
       payPerHour: new FormControl(null, [Validators.required, Validators.pattern(/^\d*\.?\d*$/)]),
-      password: new FormControl(null, [Validators.required, Validators.minLength(2)]),
-      confirmPassword: new FormControl(null, [Validators.required, Validators.minLength(2)]),
       isAdmin: new FormControl(false)
     });
   }

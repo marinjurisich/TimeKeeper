@@ -118,8 +118,8 @@ export class AllUsersTableComponent implements OnInit {
 
     //Here goes API for deleting user from database
     this._dataService.deleteUser(Number(user.id)).then((res) => {
-
-      if (res == "OK") {
+ 
+      if (!isNaN(res) && res >= 0) {
 
         //Remove user from array of users
         if (this.users.indexOf(user) > -1) { this.users.splice(this.users.indexOf(user), 1); }
@@ -144,19 +144,20 @@ export class AllUsersTableComponent implements OnInit {
       email: user.emailAddress,
       password: user.password,
       isAdmin: user.isAdmin,
-      payPerHour: user.payPerHour,
+      payPerHour: parseFloat(user.payPerHour),
       companyId: user.companyId,
-      grade: user.grade,
+      grade: user.grade | 0,
       guid: user.guid
     }
 
-    this._dataService.updateUser(propertiesToUpdate).then((res) => {
-      if (res == "OK") {
+    this._dataService.updateUser(propertiesToUpdate).then((resUser) => {
+
+      if (resUser) {
 
         //Refresh users list
-        let thisUserIndex = this.users.indexOf(user);
+        let thisUserIndex = this.users.indexOf(resUser);
         if (thisUserIndex > -1) {
-          this.users[thisUserIndex] = user;
+          this.users[thisUserIndex] = resUser;
         }
 
         console.log("\nUSER UPDATED: ")

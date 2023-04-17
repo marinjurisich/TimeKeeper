@@ -25,11 +25,10 @@ export class Storage {
 
   // Try to get user from session storage (temp memory) or from local storage (perm memory)
   public static getUser(): User | null {
-
     let userJson = sessionStorage.getItem(this.userKey) || localStorage.getItem(this.userKey);
     if (userJson) {
       // let user = new User(userJson);
-      let user = new User(JSON.parse(userJson));
+      let user = (JSON.parse(userJson));
       return user;
     }
     return null;
