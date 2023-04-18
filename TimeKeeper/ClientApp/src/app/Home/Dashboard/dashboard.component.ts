@@ -46,6 +46,24 @@ export class DashboardComponent implements OnInit {
     if (!this.user) {
       this.clientAppRoutes.Logout();
     }
+
+    // Refresh workdays (in case new clock in added)
+    this.reload_workdays();
+  }
+
+
+  async reload_workdays() {
+    
+    let workdaysUrl = environment.API_URL + "/Workday/List/" + this.user_data.userId;
+    let workdaysLastYear = await fetch(workdaysUrl).then(res => res.json());
+    this.user_data.workdays = workdaysLastYear;
+    
+    if (sessionStorage.getItem(Storage.userKey)) {
+      Storage.saveUserData(this.user_data, false);
+    }
+    else {
+      Storage.saveUserData(this.user_data, true);
+    }
   }
 
   ngOnInit(): void {
