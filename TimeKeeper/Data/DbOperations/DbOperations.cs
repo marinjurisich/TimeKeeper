@@ -192,7 +192,7 @@ namespace TimeKeeper.Data.DbOperations {
 
                 var userId = _context.Users.Where(u => u.guid == guid).Select(u => u.id).FirstOrDefault();
 
-                if(userId == null) {
+                if(userId == null || userId == 0) {
                     throw new Exception("Missing user guid");
                 }
 
