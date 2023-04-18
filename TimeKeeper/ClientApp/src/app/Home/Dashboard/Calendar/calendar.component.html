@@ -47,12 +47,14 @@
                         <!-- Clock in & out -->
                         <div class="row pb-3">
 
+                            <input type="hidden" [(ngModel)]="new_wd_date">
+
                             <!-- Clock in -->
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <label>Clock in</label>
                                 <input class="form-control form-control-user" type="time" placeholder="Clock in"
                                     [attr.data-workday_clock_in_date]="get_today_iso_date()"
-                                    [value]="">
+                                    [(ngModel)]="new_wd_clockin">
                             </div>
 
                             <!-- Clock out -->
@@ -60,7 +62,7 @@
                                 <label>Clock out</label>
                                 <input class="form-control form-control-user" type="time" placeholder="Clock out"
                                     [attr.data-workday_clock_out_date]="get_today_iso_date()"
-                                    [value]="">
+                                    [(ngModel)]="new_wd_clockout">
                             </div>
                         </div>
 
@@ -72,7 +74,7 @@
                                     title="Hover an option to see project description"></i>
                             </label>
                             <select data-workday_project class="form-control form-control-user"
-                                [value]="">
+                                [value]="user_data.projects.length == 1 ? user_data.projects[0].id : ''">
                                 <option *ngFor="let project of user_data.projects;" [value]="project.id"
                                     [title]="project.description">
                                     {{project.name}}
@@ -84,11 +86,12 @@
                         <div class="">
                             <label>Description</label>
                             <textarea data-workday_description class="form-control w-100" type="text"
-                                placeholder="Time period description">{{""}}</textarea>
+                                placeholder="Time period description"
+                                [(ngModel)]="new_wd_description"></textarea>
                         </div>
 
                         <div class="mt-3">
-                            <button id="workday_save_b" type="button" class="btn btn-warning" (click)="create_workday()">
+                            <button id="workday_save_b" type="button" class="btn btn-warning" (click)="create_workday($event.target)">
                                 Create clock-in
                             </button>
                         </div>
@@ -159,7 +162,7 @@
                 <div class="modal-footer">
                     <button id="workday_close_b" type="button" class="btn btn-secondary"
                         data-bs-dismiss="modal">Close</button>
-                    <button id="workday_save_b" type="button" class="btn btn-primary">Save all</button>
+                    <button id="workday_save_b" type="button" class="btn btn-primary" (click)="save_all_modal()">Save all</button>
                 </div>
             </div>
         </div>

@@ -1,14 +1,6 @@
 <div class="d-flex flex-column" id="content-wrapper">
     <div id="content">
 
-        <h1>
-            TODO:
-            <ul>
-                <li>Implement SAVE ALL to modal</li>
-                <li>Finish Clock in - clock out modal</li>
-            </ul>
-        </h1>
-
         <app-header></app-header>
 
         <div class="container-fluid">
@@ -36,7 +28,7 @@
                 <div class="col-lg-5 col-xl-4">
                     <app-clock-in
                         [user_data]="user_data"
-                        (user_dataChange)="user_data = $event"
+                        (create_clockin)="calendar.init_create_workday($event)"
                         ></app-clock-in>
                 </div>
 
@@ -44,6 +36,7 @@
 
             <!-- Calendar -->
             <app-calendar
+                #calendar
                 [user]="user"
                 [seed_workdays]="seed_workdays"
                 [user_data]="user_data"

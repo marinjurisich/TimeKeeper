@@ -48,7 +48,11 @@ export class CalendarComponent implements OnInit {
   modal_close: HTMLElement | null = null;
 
   // Workday creation
-  show_create_workday: boolean = true;
+  show_create_workday: boolean = false;
+  new_wd_date: string = "";
+  new_wd_clockin: string = "";
+  new_wd_clockout: string = "";
+  new_wd_description: string = "";
 
   constructor(_fp_inst: FlatpickrDirective) {
 
@@ -71,9 +75,6 @@ export class CalendarComponent implements OnInit {
     this.modal_save = document.getElementById("workday_save_b");
     this.modal_open = document.getElementById("workday_modal_open");
     this.modal_close = document.getElementById("workday_close_b");
-
-    // Refresh workdays
-    this.reload_workdays();
   }
 
 
@@ -85,20 +86,6 @@ export class CalendarComponent implements OnInit {
       // let dates = this.user_data.workdays.map(o => new ClockInItem("clock_in", new Date(o.date)));
       // init_fp({ "clock_in_arr": dates, });
     }, 1000);
-  }
-
-
-  async reload_workdays() {
-    
-    let workdaysUrl = environment.API_URL + "/Workday/List/" + this.user?.id;
-    let workdaysLastYear = await fetch(workdaysUrl).then(res => res.json());
-    this.user_data.workdays = workdaysLastYear;
-    if (sessionStorage.getItem(Storage.userKey)) {
-      Storage.saveUserData(this.user_data, false);
-    }
-    else {
-      Storage.saveUserData(this.user_data, true);
-    }
   }
 
 
@@ -115,10 +102,21 @@ export class CalendarComponent implements OnInit {
   }
 
 
-  get_today_iso_date() {
-    let d = new Date();
+  get_iso_hh_mm(d: Date) {
+    let iso_time = ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+    return iso_time;
+  }
+
+
+  get_iso_date(d: Date) {
     let isoDate = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
     return isoDate;
+  }
+
+
+  get_today_iso_date() {
+    let d = new Date();
+    return this.get_iso_date(d);
   }
 
 
@@ -167,9 +165,30 @@ export class CalendarComponent implements OnInit {
   }
 
 
-  async save_workday(workday_id: number, eventTarget: EventTarget | null) {
+  async save_all_modal() {
 
-    debugger;
+    // Get all workdays
+    let wd_el_list = Array.from(document.querySelectorAll("#workDayModal .modal-body > [data-workday_id]"));
+
+    // Save all
+    for (let i = 0; i < wd_el_list.length; ++i) {
+
+      let wd_element = <HTMLElement> wd_el_list[i];
+      let workday_id = wd_element.dataset.workday_id;
+      
+      if (workday_id) {
+        wd_element.style.opacity = "0.5";
+        await this.save_workday(parseInt(workday_id), null);
+        wd_element.style.opacity = "";
+      }
+    }
+
+    // Now refresh dates
+    location.reload()
+  }
+
+
+  async save_workday(workday_id: number, eventTarget: EventTarget | null) {
 
     // Get HTML containers
     let wd_container = document.querySelector("#workDayModal [data-workday_id='" + workday_id + "']");
@@ -177,7 +196,7 @@ export class CalendarComponent implements OnInit {
     let i_clockout:    HTMLInputElement | null | undefined = wd_container?.querySelector("[data-workday_clock_out_date]");
     let i_project:     HTMLInputElement | null | undefined = wd_container?.querySelector("[data-workday_project]");
     let i_description: HTMLInputElement | null | undefined = wd_container?.querySelector("[data-workday_description]");
-    let button = <HTMLButtonElement>eventTarget;
+    let button = <HTMLButtonElement | null>eventTarget;
 
     // Check if containers found
     if (!wd_container || !i_clockin || !i_clockout || !i_project || !i_description) {
@@ -216,11 +235,13 @@ export class CalendarComponent implements OnInit {
       workHours: workHours,
       description: i_description.value,
       grade: 5.0,
-      attachment: "-"
+      attachment: null
     });
 
     // Disable until request is finished
-    button.disabled = true;
+    if (button) {
+      button.disabled = true;
+    }
 
     // Save workday
     let updateWorkdayUrl = environment.API_URL + "/Workday/Update"
@@ -230,15 +251,80 @@ export class CalendarComponent implements OnInit {
     });
 
     // Refill user data with reload of page
-    location.reload();
-
-    // Now enable saving
-    button.disabled = false;
+    if (button) {
+      button.disabled = false;  // Reset button
+      location.reload();
+    }
   }
 
-  // Create workday from template
-  async create_workday() {
 
+  // Initialize creation of new clock in
+  init_create_workday(event: any) {
+
+    let workday: Workday = event["workday"];
+
+    this.new_wd_date = workday.date;
+    this.new_wd_clockin = workday.clockIn.split("T")[1].substring(0, 5);
+    this.new_wd_clockout = workday.clockOut.split("T")[1].substring(0, 5);
+
+    this.show_create_workday = true;
+    this.selected_date = workday.date.split("T")[0];
+    this.modal_open?.click();
+  }
+  
+
+  // Create workday from template
+  async create_workday(eventTarget: EventTarget | null) {
+
+    let projectEl = document.querySelector("#workDayModal .new-workday [data-workday_project]");
+    if (!projectEl) {
+      alert("Cannot create workday. Project missing.");
+      return;
+    }
+
+    let projectId = (<HTMLInputElement>projectEl).value;
+    let clockInStr = this.new_wd_date.split("T")[0] + "T" + this.new_wd_clockin + ":00";
+    let clockOutStr = this.new_wd_date.split("T")[0] + "T" + this.new_wd_clockout + ":00";
+    let clockIn = new Date(clockInStr);
+    let clockOut = new Date(clockOutStr);
+    let workHours = (clockOut.getTime() - clockIn.getTime()) / (60*60*1000);
+
+    if (!projectId) {
+      alert("Please select project before proceeding.");
+      return;
+    }
+
+    let workday_create = new Workday({
+      id: 0,
+      userId: this.user_data.userId,
+      date: this.new_wd_date,
+      projectId: projectId,
+      clockIn: clockInStr,
+      clockOut: clockOutStr,
+      workHours: workHours,
+      description: this.new_wd_description,
+      grade: 5.0,
+      attachment: null
+    });
+
+    let button = <HTMLButtonElement | null> eventTarget;
+    if (button) {
+      button.disabled = true;
+    }
+
+    // Create workday
+    let createWorkdayUrl = environment.API_URL + "/Workday/ClockInOut";
+    await fetch(createWorkdayUrl, {
+      method: "POST",
+      body: JSON.stringify(workday_create)
+    })
+
+    if (button) {
+      button.disabled = false;
+    }
+    
+    // Reload to refresh cache
+    location.reload();
   }
 
 }

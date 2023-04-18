@@ -12,7 +12,7 @@
     <div class="card-body">
 
         <!-- SVG icons -->
-        <div class="chart-area clock-in-container" [style.opacity]="sending_request ? '0.5' : ''">
+        <div class="chart-area clock-in-container">
 
             <svg class="svg-clock-in" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" *ngIf="!clocked_in"
                 (click)="clock_in()">
@@ -35,7 +35,7 @@
         <div class="text-center small mt-4">
 
             <!-- Show times -->
-            <span *ngFor="let item of filter_workdays_today(); let isLast = last;">
+            <span *ngFor="let item of clock_ins_today; let isLast = last;">
 
                 <!-- Show clock in -->
                 <span>
