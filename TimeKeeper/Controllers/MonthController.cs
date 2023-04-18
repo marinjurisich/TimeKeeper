@@ -22,7 +22,9 @@ namespace TimeKeeper.Controllers
         [HttpGet]
         public Month Get(int userId, DateTime date)
         {
-            return _context.Months.Where(m => m.userId == userId && m.date.Month == date.Month).FirstOrDefault();
+            return _context.Months.Where(m => m.userId == userId
+            && m.date.Month == date.Month
+            && m.date.Year == date.Year).FirstOrDefault();
         }
 
         //Accepts user id, return all months for that user
@@ -35,6 +37,13 @@ namespace TimeKeeper.Controllers
         [HttpGet]
         public List<Month> GetLastTwelveMonths(int userId) {
             return _context.Months.Where(m => m.userId == userId).OrderByDescending(m => m.id).Take(12).ToList();
+        }
+
+        //Accepts user id, returns last this years months
+        [HttpGet]
+        public List<Month> GetThisYear(int userId) {
+            return _context.Months.Where(m => m.userId == userId 
+            && m.date.Year == DateTime.Now.Year).OrderByDescending(m => m.id).ToList();
         }
 
         //Accepts date as a string, returns all days with matching month and year

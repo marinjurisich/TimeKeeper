@@ -101,7 +101,7 @@ namespace TimeKeeper.Data.DbOperations {
                     var key = (workdays[i].userId, workdays[i].date.Year, workdays[i].date.Month);
                     months[key] = workdays[i];
                 }
-                _context.SaveChanges();
+                //_context.SaveChanges();
 
                 // Update months' statistics
                 foreach(var month_workday in months)
@@ -120,6 +120,8 @@ namespace TimeKeeper.Data.DbOperations {
                     {
                         CreateMonth(wd.userId, wd.date);
                     }
+
+                    _context.SaveChanges();
 
                     // Calculate month statistics
                     CalculateMonthlySalary(wd);
@@ -190,7 +192,7 @@ namespace TimeKeeper.Data.DbOperations {
 
                 var userId = _context.Users.Where(u => u.guid == guid).Select(u => u.id).FirstOrDefault();
 
-                if(userId == null) {
+                if(userId == null || userId == 0) {
                     throw new Exception("Missing user guid");
                 }
 
